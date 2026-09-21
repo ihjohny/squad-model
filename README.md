@@ -3,14 +3,16 @@
 
 A battle-tested, high-quality operating model for scaling engineering teams, agile delivery, architectural governance, and release management in tier-1 mobile super-applications.
 
+👉 **[Launch Interactive Presentation (HTML Slides)](https://ihjohny.github.io/squad-model/presentation.html)**
+
 ---
 
 ## 📚 Core Documentation & Presentation
 
 | Resource | Description | Format |
 | :--- | :--- | :--- |
+| 🖥️ **[Interactive Slide Deck](https://ihjohny.github.io/squad-model/presentation.html)** | 12-slide presentation deck with an interactive 5% bug buffer calculator, STRIDE matrix, release timeline, and toggleable **Key Takeaways / Presenter Notes** (<kbd>T</kbd>). | [Open Live Slides ↗](https://ihjohny.github.io/squad-model/presentation.html) |
 | 📘 **[Master Engineering Playbook](ENTERPRISE_MOBILE_SUPERAPP_WORKFLOW.md)** | The complete, all-in-one guide: 30-second quickstart, plain-English glossary, "Day in the Life" walkthrough, RACI matrix, 9-stage lifecycle, STRIDE threat modeling, 4-hour task rule, 5% bug buffer, release calendar, role cheatsheets, and operational checklists. | Markdown Document |
-| 🖥️ **[Interactive Slide Presentation](presentation.html)** | 12-slide presentation deck with an interactive 5% bug buffer calculator, STRIDE matrix, release timeline, and toggleable **Key Takeaways / Presenter Notes** (<kbd>T</kbd>). | Interactive HTML (Press `F` for Fullscreen) |
 | 📝 **[Markdown Slide Deck](SLIDES.md)** | Plain-text presentation slides with presenter cues for Google Slides, Marp, Keynote, or Obsidian. | Markdown Deck |
 
 ---
