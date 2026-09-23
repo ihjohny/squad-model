@@ -6,11 +6,14 @@
 
 A practical, battle-tested operating model for scaling mobile engineering teams, cross-product architecture governance, and predictable monthly releases in enterprise super-apps (telecom, fintech, payments).
 
-[![Slides](https://img.shields.io/badge/Interactive_Slides-12_deck_·_live_calc-4338ca)](https://ihjohny.github.io/squad-model/presentation.html)
+[![Slides](https://img.shields.io/badge/Interactive_Slides-14_deck_·_4_acts-4338ca)](https://ihjohny.github.io/squad-model/presentation.html)
 [![Playbook](https://img.shields.io/badge/Master_Playbook-13_sections-0d9488)](./ENTERPRISE_MOBILE_SUPERAPP_WORKFLOW.md)
 [![Markdown Deck](https://img.shields.io/badge/SLIDES.md-Marp_ready-059669)](./SLIDES.md)
 
 👉 **[Launch the Interactive Presentation](https://ihjohny.github.io/squad-model/presentation.html)**
+
+> **The whole model in one sentence: Three Gates. Two Budgets. One Calendar.**
+> Pass the gates (ARB Scope Lock → UAT Sign-off → Backend Freeze), respect the budgets (≤ 4 h per task, ≤ 10% of dev time for bugs), and trust the calendar (one fixed 28-day release rhythm). Every rule below is one of those six things.
 
 </div>
 
@@ -20,7 +23,7 @@ A practical, battle-tested operating model for scaling mobile engineering teams,
 
 | Resource | Description | Format |
 | :--- | :--- | :--- |
-| 🖥️ **[Interactive Slide Deck](https://ihjohny.github.io/squad-model/presentation.html)** | 12-slide presentation with an interactive 10% bug-buffer calculator, 3-phase delivery flow, STRIDE security matrix, and presenter takeaways (press <kbd>T</kbd>). Deep-link any slide with `#N` in the URL. | [Open Live Slides ↗](https://ihjohny.github.io/squad-model/presentation.html) |
+| 🖥️ **[Interactive Slide Deck](https://ihjohny.github.io/squad-model/presentation.html)** | 14 slides told in four acts — *Why → The Model → How It Runs → Payoff* — with a live 10% bug-budget calculator, a 9-stage workflow map, a 28-day release timeline, a UAT triage decision tree, and presenter takeaways (press <kbd>T</kbd>). Deep-link any slide with `#N`. | [Open Live Slides ↗](https://ihjohny.github.io/squad-model/presentation.html) |
 | 📘 **[Master Engineering Playbook](ENTERPRISE_MOBILE_SUPERAPP_WORKFLOW.md)** | The complete guide: 30-second quickstart, plain-English glossary, daily engineer routine, 7-SPOC RACI model, 9-stage lifecycle, STRIDE threat model, 4-hour task rule, 10% bug buffer, monthly release calendar, anti-pattern guardrails, role cheatsheets, KPI scorecard, and operational checklists. | Markdown Document |
 | 📝 **[Markdown Slide Deck](SLIDES.md)** | Clean slide text with presenter cues for Google Slides, Keynote, Marp, or Obsidian. Ships Marp-ready front matter: run `marp SLIDES.md --pdf` to export. | Markdown Deck |
 

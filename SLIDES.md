@@ -5,188 +5,212 @@ paginate: true
 ---
 
 # Scaling Mobile Super-App Engineering Teams
-## *A Battle-Tested Operating Model for High-Velocity Mobile Organizations*
+## *Three Gates. Two Budgets. One Calendar.*
+
+> A battle-tested operating model for high-velocity mobile organizations. This markdown deck mirrors `presentation.html` slide for slide — the `> 💡` blocks are presenter notes.
 
 ---
 
-## Slide 1: Title & Overview
-### Scaling Mobile Super-App Engineering Teams
-- **Core Focus**: Deliver fast with autonomous squads while keeping multi-system architecture stable, secure, and predictable.
-- **Audience**: Engineering Leads, Mobile Developers, QA Engineers, Solution Architects, and Product Owners.
-- **Key Tenets**: ARB Architecture Gate, 4-Hour Task Chunking, 10% Bug Buffer, and Pre-Sanity Backend Freeze.
+## Act 1 · The Problem
 
-> 💡 **Engineering Principle:** These are not bureaucratic hurdles. They are practical *guardrails* that protect sprint commitments, prevent scope creep, and stop weekend emergency fixes.
+### Standard Agile Breaks at Super-App Scale
 
----
+- **30% of the sprint** eaten by bug spills, because edge cases were never reviewed upfront.
+- **20 hours** logged as "coding" but spent in clarification meetings — sprint metrics lie.
+- **Phantom bugs** from moving targets: backend deploys land while mobile QA is mid-test.
+- **Silent cross-product breakage:** Squad A changes a checkout payload; Squad B's subscription purchase crashes.
 
-## Slide 2: The Core Problem
-### Why Standard Agile Fails at Super-App Scale
-- **Cross-Product Breakages**: Squad A changes a checkout payload; Squad B's subscription purchase crashes in staging.
-- **Moving Target QA**: Microservices deploy while mobile QA is testing, producing phantom bugs and wasting QA cycles.
-- **Invisible Work**: Developers spend 20 hours in clarification meetings and log it as "coding time", misleading sprint metrics.
-- **Endless Bug Spills**: Minor defects eat 30% of sprint capacity because edge cases were never reviewed upfront.
-
-> 💡 **Presenter Cue:** Highlight that governance protects developers: it stops other squads from breaking your feature right before release.
+> 💡 **The point:** none of these are talent problems — they are *coordination* problems. Coordination is exactly what the model automates.
 
 ---
 
-## Slide 3: Team Topology & the RACI Model
-### Autonomous Squads with Matrix Governance
-- **Lead Team**: Solution Architect (Box Solutions), Squad Main Lead (guiding 1+ squads), and Release Lead.
-- **ARB Forum**: Cross-product council of Leads & Architects from Core Products, Main Product Leads, POL (Payments), and SOL (Subscriptions).
-- **Dev Squad Pool**:
-  - Each squad has Android, iOS, Backend, Squad QA, Internal Dev Lead, and Squad Main Lead.
-  - **Single Feature Ownership**: Each senior engineer takes personal ownership of one primary feature.
-  - **Fluid Staffing**: Squads temporarily loan engineers to each other for urgent priorities.
-  - **Revamp Taskforces vs. Growth Squads**: Combined specialist squads tackle major app redesigns; Growth squads ship daily business features.
-- **Dual Scrum Masters**: Squad SM (daily standups, 4h task hygiene, time logs) + Release SM (monthly release scope & pipeline readiness).
-- **The 7 Ticket SPOCs**: PO, Integration SPOC (SA), Assignee (Dev Lead), Squad QA SPOC, SM, UAT SPOC, Code Reviewers (FE, BE).
-- **Communication Rule**: Keep all discussions and decisions in Jira comments using `@mentions`.
+## Act 2 · The Model in One Breath
 
-> 💡 **Engineering Principle:** You are never left alone on a feature. Every ticket clearly lists the Solution Architect, Squad QA, and UAT Tester responsible with you.
+### Three Gates. Two Budgets. One Calendar.
+
+Every rule in the operating model is one of those six things:
+
+- **The 3 Gates (you must pass):** 🔒 ARB Scope Lock → 🎯 UAT Sign-off → ❄️ Backend Freeze
+- **The 2 Budgets (you must respect):** ≤ 4 h per task · ≤ 10% of locked dev hours for bug fixing
+- **The 1 Calendar (you must trust):** one fixed monthly cadence — UAT cutoff Day 19, backend frozen Day 22, stores by Day 28
+
+> 💡 **Say this:** "If you remember one sentence from today, make it this one — three gates, two budgets, one calendar."
 
 ---
 
-## Slide 4: The 9-Stage Super-App Delivery Pipeline
-### From PRD Inception to Production Store Rollout
+## Act 2 · Five Non-Negotiables
+
+### The Five Golden Rules
+
+1. **Box Before Build** *(feeds Gate 1)* — never refine a ticket without an architect's one-page Box Solution.
+2. **Lock at ARB** *(= Gate 1)* — cross-product review permanently locks hours and release dates.
+3. **Chunk to ≤ 4 Hours** *(= Budget 1)* — small, verifiable subtasks surface blockers within 24 hours.
+4. **Enforce 10% Buffer** *(= Budget 2)* — cap bug-fixing time to expose design debt early.
+5. **BE Freeze First** *(= Gate 3)* — backend deploys to production before mobile sanity ever starts.
+
+*And Gate 2 (UAT Sign-off)? It's earned — by holding both budgets through the sprint.*
+
+> 💡 **Why it works:** five memorable rules beat fifty policies. Every engineer knows exactly what the organization will and won't tolerate.
+
+---
+
+## Act 2 · Who Runs This
+
+### Autonomous Squads, Matrix Governance
+
+- **Layer 1 — Business & UAT** *(the "why")*: Product Owners own vision & PRDs; UAT owns business acceptance and Go/No-Go.
+- **Layer 2 — Leadership & the ARB** *(the "what fits")*: Solution Architect draws Box Solutions; Squad Main Leads (1 lead, 1+ squads); Release Lead owns the calendar; the **ARB** is the joint council of Core, Payments (POL), Subscriptions (SOL) & Platform architects.
+- **Layer 3 — The Squad Pool** *(the "how")*: each squad = Android, iOS, Backend, QA, SM, Dev Lead. Fluid staffing: inter-squad loans, revamp taskforces, Growth squads keep shipping.
+- **7 owners on every ticket**: PO → intent · SA → blueprint · Dev Lead → code & doc · QA → test plan · SM → blockers · UAT → acceptance · Reviewers → architecture.
+- **Communication rule:** all decisions via `@mentions` in the ticket — never in private chats.
+
+> 💡 **The point:** you are never alone on a feature. Before coding starts, the ticket already names the architect, the QA, and the UAT tester who are on the hook with you.
+
+---
+
+## Act 2 · The Workflow
+
+### From PRD to 100% Rollout in 9 Stages
+
+**Phase 1 · Architect** — 01 PO Grooming (PRD in, Box Solution out) → 02 Squad Refinement (Solution Doc + STRIDE + ≤ 4h tasks) → **03 ARB Gateway 🔒 GATE 1** (defend the doc, lock hours & dates)
+
+**Phase 2 · Build** — 04 Sprint Execution (daily 4h subtasks, honest time logs, 2 senior approvals) → 05 Squad QA (bug fixing inside the 10% budget) → **06 UAT Staging 🎯 GATE 2** (regressions fixed, legacy bugs routed to the pool)
+
+**Phase 3 · Ship** — **07 TCAB & Freeze ❄️ GATE 3** (backend live before sanity starts) → 08 Dual-Gate Sanity (QA pool, then UAT pool Go) → 09 Staged Rollout (5 → 20 → 50 → 100%, watched on Crashlytics)
+
+> 💡 **Say this:** walk the three phases left to right. Each ends with a gate slamming: *scope locked → quality capped → backend frozen*. Nothing advances with a gate open.
+
+---
+
+## Act 3 · The Gates, Up Close
+
+### Gate 1 · ARB: Where Scope Gets Locked
+
+- **Step 1 — Submit:** Solution Doc with sequence flows, failure fallbacks, STRIDE analysis, and the ≤ 4h task list — circulated ≥ 24 h ahead.
+- **Step 2 — Defend:** the council hunts corner cases: *gateway dies mid-payment? partial refund on retry? retry storm on 2G?*
+- **Step 3 — Lock 🔒:** four things become immutable — **Dev Hours, QA Hours, UAT Delivery Date, Release Month Tag**.
+- **Who's in the room:** Core Product Leads · Main Product Leads · POL (Payments) · SOL (Subscriptions) · Platform Architects.
+
+> 💡 **Say this:** "ARB approval is your shield." After the lock, product cannot quietly add scope to your active sprint — any change means re-estimation and re-approval.
+
+---
+
+## Act 3 · Design Before Code
+
+### One Blueprint & One Contract per Feature
+
+- **📐 The Architect's Box Solution** (1 page, drawn at grooming):
+  - Touched microservices: Payment (POL) · Subscription (SOL) · Core Profile
+  - Baseline effort split, e.g. 40% Frontend / 60% Backend
+  - Downstream systems: external gateways & telco billing
+- **📜 The Squad's Solution Doc** (Confluence, the ARB exhibit):
+  - Sequence diagrams for happy paths *and* timeout/retry failures
+  - Network failure matrix: offline cache, flaky 3G, backoff with jitter
+  - STRIDE threat model · blockers + ≤ 4h task list
+
+**No Box → No Sprint. No Doc → No ARB.**
+
+> 💡 **Engineering principle:** an hour of diagramming is worth a week of debugging. The blueprint kills architecture drift; the contract kills "I assumed the API worked differently".
+
+---
+
+## Act 3 · Budget 1
+
+### No Task Bigger Than 4 Hours
+
+- A 16-hour feature decomposes into: *DTO & serialization tests [4h] · repository & cache fallback [3.5h] · UI + state binding [4h] · error dialogs & analytics [3h]*.
+- **Smoke-detector effect:** a developer can be stuck for hours, never for days — blockers surface within 24 h at standup.
+- **Honest hours fuel the dashboard:** Dev Time (target ≥ 90% of locked hours delivered) vs. Refinement Time (≤ 20% overhead), rolled up per engineer and per squad.
+
+> 💡 **Say this:** "4-hour tasks protect *you*. Small PRs get reviewed in 30 minutes instead of rotting in a queue for days — and nobody discovers at sprint end that you were blocked since Tuesday."
+
+---
+
+## Act 3 · Budget 2
+
+### The 10% Bug Buffer: Quality Has a Budget
 
 ```
-[Phase 1: Architecture & Planning] ──► [Phase 2: Execution & Quality] ──► [Phase 3: Production & Rollout]
-Steps 01 → 02 → 03 (ARB Lock)          Steps 04 → 05 → 06 (10% Cap)         Steps 07 → 08 → 09 (Freeze & Stores)
+Max Allowed Bug-Fix Time  ≤  10% × Locked Dev Hours
 ```
 
-#### Phase 1: Architecture & Scoping
-1. **PO Grooming**: Standard PRD + Solution Architect "Box Solution" with FE/BE effort split.
-2. **Squad Refinement**: Confluence Solution Doc, STRIDE threat model, and tasks sized ≤ 4 hours.
-3. **ARB Gateway**: Review with cross-product leads (Core Products, Main Leads, POL/SOL); permanently lock Dev/QA hours and target release month.
+- Example: a 40-hour locked ticket carries a **4.0-hour** bug budget. (Interactive calculator lives on this slide in `presentation.html`.)
+- **Green path (within budget):** typos, styling, edge-case null checks — fixed quietly, the sprint never feels it.
+- **Quality alarm (over budget):** fixing stops; retro with the Squad Lead — were edge cases tested locally? was the API spec ambiguous? is there design debt to raise?
+- Shift-left economics: a defect caught on the Dev env costs **10× less** than in UAT or production.
 
-#### Phase 2: Execution & Quality
-4. **Sprint Execution**: Daily 4-hour subtasks, daily time logs, peer code review (minimum 2 senior approvals).
-5. **Squad QA**: Test on Dev environment (VPN); bug fixing time mathematically capped at **10% of locked dev estimate**.
-6. **UAT Staging**: Deploy to staging before UAT deadline; fix feature regressions and route legacy bugs to Live Issue Pool.
-
-#### Phase 3: Production & Release
-7. **TCAB & BE Freeze**: All microservices deploy to production under TCAB *before* mobile sanity testing starts.
-8. **Sanity Candidate**: Rotating Release Team merges squad branches; run dual-gate sanity (Squad QA then UAT).
-9. **Staged Rollout**: Gradual store release (5% → 20% → 50% → 100%) with Crashlytics monitoring (≥ 99.8% crash-free).
-
-> 💡 **Presenter Cue:** Walk through the 3 phases sequentially. Emphasize that each phase ends with an explicit gate: Scope Lock, Quality Cap, and Backend Freeze.
+> 💡 **Say this:** "If it takes 10 hours to debug, it wasn't a bug — it was an unfinished feature. The 10% alarm makes sure architects own that early, not the developer alone at 2 AM."
 
 ---
 
-## Slide 5: The "Box Solution" & Confluence Standards
-### Architecting Before Coding
-- **Part 1: The Architect's Box Solution**:
-  - High-level system diagram attached to the Jira ticket during PO grooming.
-  - Lists all touched microservices (Core Telco, POL, SOL, Billing).
-  - Sets the baseline effort split (for example, 40% Frontend / 60% Backend).
-- **Part 2: The Squad's Confluence Solution Document**:
-  - Clear sequence diagrams for success and failure paths.
-  - Network failure matrix (offline cache, flaky connections, retry backoff).
-  - STRIDE security threat analysis.
-  - Subtask breakdown with every task ≤ 4 hours.
+## Act 3 · Fair Triage
 
-> 💡 **Engineering Principle:** You never start coding from an ambiguous 2-line ticket. You always have a Box Solution blueprint and a clear solution document first.
+### Every UAT Bug Gets a Verdict
 
----
+One question decides who owns the fix: **does it reproduce on live production?**
 
-## Slide 6: STRIDE Threat Modeling for Mobile Features
-### Practical Security for Telecom & Financial Journeys
-- **Spoofing**: Fake headers or phone numbers → Signed mTLS tokens and SIM-binding validation.
-- **Tampering**: Altering local cached balances on rooted devices → Trust only the server-side balance ledger.
-- **Repudiation**: Disputing duplicate bundle purchases → Pass unique client idempotency keys to Payment Layer (POL).
-- **Information Disclosure**: Leaking tokens into system logs → Obfuscate code with R8 and store secrets in Keystore / Keychain.
-- **Denial of Service**: Retrying network calls on slow connections → Use exponential backoff, random jitter, and circuit breakers.
-- **Elevation of Privilege**: Bypassing UI checks to call internal APIs → Enforce scoped OAuth2 permissions at the BFF gateway.
+- **NO → Type A · Story Regression:** introduced by this squad's recent PR; fixed before UAT sign-off; counts against the QA KPI (leakage < 2%).
+- **YES → Type B · Pre-Existing Live Defect:** SA validates → detached from the feature → Live Issue Pool → fixed via the squad's monthly quota.
 
-> 💡 **Presenter Cue:** STRIDE is practical edge-case planning, not dry theory. It asks simple questions: "What happens if the user taps twice?" or "What if the network drops mid-payment?"
+Why the split matters: delivery dates are protected from legacy debt, the QA KPI only measures what QA could have caught, and old potholes still get fixed — on quota.
+
+> 💡 **Engineering principle:** never fear UAT finding an old bug. If it reproduces on production, it was never your sprint's regression — it goes to the pool and your feature still ships on time.
 
 ---
 
-## Slide 7: The ARB Gate: Locking Scope & Estimations
-### Where Cross-Product Leaders Eliminate Surprises Upfront
-- **The Council**: Solution Architects, Team Leads, Core Product Leads, and Main Product Leads from Core Telecom, Payments (POL), Subscriptions (SOL), and Platform Services.
-- **The Defense**: Squad developer presents sequence flows, edge cases, error fallbacks, and security controls. The panel checks corner cases.
-- **The Permanent Lock**: Once ARB approves, 4 commitments cannot change:
-  - Dev Hours Locked
-  - QA Hours Locked
-  - UAT Delivery Date Locked
-  - Target Release Month Tagged
+## Act 3 · Ship It
 
-> 💡 **Engineering Principle:** ARB approval is your shield. Once your hours and dates are locked, Product cannot secretly add features into your active sprint. Scope is protected.
+### Gate 3 · The Backend Freezes First
 
----
+The 28-day calendar, same every month:
 
-## Slide 8: Time Engineering & the Central Jira Dashboard
-### Eliminating Invisible Work, the 4-Hour Rule & Progress Visibility
-- **The 4-Hour Rule & Subtask Hygiene**:
-  - No Jira subtask may exceed 4 hours. Use standard subtask templates.
-  - No multi-day black boxes. Blockers surface within 24 hours at morning standup.
-- **Time Classification**:
-  - **Refinement Time**: Meetings, documentation, discovery, KT, and PO clarifications.
-  - **Dev Time**: Active coding, unit tests, and code review fixes. This drives velocity metrics.
-- **The Central Jira Dashboard**:
-  - Tracks weekly Dev Completion, UAT Delivery Alignment, and quarterly Production Delivery.
-  - Monitors the 10% bug buffer, UAT bug leakage rate, and monthly Live Issue Quota completion.
+- **Days 1–18** sprint execution + squad QA (≥ 90% dev hours)
+- **Day 19** staging handover · **Day 20** UAT fixes & sign-off
+- **Days 21–22** ❄️ TCAB → backend live in production → **frozen**
+- **Days 23–27** dual-gate sanity (QA pool, then UAT Go) · **Day 28** staged rollout
 
-> 💡 **Presenter Cue:** 4-hour tasks protect developers. Smaller pull requests get reviewed in 30 minutes instead of sitting idle for days.
+Staged rollout, watched live: **5% → 20% → 50% → 100%** over four days, guard ≥ 99.8% crash-free sessions; spike → hotfix → re-verify → re-upload.
+
+> 💡 **Cardinal rule:** mobile sanity *never* runs against a changing backend. BE deploys to production first; mobile sanity runs second. Backward-plan from Day 19 — if a feature can't make staging by then, it belongs in next month's release.
 
 ---
 
-## Slide 9: Squad QA & the 10% Defect Buffer Rule
-### Mathematical Safeguards for Sprint Stability
+## Act 4 · What Good Looks Like
 
-```
-Max Allowed Bug-Fix Time  ≤  10% × Locked Dev Estimate
-```
+### The Scoreboard
 
-- **Concrete Example**: A 40-hour locked dev ticket allows a maximum of **4.0 hours** for bug fixing.
-- **Shift-Left**: Catching defects on the Dev environment costs 10x less time than discovering them in UAT or production.
-- **Alarm Protocol**: If bug fixing exceeds the 10% buffer, the Squad Lead and Developer hold a short review to check code quality, API specifications, or local testing gaps.
+| Target | Metric | Owner |
+| :--- | :--- | :--- |
+| 100% | On-time UAT handover | Squad |
+| < 2% | UAT bug leakage | Squad QA |
+| ≥ 90% | Locked dev hours delivered | Developers |
+| ≤ 10% | Bug-fix vs dev-time ratio | Developers |
+| ≤ 20% | Refinement overhead | Lead & SM |
+| 100% | Live-issue quota fulfilled | Squad + SA |
+| 100% | Store submission on calendar date | Release team |
+| ≥ 99.8% | Crash-free sessions | Whole team |
 
-> 💡 **Engineering Principle:** If a task takes 10 hours to debug, it was not a simple bug—it was an incomplete feature. The 10% rule ensures architects and leads address fundamental flaws early.
-
----
-
-## Slide 10: UAT Staging & Defect Bifurcation
-### Protecting Squad Metrics and Isolating Legacy Debt
-- **Defect Type A: Story Bug / Regression**:
-  - Caused by new changes in the current PR.
-  - Must be fixed immediately before UAT sign-off.
-  - Counts toward the **Squad QA KPI (UAT Bug Leakage Rate)**.
-- **Defect Type B: Pre-Existing Live Defect**:
-  - Found during UAT, but also happens on the current production app.
-  - Detached from the feature ticket and moved to the **Live Issue Pool**.
-  - Squads fix these through a dedicated **Monthly Live Issue Quota**.
-
-> 💡 **Engineering Principle:** Never fear legacy bugs during UAT. Old issues go to the Live Issue Pool so your current sprint feature releases on time.
+> 💡 **Say this:** every KPI traces back to a gate or a budget you've already seen. Nothing is measured that the model doesn't actively protect.
 
 ---
 
-## Slide 11: Release Operations & the Backend Freeze
-### Decoupling Microservices from Store Review Timelines
-- **Days 01 – 18**: Sprint development, code reviews, and Dev environment QA testing.
-- **Day 19**: UAT Staging handover over secure VPN.
-- **Days 21 – 22**: **TCAB & Backend Freeze** — all backend microservices deploy to production *before* mobile sanity testing starts.
-- **Days 23 – 28**: Rotating Release Team creates the release candidate branch, runs QA sanity, and completes business UAT.
+## Act 4 · Make It Yours
 
-> 💡 **Cardinal Rule:** Mobile sanity testing NEVER runs against changing backend code. Backend microservices freeze and deploy to production first; mobile sanity runs second.
+### Adopt It in Three Waves
 
----
+- **Wave 1 (Weeks 1–2) — Time Hygiene:** ≤ 4h subtasks, Dev vs. Refinement logging, `[BLOCKER]` tag with a 4h SLA.
+- **Wave 2 (Sprints 1–2) — Quality Gates:** 10% bug budget + alarm, defect bifurcation, Live Issue Pool quotas.
+- **Wave 3 (The Quarter) — Full Governance:** Box Solutions + ARB gateway, TCAB backend freeze, the 28-day calendar.
 
-## Slide 12: Five Golden Rules for High-Scale Teams
-1. **Box Before Build**: Never refine a ticket without an architect's Box Solution blueprint.
-2. **Lock at ARB**: Cross-product review (Core Products, Main Leads, POL/SOL) permanently locks dev hours and release dates.
-3. **Chunk to ≤ 4 Hours**: Small, verifiable subtasks surface blockers within 24 hours at daily standups.
-4. **Enforce 10% Buffer**: Mathematically cap bug-fixing time to diagnose code quality issues early.
-5. **BE Freeze First**: Always deploy backend services to production before mobile sanity testing starts.
+Recap: **Box Before Build · Lock at ARB · Chunk to ≤ 4h · Enforce 10% Buffer · BE Freeze First.**
 
-> 📘 **Operational Reference:** See the **Master Engineering Playbook** (`ENTERPRISE_MOBILE_SUPERAPP_WORKFLOW.md`) for complete role guides, RACI contracts, release calendar, and operational checklists.
+> 📘 **Go deeper:** the Master Engineering Playbook (`ENTERPRISE_MOBILE_SUPERAPP_WORKFLOW.md`) has the full lifecycle, the 7-SPOC RACI contract, STRIDE matrix, and operational checklists — everything to run this starting Monday.
 
 ---
 
 ## Presenting This Deck
 
-- **Google Slides / Keynote**: Paste each slide's bullet block onto a matching slide; the `> 💡` blocks are presenter notes.
-- **Marp**: Render directly — `marp SLIDES.md --pdf` (front matter at the top configures pagination).
-- **Obsidian**: The `---` separators split slides in most slide plugins; the 💡 blocks double as callouts.
+- **Google Slides / Keynote:** paste each slide's bullet block onto a matching slide; the `> 💡` blocks are presenter notes.
+- **Marp:** render directly — `marp SLIDES.md --pdf` (front matter configures pagination).
+- **Obsidian:** the `---` separators split slides in most slide plugins; the 💡 blocks double as callouts.
+- The acts are the story: **Act 1** why the model exists → **Act 2** the model in one breath → **Act 3** the gates and budgets up close → **Act 4** the payoff and adoption.

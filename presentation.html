@@ -3,18 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Interactive 12-slide deck: the enterprise mobile super-app operating model — ARB governance, 4-hour task chunking, the 10% bug buffer, and the pre-sanity backend freeze.">
+  <meta name="description" content="Interactive 14-slide deck: the enterprise mobile super-app operating model — three gates, two budgets, one calendar. ARB governance, 4-hour task chunking, the 10% bug buffer, and the pre-sanity backend freeze.">
   <meta name="color-scheme" content="light">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Scaling Mobile Super-App Engineering Teams">
-  <meta property="og:description" content="A battle-tested operating model for high-velocity mobile organizations: ARB governance, 4-hour task chunking, 10% bug buffer, and pre-sanity backend freeze.">
+  <meta property="og:description" content="A battle-tested operating model for high-velocity mobile organizations: three gates, two budgets, one calendar.">
   <meta property="og:url" content="https://ihjohny.github.io/squad-model/presentation.html">
   <title>Enterprise Mobile Super-App Engineering Playbook & Operating Model</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234338ca'/%3E%3Ctext x='16' y='21' font-family='monospace' font-size='12' font-weight='700' text-anchor='middle' fill='white'%3ESM%3C/text%3E%3C/svg%3E">
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg-canvas: #f8fafc;
@@ -38,9 +38,18 @@
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
 
-    code, pre, .mono {
+    code, pre, .mono, .kicker {
       font-family: 'JetBrains Mono', monospace;
     }
+
+    .kicker {
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .display-tight { letter-spacing: -0.025em; }
 
     body {
       background-color: var(--bg-canvas);
@@ -69,18 +78,23 @@
       box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.03), 0 1px 2px -1px rgba(15, 23, 42, 0.03);
     }
 
-    .deck-card-elevated {
-      background-color: var(--bg-surface);
-      border: 1px solid var(--border-strong);
+    .gate-card {
+      border: 2px solid;
       border-radius: 0.75rem;
-      box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.04), 0 2px 4px -2px rgba(15, 23, 42, 0.04);
+      box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.05), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
     }
 
-    .takeaway-banner {
-      transition: all 0.2s ease-in-out;
+    .flow-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #94a3b8;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
     }
 
-    /* Custom range slider styling */
+    .takeaway-banner { transition: all 0.2s ease-in-out; }
+
     input[type=range] {
       -webkit-appearance: none;
       background: #e2e8f0;
@@ -100,23 +114,17 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .slide {
-        transition: none;
-      }
+      .slide { transition: none; }
     }
 
     @media print {
-      @page {
-        size: landscape;
-      }
+      @page { size: landscape; }
       body {
         background: #ffffff !important;
         color: #0f172a !important;
         background-image: none !important;
       }
-      .no-print {
-        display: none !important;
-      }
+      .no-print { display: none !important; }
       .slide {
         display: flex !important;
         opacity: 1 !important;
@@ -137,25 +145,22 @@
       </div>
       <div>
         <h1 class="text-xs font-bold tracking-wide text-slate-900">Enterprise Mobile Super-App Operating Model</h1>
-        <p class="text-[11px] text-slate-500 font-medium">Architecture Governance, Agile Squad Delivery & Release Engineering</p>
+        <p class="text-[11px] text-slate-500 font-medium">Three Gates · Two Budgets · One Calendar</p>
       </div>
     </div>
 
     <!-- Interactive Navigation Controls -->
     <div class="flex items-center space-x-3">
-      <!-- Key Takeaways Toggle Button -->
       <button onclick="toggleTakeaways()" id="takeaway-btn" class="text-xs font-medium px-3 py-1.5 rounded-lg bg-indigo-50 hover:bg-indigo-100/80 border border-indigo-200 text-indigo-800 flex items-center space-x-1.5 transition-all shadow-xs" title="Toggle Presenter Takeaways (T)">
         <span>💡</span>
         <span class="hidden sm:inline">Key Takeaways</span>
         <kbd class="hidden md:inline text-[10px] text-indigo-500 bg-white px-1.5 py-0.5 rounded border border-indigo-200 font-mono ml-1">T</kbd>
       </button>
 
-      <!-- Slide Counter Pill -->
       <div class="flex items-center space-x-2 text-xs font-mono text-slate-600 bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200 shadow-xs" aria-live="polite">
-        <span>Slide <span id="current-slide-num" class="text-indigo-700 font-bold">1</span> / <span id="total-slides-num">12</span></span>
+        <span>Slide <span id="current-slide-num" class="text-indigo-700 font-bold">1</span> / <span id="total-slides-num">14</span></span>
       </div>
 
-      <!-- Arrow Controls -->
       <div class="flex items-center space-x-1.5">
         <button onclick="prevSlide()" class="p-1.5 rounded-lg bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 hover:text-slate-900 shadow-xs transition-all disabled:opacity-30 disabled:cursor-not-allowed" id="prev-btn" title="Previous Slide (← / Up)" aria-label="Previous slide">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
@@ -172,14 +177,14 @@
 
   <!-- Deck Progress Bar -->
   <div class="no-print fixed top-0 left-0 right-0 h-[3px] z-[60] pointer-events-none">
-    <div id="progress-bar" class="h-full bg-gradient-to-r from-indigo-600 via-sky-500 to-emerald-500 transition-all duration-300" style="width: 8.33%"></div>
+    <div id="progress-bar" class="h-full bg-gradient-to-r from-indigo-600 via-sky-500 to-emerald-500 transition-all duration-300" style="width: 7.14%"></div>
   </div>
 
   <!-- Slide Content Viewport -->
   <main class="flex-1 flex flex-col justify-center p-4 sm:p-6 lg:p-8 max-w-6xl mx-auto w-full">
 
     <!-- ============================================================ -->
-    <!-- SLIDE 1: Title & Foundational Pillars -->
+    <!-- SLIDE 1 · TITLE: The promise -->
     <!-- ============================================================ -->
     <section class="slide active flex-col justify-center items-center text-center py-6 w-full" data-slide="1">
       <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-semibold mb-5 shadow-xs">
@@ -187,703 +192,615 @@
         <span>High-Scale Mobile Operating Model</span>
       </div>
 
-      <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 max-w-3xl leading-tight mb-4">
+      <h1 class="text-3xl sm:text-5xl font-extrabold display-tight text-slate-900 max-w-3xl leading-tight mb-3">
         Scaling Mobile Super-App Engineering Teams
       </h1>
-      
-      <p class="text-base sm:text-lg text-slate-600 max-w-2xl font-normal mb-8 leading-relaxed">
-        A battle-tested operating model balancing rapid squad velocity, multi-system governance (payments, subscriptions), and predictable monthly release cadences.
+
+      <p class="text-base sm:text-lg text-slate-600 max-w-2xl font-normal mb-5 leading-relaxed">
+        Ship payments-grade features <em>every month</em> — with autonomous squads, predictable releases, and zero weekend emergencies.
       </p>
 
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-3.5 max-w-4xl w-full text-left mb-6">
+      <!-- The memory device -->
+      <div class="flex flex-wrap items-center justify-center gap-2.5 mb-7">
+        <span class="px-3.5 py-1.5 rounded-lg bg-indigo-600 text-white text-xs font-bold font-mono shadow-sm">3 GATES</span>
+        <span class="text-slate-400 font-bold">·</span>
+        <span class="px-3.5 py-1.5 rounded-lg bg-sky-600 text-white text-xs font-bold font-mono shadow-sm">2 BUDGETS</span>
+        <span class="text-slate-400 font-bold">·</span>
+        <span class="px-3.5 py-1.5 rounded-lg bg-emerald-600 text-white text-xs font-bold font-mono shadow-sm">1 CALENDAR</span>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3.5 max-w-4xl w-full text-left mb-5">
         <div class="deck-card p-4 hover:border-indigo-300 transition-all">
           <div class="flex items-center space-x-2 text-indigo-600 text-xs font-bold font-mono mb-1">
-            <span>01</span>
-            <span class="text-slate-300">|</span>
-            <span class="text-slate-700 uppercase">Architecture</span>
+            <span>01</span><span class="text-slate-300">|</span><span class="text-slate-700 uppercase">Architecture</span>
           </div>
           <h3 class="text-sm font-bold text-slate-900 mb-1">Box Before Build</h3>
-          <p class="text-xs text-slate-500 leading-relaxed">Architectural blueprints and FE/BE effort ratios defined prior to squad intake.</p>
+          <p class="text-xs text-slate-500 leading-relaxed">A one-page architectural blueprint exists before any squad refines the ticket.</p>
         </div>
-
         <div class="deck-card p-4 hover:border-indigo-300 transition-all">
           <div class="flex items-center space-x-2 text-indigo-600 text-xs font-bold font-mono mb-1">
-            <span>02</span>
-            <span class="text-slate-300">|</span>
-            <span class="text-slate-700 uppercase">Governance</span>
+            <span>02</span><span class="text-slate-300">|</span><span class="text-slate-700 uppercase">Governance</span>
           </div>
           <h3 class="text-sm font-bold text-slate-900 mb-1">Lock at ARB</h3>
-          <p class="text-xs text-slate-500 leading-relaxed">Cross-product architecture council locks Dev hours, QA hours, and release dates.</p>
+          <p class="text-xs text-slate-500 leading-relaxed">Cross-product review locks dev hours, QA hours, and release dates.</p>
         </div>
-
         <div class="deck-card p-4 hover:border-indigo-300 transition-all">
           <div class="flex items-center space-x-2 text-indigo-600 text-xs font-bold font-mono mb-1">
-            <span>03</span>
-            <span class="text-slate-300">|</span>
-            <span class="text-slate-700 uppercase">Velocity</span>
+            <span>03</span><span class="text-slate-300">|</span><span class="text-slate-700 uppercase">Velocity</span>
           </div>
           <h3 class="text-sm font-bold text-slate-900 mb-1">Chunk to ≤ 4 Hours</h3>
-          <p class="text-xs text-slate-500 leading-relaxed">Granular subtasks surface blockers within 24 hours at morning standups.</p>
+          <p class="text-xs text-slate-500 leading-relaxed">Granular subtasks surface blockers within 24 hours at standup.</p>
         </div>
-
         <div class="deck-card p-4 hover:border-indigo-300 transition-all">
           <div class="flex items-center space-x-2 text-indigo-600 text-xs font-bold font-mono mb-1">
-            <span>04</span>
-            <span class="text-slate-300">|</span>
-            <span class="text-slate-700 uppercase">Quality</span>
+            <span>04</span><span class="text-slate-300">|</span><span class="text-slate-700 uppercase">Quality</span>
           </div>
           <h3 class="text-sm font-bold text-slate-900 mb-1">10% Bug Buffer</h3>
-          <p class="text-xs text-slate-500 leading-relaxed">Mathematical cap on bug-fixing time to identify code quality debt early.</p>
+          <p class="text-xs text-slate-500 leading-relaxed">A mathematical cap on bug-fixing time exposes design debt early.</p>
         </div>
+      </div>
+
+      <div class="no-print flex items-center space-x-2 text-[11px] text-slate-400 font-mono mb-4">
+        <kbd class="px-1.5 py-0.5 bg-white border border-slate-200 rounded">→</kbd><span>or</span><kbd class="px-1.5 py-0.5 bg-white border border-slate-200 rounded">Space</kbd><span>to begin</span>
+        <span class="text-slate-300">·</span>
+        <kbd class="px-1.5 py-0.5 bg-white border border-slate-200 rounded">T</kbd><span>toggles presenter takeaways</span>
       </div>
 
       <div class="takeaway-banner max-w-4xl w-full bg-indigo-50/80 border border-indigo-200/80 rounded-xl p-3.5 text-left flex items-start space-x-3 shadow-xs">
         <span class="text-indigo-600 text-base">💡</span>
         <div class="text-xs text-slate-700 leading-relaxed">
-          <strong class="text-indigo-900 font-semibold">Engineering Principle:</strong> Frame this operating model not as red tape, but as <em>guardrails</em> that protect sprint commitments, eliminate scope creep, and ensure predictable releases.
+          <strong class="text-indigo-900 font-semibold">Framing:</strong> this model is not red tape — it is <em>guardrails</em>. Everything in the next 13 slides is one of: a gate you pass, a budget you respect, or a calendar you trust.
         </div>
       </div>
     </section>
 
     <!-- ============================================================ -->
-    <!-- SLIDE 2: The Core Challenge -->
+    <!-- SLIDE 2 · ACT 1: The pain -->
     <!-- ============================================================ -->
     <section class="slide flex-col justify-center w-full py-4" data-slide="2">
       <div class="mb-4">
-        <span class="text-xs font-mono uppercase tracking-wider font-semibold text-indigo-600">The Problem Statement</span>
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">Why Standard Agile Fails at Super-App Scale</h2>
-        <p class="text-slate-600 text-sm mt-1">When multiple squads build on top of core billing, payments, and account services, traditional 2-week sprints collapse.</p>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
-        <!-- Chaotic Reality -->
-        <div class="deck-card p-5 border-rose-200 bg-rose-50/30">
-          <div class="flex items-center space-x-2 text-rose-700 text-xs font-bold mb-3">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-            <span>SYMPTOMS OF UNGOVERNED SQUADS</span>
-          </div>
-          <ul class="space-y-3 text-xs text-slate-700">
-            <li class="flex items-start space-x-2">
-              <span class="text-rose-600 font-bold">•</span>
-              <span><strong>Cross-Product Breakages:</strong> Squad A alters a checkout payload; Squad B's subscription purchase silently crashes in staging.</span>
-            </li>
-            <li class="flex items-start space-x-2">
-              <span class="text-rose-600 font-bold">•</span>
-              <span><strong>Moving Target QA:</strong> Backend microservices deploy while mobile QA is testing, producing ghost bugs and invalidating test runs.</span>
-            </li>
-            <li class="flex items-start space-x-2">
-              <span class="text-rose-600 font-bold">•</span>
-              <span><strong>Invisible Work:</strong> Devs spend 20 hours in clarification meetings and log it as "coding time", distorting sprint velocity.</span>
-            </li>
-            <li class="flex items-start space-x-2">
-              <span class="text-rose-600 font-bold">•</span>
-              <span><strong>Endless Bug Spills:</strong> Minor defects consume 30% of sprint capacity because edge cases were never audited upfront.</span>
-            </li>
-          </ul>
+        <div class="flex items-center space-x-2 mb-1">
+          <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
+          <span class="kicker text-rose-600">Act 1 · The Problem</span>
         </div>
-
-        <!-- The Solution Playbook -->
-        <div class="deck-card p-5 border-emerald-200 bg-emerald-50/30">
-          <div class="flex items-center space-x-2 text-emerald-800 text-xs font-bold mb-3">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-            <span>THE GOVERNED OPERATING MODEL</span>
-          </div>
-          <ul class="space-y-3 text-xs text-slate-700">
-            <li class="flex items-start space-x-2">
-              <span class="text-emerald-600 font-bold">•</span>
-              <span><strong>ARB Gatekeeping:</strong> Core Product Leads, Main Product Leads, and Payment (POL) & Subscription (SOL) architects approve solution docs before coding begins.</span>
-            </li>
-            <li class="flex items-start space-x-2">
-              <span class="text-emerald-600 font-bold">•</span>
-              <span><strong>Pre-Sanity Backend Freeze:</strong> All microservices deploy to production under TCAB clearance <em>before</em> mobile sanity begins.</span>
-            </li>
-            <li class="flex items-start space-x-2">
-              <span class="text-emerald-600 font-bold">•</span>
-              <span><strong>Time Classification:</strong> Clear separation between "Refinement Time" (discovery) and "Dev Time" (active coding).</span>
-            </li>
-            <li class="flex items-start space-x-2">
-              <span class="text-emerald-600 font-bold">•</span>
-              <span><strong>10% Defect Cap:</strong> Mathematically limits bug-fixing overhead and triggers an immediate quality alarm when exceeded.</span>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="takeaway-banner w-full bg-indigo-50/80 border border-indigo-200/80 rounded-xl p-3.5 flex items-start space-x-3 shadow-xs">
-        <span class="text-indigo-600 text-base">💡</span>
-        <div class="text-xs text-slate-700 leading-relaxed">
-          <strong class="text-indigo-900 font-semibold">Presenter Cue:</strong> Emphasize that governance is designed to protect developers: it guarantees that upstream microservice teams cannot break mobile features right before release.
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================================================ -->
-    <!-- SLIDE 3: Team Topology & The RACI Model -->
-    <!-- ============================================================ -->
-    <section class="slide flex-col justify-center w-full py-4" data-slide="3">
-      <div class="mb-4">
-        <span class="text-xs font-mono uppercase tracking-wider font-semibold text-indigo-600">Organizational Structure</span>
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">Autonomous Squads with Matrix Governance</h2>
-        <p class="text-slate-600 text-sm">Decoupled execution pods anchored by cross-domain technical architecture.</p>
-      </div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 mb-4">
-        <!-- Squad Composition -->
-        <div class="lg:col-span-7 deck-card p-4">
-          <div class="flex items-center justify-between border-b border-slate-200 pb-2 mb-3">
-            <span class="text-xs font-bold uppercase tracking-wider text-slate-800">Feature Squad Composition</span>
-            <span class="text-[11px] font-mono text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded-md border border-indigo-200 font-semibold">Cross-Functional Pod</span>
-          </div>
-
-          <div class="grid grid-cols-2 gap-2.5 text-xs mb-3">
-            <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-200">
-              <span class="font-bold text-slate-800 block mb-0.5">Squad Main Lead & Tech Lead</span>
-              <p class="text-slate-600 text-[11px]">Technical delivery, architecture alignment; Squad Main Lead may oversee 1+ squads.</p>
-            </div>
-            <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-200">
-              <span class="font-bold text-slate-800 block mb-0.5">Frontend (Android & iOS)</span>
-              <p class="text-slate-600 text-[11px]">Seniors own major journeys; juniors implement UI components & unit tests.</p>
-            </div>
-            <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-200">
-              <span class="font-bold text-slate-800 block mb-0.5">Backend Engineers (BE)</span>
-              <p class="text-slate-600 text-[11px]">Microservices, DB migrations, TCAB compliance, and contract tests.</p>
-            </div>
-            <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-200">
-              <span class="font-bold text-slate-800 block mb-0.5">Squad QA & Scrum Master</span>
-              <p class="text-slate-600 text-[11px]">Dev env verification, 4h task hygiene, daily standups, and blocker resolution.</p>
-            </div>
-          </div>
-
-          <div class="p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-[11px] text-slate-700 space-y-1">
-            <div><strong>Senior Feature Ownership:</strong> Each senior engineer takes personal ownership of one main feature.</div>
-            <div><strong>Fluid Staffing & Taskforces:</strong> Temporary member loans for urgent work; specialist taskforces for redesigns vs. Growth squads for daily features.</div>
-            <div><strong>ARB Architecture Forum:</strong> Cross-product council of Leads & Architects from Core Products, Main Product Leads, POL, and SOL.</div>
-            <div><strong>Dual Scrum Masters:</strong> Squad SM (daily standups, 4h hygiene, blockers) + Release SM (monthly release scope & pipeline readiness).</div>
-          </div>
-        </div>
-
-        <!-- RACI Ticket Accountability -->
-        <div class="lg:col-span-5 deck-card p-4 flex flex-col justify-between">
-          <div>
-            <div class="border-b border-slate-200 pb-2 mb-2">
-              <span class="text-xs font-bold uppercase tracking-wider text-slate-800">The 7 Ticket SPOCs</span>
-              <p class="text-[11px] text-slate-500">Every main feature ticket binds these 7 owners:</p>
-            </div>
-
-            <ul class="space-y-1.5 text-xs">
-              <li class="flex justify-between py-1 border-b border-slate-100">
-                <span class="text-slate-700 font-medium">Product Owner (PO)</span>
-                <span class="text-indigo-700 font-mono text-[11px] bg-indigo-50 px-1.5 rounded">PRD & Business Intent</span>
-              </li>
-              <li class="flex justify-between py-1 border-b border-slate-100">
-                <span class="text-slate-700 font-medium">Integration SPOC (SA)</span>
-                <span class="text-indigo-700 font-mono text-[11px] bg-indigo-50 px-1.5 rounded">Box Solution & ARB</span>
-              </li>
-              <li class="flex justify-between py-1 border-b border-slate-100">
-                <span class="text-slate-700 font-medium">Assignee (Dev Lead)</span>
-                <span class="text-indigo-700 font-mono text-[11px] bg-indigo-50 px-1.5 rounded">Solution Doc & Coding</span>
-              </li>
-              <li class="flex justify-between py-1 border-b border-slate-100">
-                <span class="text-slate-700 font-medium">Squad QA SPOC</span>
-                <span class="text-indigo-700 font-mono text-[11px] bg-indigo-50 px-1.5 rounded">Dev Env Test Plan</span>
-              </li>
-              <li class="flex justify-between py-1 border-b border-slate-100">
-                <span class="text-slate-700 font-medium">Scrum Master (SM)</span>
-                <span class="text-indigo-700 font-mono text-[11px] bg-indigo-50 px-1.5 rounded">Blocker Escalation</span>
-              </li>
-              <li class="flex justify-between py-1 border-b border-slate-100">
-                <span class="text-slate-700 font-medium">UAT SPOC</span>
-                <span class="text-indigo-700 font-mono text-[11px] bg-indigo-50 px-1.5 rounded">Staging Business QA</span>
-              </li>
-              <li class="flex justify-between py-1">
-                <span class="text-slate-700 font-medium">Code Reviewers</span>
-                <span class="text-indigo-700 font-mono text-[11px] bg-indigo-50 px-1.5 rounded">Senior FE & BE Approvers</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <div class="takeaway-banner w-full bg-indigo-50/80 border border-indigo-200/80 rounded-xl p-3.5 flex items-start space-x-3 shadow-xs">
-        <span class="text-indigo-600 text-base">💡</span>
-        <div class="text-xs text-slate-700 leading-relaxed">
-          <strong class="text-indigo-900 font-semibold">Engineering Principle:</strong> Clear ownership prevents diffusion of responsibility. Every Jira ticket explicitly links the Solution Architect, Squad QA, and UAT Tester before coding starts.
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================================================ -->
-    <!-- SLIDE 4: End-to-End Delivery Flow -->
-    <!-- ============================================================ -->
-    <section class="slide flex-col justify-center w-full py-4" data-slide="4">
-      <div class="mb-3">
-        <span class="text-xs font-mono uppercase tracking-wider font-semibold text-indigo-600">Step-by-Step Operating Model</span>
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">The 9-Stage Super-App Delivery Pipeline</h2>
-        <p class="text-slate-600 text-sm">How a business idea travels from PRD to production store rollout.</p>
-      </div>
-
-      <!-- Top Macro Flow Bar -->
-      <div class="w-full grid grid-cols-3 gap-2 mb-3 text-xs">
-        <div class="flex items-center space-x-2 bg-indigo-50 border border-indigo-200 rounded-lg px-3 py-1.5 text-indigo-900 font-semibold shadow-2xs">
-          <span class="w-5 h-5 rounded-full bg-indigo-600 text-white flex items-center justify-center font-mono text-[10px] font-bold">1</span>
-          <span class="truncate">Phase 1: Architecture & Scope Lock (1–3)</span>
-        </div>
-        <div class="flex items-center space-x-2 bg-sky-50 border border-sky-200 rounded-lg px-3 py-1.5 text-sky-900 font-semibold shadow-2xs">
-          <span class="w-5 h-5 rounded-full bg-sky-600 text-white flex items-center justify-center font-mono text-[10px] font-bold">2</span>
-          <span class="truncate">Phase 2: Sprint & Quality Cap (4–6)</span>
-        </div>
-        <div class="flex items-center space-x-2 bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-1.5 text-emerald-900 font-semibold shadow-2xs">
-          <span class="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center font-mono text-[10px] font-bold">3</span>
-          <span class="truncate">Phase 3: Production & Rollout (7–9)</span>
-        </div>
-      </div>
-
-      <!-- 9-Stage Connected Grid with Phases & Flow Indicators -->
-      <div class="grid grid-cols-3 gap-2.5 mb-3 text-xs">
-        <!-- PHASE 1: Cards 1, 2, 3 -->
-        <div class="deck-card p-3 border-l-4 border-l-indigo-600 flex flex-col justify-between">
-          <div>
-            <div class="flex items-center justify-between mb-1">
-              <span class="font-bold text-slate-800 flex items-center space-x-1.5">
-                <span class="font-mono text-indigo-600 font-bold">01.</span>
-                <span>PO Grooming</span>
-              </span>
-              <span class="text-[10px] font-mono text-indigo-700 bg-indigo-50 px-1.5 rounded">PO + SA</span>
-            </div>
-            <p class="text-[11px] text-slate-600 leading-snug">PO submits PRD. Architect drafts the 1-page Box Solution with FE/BE effort ratio.</p>
-          </div>
-          <div class="mt-2 pt-1 border-t border-slate-100 flex items-center justify-between text-[10px] text-indigo-600 font-mono">
-            <span>Input: PRD</span>
-            <span>Output: Box Blueprint ➔</span>
-          </div>
-        </div>
-
-        <div class="deck-card p-3 border-l-4 border-l-indigo-600 flex flex-col justify-between">
-          <div>
-            <div class="flex items-center justify-between mb-1">
-              <span class="font-bold text-slate-800 flex items-center space-x-1.5">
-                <span class="font-mono text-indigo-600 font-bold">02.</span>
-                <span>Squad Refinement</span>
-              </span>
-              <span class="text-[10px] font-mono text-indigo-700 bg-indigo-50 px-1.5 rounded">Squad Dev</span>
-            </div>
-            <p class="text-[11px] text-slate-600 leading-snug">Developer authors Confluence Doc, models STRIDE security, and breaks tasks to ≤ 4 hours.</p>
-          </div>
-          <div class="mt-2 pt-1 border-t border-slate-100 flex items-center justify-between text-[10px] text-indigo-600 font-mono">
-            <span>Input: Box Doc</span>
-            <span>Output: ≤ 4h Subtasks ➔</span>
-          </div>
-        </div>
-
-        <div class="deck-card p-3 border-l-4 border-l-indigo-600 bg-indigo-50/30 flex flex-col justify-between">
-          <div>
-            <div class="flex items-center justify-between mb-1">
-              <span class="font-bold text-slate-800 flex items-center space-x-1.5">
-                <span class="font-mono text-indigo-600 font-bold">03.</span>
-                <span>ARB Gateway</span>
-              </span>
-              <span class="text-[10px] font-mono text-indigo-700 bg-indigo-100 px-1.5 rounded font-bold">ARB Panel</span>
-            </div>
-            <p class="text-[11px] text-slate-600 leading-snug">Review with Core Products, Main Leads, POL, and SOL; permanently lock Dev/QA hours and month.</p>
-          </div>
-          <div class="mt-2 pt-1 border-t border-indigo-100 flex items-center justify-between text-[10px] font-mono">
-            <span class="text-indigo-700 font-bold">🔒 GATE 1</span>
-            <span class="text-indigo-800 font-bold bg-white px-1.5 py-0.5 rounded border border-indigo-200">Scope & Dates Locked ➔</span>
-          </div>
-        </div>
-
-        <!-- PHASE 2: Cards 4, 5, 6 -->
-        <div class="deck-card p-3 border-l-4 border-l-sky-600 flex flex-col justify-between">
-          <div>
-            <div class="flex items-center justify-between mb-1">
-              <span class="font-bold text-slate-800 flex items-center space-x-1.5">
-                <span class="font-mono text-sky-600 font-bold">04.</span>
-                <span>Sprint Execution</span>
-              </span>
-              <span class="text-[10px] font-mono text-sky-700 bg-sky-50 px-1.5 rounded">Dev Pod</span>
-            </div>
-            <p class="text-[11px] text-slate-600 leading-snug">Work on 4h subtasks, log Dev vs. Refinement time daily, and obtain min 2 senior PR approvals.</p>
-          </div>
-          <div class="mt-2 pt-1 border-t border-slate-100 flex items-center justify-between text-[10px] text-sky-700 font-mono">
-            <span>Input: Locked Sprint</span>
-            <span>Output: Merged PRs ➔</span>
-          </div>
-        </div>
-
-        <div class="deck-card p-3 border-l-4 border-l-sky-600 bg-sky-50/20 flex flex-col justify-between">
-          <div>
-            <div class="flex items-center justify-between mb-1">
-              <span class="font-bold text-slate-800 flex items-center space-x-1.5">
-                <span class="font-mono text-sky-600 font-bold">05.</span>
-                <span>Squad QA Testing</span>
-              </span>
-              <span class="text-[10px] font-mono text-sky-700 bg-sky-100 px-1.5 rounded font-bold">Squad QA</span>
-            </div>
-            <p class="text-[11px] text-slate-600 leading-snug">Test on Dev VPN environment. Bug fixing time is mathematically capped at ≤ 10% of locked dev hours.</p>
-          </div>
-          <div class="mt-2 pt-1 border-t border-sky-100 flex items-center justify-between text-[10px] font-mono">
-            <span class="text-sky-800 font-bold">⏱️ RULE</span>
-            <span class="text-sky-900 font-bold bg-white px-1.5 py-0.5 rounded border border-sky-200">≤ 10% Bug Fix Cap ➔</span>
-          </div>
-        </div>
-
-        <div class="deck-card p-3 border-l-4 border-l-sky-600 flex flex-col justify-between">
-          <div>
-            <div class="flex items-center justify-between mb-1">
-              <span class="font-bold text-slate-800 flex items-center space-x-1.5">
-                <span class="font-mono text-sky-600 font-bold">06.</span>
-                <span>UAT Staging</span>
-              </span>
-              <span class="text-[10px] font-mono text-sky-700 bg-sky-50 px-1.5 rounded">UAT Team</span>
-            </div>
-            <p class="text-[11px] text-slate-600 leading-snug">Deploy to staging before UAT deadline; fix feature bugs and move legacy bugs to Live Issue Pool.</p>
-          </div>
-          <div class="mt-2 pt-1 border-t border-slate-100 flex items-center justify-between text-[10px] font-mono">
-            <span class="text-sky-800 font-bold">🎯 GATE 2</span>
-            <span class="text-sky-900 font-bold bg-white px-1.5 py-0.5 rounded border border-sky-200">UAT Sign-off ➔</span>
-          </div>
-        </div>
-
-        <!-- PHASE 3: Cards 7, 8, 9 -->
-        <div class="deck-card p-3 border-l-4 border-l-emerald-600 bg-emerald-50/20 flex flex-col justify-between">
-          <div>
-            <div class="flex items-center justify-between mb-1">
-              <span class="font-bold text-slate-800 flex items-center space-x-1.5">
-                <span class="font-mono text-emerald-700 font-bold">07.</span>
-                <span>TCAB & BE Freeze</span>
-              </span>
-              <span class="text-[10px] font-mono text-emerald-800 bg-emerald-100 px-1.5 rounded font-bold">Backend</span>
-            </div>
-            <p class="text-[11px] text-slate-600 leading-snug">All backend microservices deploy to LIVE production under TCAB before mobile sanity starts.</p>
-          </div>
-          <div class="mt-2 pt-1 border-t border-emerald-100 flex items-center justify-between text-[10px] font-mono">
-            <span class="text-emerald-800 font-bold">❄️ GATE 3</span>
-            <span class="text-emerald-900 font-bold bg-white px-1.5 py-0.5 rounded border border-emerald-200">BE Freeze First ➔</span>
-          </div>
-        </div>
-
-        <div class="deck-card p-3 border-l-4 border-l-emerald-600 flex flex-col justify-between">
-          <div>
-            <div class="flex items-center justify-between mb-1">
-              <span class="font-bold text-slate-800 flex items-center space-x-1.5">
-                <span class="font-mono text-emerald-700 font-bold">08.</span>
-                <span>Sanity Candidate</span>
-              </span>
-              <span class="text-[10px] font-mono text-emerald-800 bg-emerald-50 px-1.5 rounded">Release Team</span>
-            </div>
-            <p class="text-[11px] text-slate-600 leading-snug">Rotating Release Team merges squad branches; run dual-gate sanity (Squad QA then UAT pool).</p>
-          </div>
-          <div class="mt-2 pt-1 border-t border-slate-100 flex items-center justify-between text-[10px] text-emerald-700 font-mono">
-            <span>Input: Merged Release</span>
-            <span>Dual Gate Passed ➔</span>
-          </div>
-        </div>
-
-        <div class="deck-card p-3 border-l-4 border-l-emerald-600 bg-emerald-50/30 flex flex-col justify-between">
-          <div>
-            <div class="flex items-center justify-between mb-1">
-              <span class="font-bold text-slate-800 flex items-center space-x-1.5">
-                <span class="font-mono text-emerald-700 font-bold">09.</span>
-                <span>Staged Rollout</span>
-              </span>
-              <span class="text-[10px] font-mono text-emerald-800 bg-emerald-100 px-1.5 rounded font-bold">Stores + Ops</span>
-            </div>
-            <p class="text-[11px] text-slate-600 leading-snug">5% → 20% → 50% → 100% store rollout with real-time Firebase Crashlytics monitoring.</p>
-          </div>
-          <div class="mt-2 pt-1 border-t border-emerald-100 flex items-center justify-between text-[10px] font-mono">
-            <span class="text-emerald-800 font-bold">🚀 SLA</span>
-            <span class="text-emerald-900 font-bold bg-white px-1.5 py-0.5 rounded border border-emerald-200">≥ 99.8% Crash-Free</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="takeaway-banner w-full bg-indigo-50/80 border border-indigo-200/80 rounded-xl p-3.5 flex items-start space-x-3 shadow-xs">
-        <span class="text-indigo-600 text-base">💡</span>
-        <div class="text-xs text-slate-700 leading-relaxed">
-          <strong class="text-indigo-900 font-semibold">Presenter Cue:</strong> Walk through the 3 phases sequentially. Emphasize that each phase has a strict exit gate: <strong>Scope Lock</strong> at Step 3, <strong>10% Defect Cap</strong> at Step 5, and <strong>Backend Freeze</strong> at Step 7.
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================================================ -->
-    <!-- SLIDE 5: The "Box Solution" & Confluence Standards -->
-    <!-- ============================================================ -->
-    <section class="slide flex-col justify-center w-full py-4" data-slide="5">
-      <div class="mb-4">
-        <span class="text-xs font-mono uppercase tracking-wider font-semibold text-indigo-600">Architectural Standards</span>
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">The "Box Solution" & Confluence Refinement</h2>
-        <p class="text-slate-600 text-sm">Eliminating ambiguity by designing contracts, failure modes, and threat models before coding.</p>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4">
-        <!-- Box Solution -->
-        <div class="deck-card p-4">
-          <div class="flex items-center space-x-2 text-indigo-700 text-xs font-bold mb-2">
-            <span class="w-2 h-2 rounded-full bg-indigo-600"></span>
-            <span>PART 1: SOLUTION ARCHITECT'S "BOX SOLUTION"</span>
-          </div>
-          <p class="text-xs text-slate-600 mb-3 leading-relaxed">
-            Attached to the Jira ticket during PO grooming. Defines the system landscape and sets baseline estimation:
-          </p>
-
-          <div class="space-y-2 font-mono text-xs">
-            <div class="p-2.5 bg-slate-50 rounded-lg border border-slate-200">
-              <span class="text-slate-500 text-[10px] block uppercase">Touched Microservices</span>
-              <span class="text-slate-800 font-semibold text-xs">Payment (POL) • Subscription (SOL) • Core Profile</span>
-            </div>
-            <div class="p-2.5 bg-slate-50 rounded-lg border border-slate-200">
-              <span class="text-slate-500 text-[10px] block uppercase">Initial Effort Split</span>
-              <span class="text-indigo-700 font-semibold text-xs">40% Frontend (Android & iOS) / 60% Backend</span>
-            </div>
-            <div class="p-2.5 bg-slate-50 rounded-lg border border-slate-200">
-              <span class="text-slate-500 text-[10px] block uppercase">Downstream Systems</span>
-              <span class="text-slate-800 font-semibold text-xs">External Payment Gateways & Telco Core Billing</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Confluence Solution Doc -->
-        <div class="deck-card p-4">
-          <div class="flex items-center space-x-2 text-sky-700 text-xs font-bold mb-2">
-            <span class="w-2 h-2 rounded-full bg-sky-600"></span>
-            <span>PART 2: SQUAD CONFLUENCE SOLUTION SPEC</span>
-          </div>
-          <p class="text-xs text-slate-600 mb-3 leading-relaxed">
-            Authored by the squad developer during refinement. Required for ARB presentation:
-          </p>
-
-          <ul class="space-y-2 text-xs text-slate-700">
-            <li class="flex items-start space-x-2">
-              <span class="text-indigo-600 font-bold">✔</span>
-              <span><strong>Sequence Diagrams:</strong> Happy paths and network timeout / retry failure fallbacks.</span>
-            </li>
-            <li class="flex items-start space-x-2">
-              <span class="text-indigo-600 font-bold">✔</span>
-              <span><strong>Network Matrix:</strong> Offline caching, flaky 3G timeouts, exponential backoff with jitter.</span>
-            </li>
-            <li class="flex items-start space-x-2">
-              <span class="text-indigo-600 font-bold">✔</span>
-              <span><strong>STRIDE Threat Model:</strong> Analysis of mobile fraud, tampering, and API replay risks.</span>
-            </li>
-            <li class="flex items-start space-x-2">
-              <span class="text-indigo-600 font-bold">✔</span>
-              <span><strong>Blockers & 4h Tasks:</strong> Upcoming blocker analysis and granular task decomposition.</span>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="takeaway-banner w-full bg-indigo-50/80 border border-indigo-200/80 rounded-xl p-3.5 flex items-start space-x-3 shadow-xs">
-        <span class="text-indigo-600 text-base">💡</span>
-        <div class="text-xs text-slate-700 leading-relaxed">
-          <strong class="text-indigo-900 font-semibold">Engineering Principle:</strong> Developers never code from a vague ticket description. Every feature begins with an architect's Box Solution and a documented Confluence specification.
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================================================ -->
-    <!-- SLIDE 6: STRIDE Threat Modeling -->
-    <!-- ============================================================ -->
-    <section class="slide flex-col justify-center w-full py-4" data-slide="6">
-      <div class="mb-3">
-        <span class="text-xs font-mono uppercase tracking-wider font-semibold text-indigo-600">Security Engineering</span>
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">STRIDE Threat Modeling for Mobile Features</h2>
-        <p class="text-slate-600 text-sm">Mandatory threat analysis for financial transactions, subscriptions, and identity flows.</p>
-      </div>
-
-      <div class="deck-card overflow-hidden mb-3">
-        <table class="w-full text-left text-xs border-collapse">
-          <thead>
-            <tr class="border-b border-slate-200 bg-slate-50 text-slate-800">
-              <th class="py-2.5 px-4 font-bold">Threat</th>
-              <th class="py-2.5 px-4 font-bold">Mobile Super-App Risk</th>
-              <th class="py-2.5 px-4 font-bold">Required Countermeasure</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-slate-100 text-slate-700">
-            <tr>
-              <td class="py-2 px-4 font-mono font-bold text-indigo-700">Spoofing</td>
-              <td class="py-2 px-4">Fake mobile headers or spoofed MSISDN</td>
-              <td class="py-2 px-4">Signed mTLS tokens & SIM-binding validation</td>
-            </tr>
-            <tr>
-              <td class="py-2 px-4 font-mono font-bold text-indigo-700">Tampering</td>
-              <td class="py-2 px-4">Modifying wallet balance in local SQLite / Preferences</td>
-              <td class="py-2 px-4">Strict server-side ledger; client cache is display-only</td>
-            </tr>
-            <tr>
-              <td class="py-2 px-4 font-mono font-bold text-indigo-700">Repudiation</td>
-              <td class="py-2 px-4">User disputes duplicate bundle purchases</td>
-              <td class="py-2 px-4">Client-side idempotency keys passed to Payment Layer</td>
-            </tr>
-            <tr>
-              <td class="py-2 px-4 font-mono font-bold text-indigo-700">Info Disclosure</td>
-              <td class="py-2 px-4">Leaking auth tokens to system logcat / crash logs</td>
-              <td class="py-2 px-4">R8/ProGuard obfuscation & Encrypted Keystore / Keychain</td>
-            </tr>
-            <tr>
-              <td class="py-2 px-4 font-mono font-bold text-indigo-700">Denial of Service</td>
-              <td class="py-2 px-4">App retry storm when connection drops to 2G</td>
-              <td class="py-2 px-4">Exponential backoff, jitter, and local circuit breakers</td>
-            </tr>
-            <tr>
-              <td class="py-2 px-4 font-mono font-bold text-indigo-700">Elevation of Privilege</td>
-              <td class="py-2 px-4">Direct invocation of internal telecom APIs</td>
-              <td class="py-2 px-4">Scoped OAuth2 permission checks enforced at BFF gateway</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="takeaway-banner w-full bg-indigo-50/80 border border-indigo-200/80 rounded-xl p-3.5 flex items-start space-x-3 shadow-xs">
-        <span class="text-indigo-600 text-base">💡</span>
-        <div class="text-xs text-slate-700 leading-relaxed">
-          <strong class="text-indigo-900 font-semibold">Presenter Cue:</strong> STRIDE is not abstract security theory—it is practical edge-case thinking before writing code (e.g. "What if the user double-taps on 2G?").
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================================================ -->
-    <!-- SLIDE 7: The ARB Architecture Gate -->
-    <!-- ============================================================ -->
-    <section class="slide flex-col justify-center w-full py-4" data-slide="7">
-      <div class="mb-4">
-        <span class="text-xs font-mono uppercase tracking-wider font-semibold text-indigo-600">Governance Gate</span>
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">The ARB Gate: Locking Scope & Estimations</h2>
-        <p class="text-slate-600 text-sm">Where cross-product architects eliminate downstream surprises before code is written.</p>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-        <div class="deck-card p-4">
-          <span class="text-xs font-mono text-indigo-700 block mb-2 font-bold">1. THE FORUM</span>
-          <h3 class="text-sm font-bold text-slate-900 mb-2">Cross-Product Panel (ARB)</h3>
-          <p class="text-xs text-slate-600 leading-relaxed">
-            Team Leads, System Architects, <strong>Core Product Leads</strong>, and <strong>Main Product Leads</strong> from Core Products, <strong>Payment (POL)</strong>, <strong>Subscription (SOL)</strong>, and Platform Services.
-          </p>
-          <div class="mt-3 text-[11px] text-slate-600 bg-slate-50 p-2.5 rounded-lg border border-slate-200">
-            Guarantees new endpoints adhere to security, token reuse, and backward compatibility.
-          </div>
-        </div>
-
-        <div class="deck-card p-4">
-          <span class="text-xs font-mono text-sky-700 block mb-2 font-bold">2. THE SCRUTINY</span>
-          <h3 class="text-sm font-bold text-slate-900 mb-2">Corner Cases & Feedback</h3>
-          <p class="text-xs text-slate-600 leading-relaxed">
-            The squad dev defends the Confluence doc:
-          </p>
-          <ul class="mt-2.5 space-y-1.5 text-xs text-slate-600">
-            <li>• What happens if payment gateway drops halfway?</li>
-            <li>• How is partial balance refund handled?</li>
-            <li>• Are retry storms prevented at the gateway?</li>
-          </ul>
-        </div>
-
-        <div class="deck-card p-4">
-          <span class="text-xs font-mono text-amber-700 block mb-2 font-bold">3. THE COMMITMENT</span>
-          <h3 class="text-sm font-bold text-slate-900 mb-2">The Permanent Milestone Lock</h3>
-          <p class="text-xs text-slate-600 leading-relaxed">
-            Once ARB stamps approval, 4 parameters become immutable:
-          </p>
-          <ul class="mt-2.5 space-y-1 text-xs font-mono text-[11px] text-slate-700">
-            <li class="flex items-center space-x-1.5"><span class="text-emerald-600">✔</span> <span>Dev Hours Locked</span></li>
-            <li class="flex items-center space-x-1.5"><span class="text-emerald-600">✔</span> <span>QA Hours Locked</span></li>
-            <li class="flex items-center space-x-1.5"><span class="text-emerald-600">✔</span> <span>UAT Delivery Date Locked</span></li>
-            <li class="flex items-center space-x-1.5"><span class="text-emerald-600">✔</span> <span>Release Version Tagged</span></li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="takeaway-banner w-full bg-indigo-50/80 border border-indigo-200/80 rounded-xl p-3.5 flex items-start space-x-3 shadow-xs">
-        <span class="text-indigo-600 text-base">💡</span>
-        <div class="text-xs text-slate-700 leading-relaxed">
-          <strong class="text-indigo-900 font-semibold">Engineering Principle:</strong> The ARB approval locks commitments. Once dev hours and UAT delivery dates are formally approved, sprint scope is protected from ad-hoc additions.
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================================================ -->
-    <!-- SLIDE 8: Time Classification & The 4-Hour Rule -->
-    <!-- ============================================================ -->
-    <section class="slide flex-col justify-center w-full py-4" data-slide="8">
-      <div class="mb-4">
-        <span class="text-xs font-mono uppercase tracking-wider font-semibold text-indigo-600">Sprint Hygiene & Velocity</span>
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">Time Engineering & The Central Jira Dashboard</h2>
-        <p class="text-slate-600 text-sm">Eliminating invisible work, chunking subtasks, and tracking true engineering velocity.</p>
+        <h2 class="text-2xl sm:text-3xl font-extrabold display-tight text-slate-900">Standard Agile Breaks at Super-App Scale</h2>
+        <p class="text-slate-600 text-sm mt-1">Six squads, one checkout flow, and a microservice mesh that never stands still. Sound familiar?</p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-        <div class="deck-card p-4 flex flex-col justify-between">
+        <div class="deck-card p-4 flex items-start space-x-4 border-l-4 border-l-rose-500">
+          <span class="text-3xl font-extrabold display-tight text-rose-600 leading-none min-w-[4.5rem]">30%</span>
           <div>
-            <div class="flex items-center space-x-2 text-xs font-bold text-indigo-700 mb-2">
-              <span class="w-2 h-2 rounded-full bg-indigo-600"></span>
-              <span>THE 4-HOUR GRANULAR SUBTASK RULE</span>
+            <h3 class="text-sm font-bold text-slate-900 mb-0.5">…of the sprint eaten by bug spills</h3>
+            <p class="text-xs text-slate-500 leading-relaxed">Edge cases were never reviewed upfront, so "small" defects consume a third of the team's capacity.</p>
+          </div>
+        </div>
+        <div class="deck-card p-4 flex items-start space-x-4 border-l-4 border-l-rose-500">
+          <span class="text-3xl font-extrabold display-tight text-rose-600 leading-none min-w-[4.5rem]">20h</span>
+          <div>
+            <h3 class="text-sm font-bold text-slate-900 mb-0.5">…logged as "coding" but spent in meetings</h3>
+            <p class="text-xs text-slate-500 leading-relaxed">Clarification work is invisible, so sprint metrics lie and planning keeps missing.</p>
+          </div>
+        </div>
+        <div class="deck-card p-4 flex items-start space-x-4 border-l-4 border-l-rose-500">
+          <span class="text-3xl font-extrabold display-tight text-rose-600 leading-none min-w-[4.5rem]">👻</span>
+          <div>
+            <h3 class="text-sm font-bold text-slate-900 mb-0.5">…phantom bugs from moving targets</h3>
+            <p class="text-xs text-slate-500 leading-relaxed">Backend microservices deploy while mobile QA is mid-test, invalidating every open test run.</p>
+          </div>
+        </div>
+        <div class="deck-card p-4 flex items-start space-x-4 border-l-4 border-l-rose-500">
+          <span class="text-3xl font-extrabold display-tight text-rose-600 leading-none min-w-[4.5rem]">💥</span>
+          <div>
+            <h3 class="text-sm font-bold text-slate-900 mb-0.5">…silent cross-product breakage</h3>
+            <p class="text-xs text-slate-500 leading-relaxed">Squad A changes a checkout payload; Squad B's subscription purchase crashes in staging.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="takeaway-banner w-full bg-indigo-50/80 border border-indigo-200/80 rounded-xl p-3.5 flex items-start space-x-3 shadow-xs">
+        <span class="text-indigo-600 text-base">💡</span>
+        <div class="text-xs text-slate-700 leading-relaxed">
+          <strong class="text-indigo-900 font-semibold">The point:</strong> none of these are talent problems — they are <em>coordination</em> problems. And coordination is exactly what the model automates.
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SLIDE 3 · ACT 2: The model in one breath -->
+    <!-- ============================================================ -->
+    <section class="slide flex-col justify-center w-full py-4" data-slide="3">
+      <div class="mb-4">
+        <div class="flex items-center space-x-2 mb-1">
+          <span class="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
+          <span class="kicker text-indigo-600">Act 2 · The Model in One Breath</span>
+        </div>
+        <h2 class="text-2xl sm:text-4xl font-extrabold display-tight text-slate-900">Three Gates. Two Budgets. One Calendar.</h2>
+        <p class="text-slate-600 text-sm mt-1">Every rule in this operating model is one of those six things. That's the whole system.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+        <!-- GATES -->
+        <div class="deck-card p-4 border-t-4 border-t-indigo-600">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-xs font-extrabold uppercase tracking-wider text-indigo-800">🚪 The 3 Gates</h3>
+            <span class="text-[10px] font-mono text-slate-400">you must pass</span>
+          </div>
+          <div class="space-y-2">
+            <div class="flex items-center space-x-2 bg-indigo-50 border border-indigo-200 rounded-lg px-3 py-2">
+              <span class="text-sm">🔒</span><span class="text-xs font-bold text-indigo-900">Gate 1 · ARB Scope Lock</span>
             </div>
-            <p class="text-xs text-slate-600 leading-relaxed mb-3">
-              In this operating model, <strong>no Jira task may exceed 4 hours</strong>. If a feature takes 16 hours, it must be split into 4 tangible subtasks:
-            </p>
-            <div class="space-y-1.5 font-mono text-xs">
-              <div class="p-2 bg-slate-50 rounded-lg border border-slate-200 flex justify-between">
-                <span class="text-slate-700">1. DTO models & serialization unit tests</span>
-                <span class="text-indigo-700 font-bold">4.0h</span>
+            <div class="flow-arrow text-xs">↓</div>
+            <div class="flex items-center space-x-2 bg-sky-50 border border-sky-200 rounded-lg px-3 py-2">
+              <span class="text-sm">🎯</span><span class="text-xs font-bold text-sky-900">Gate 2 · UAT Sign-off</span>
+            </div>
+            <div class="flow-arrow text-xs">↓</div>
+            <div class="flex items-center space-x-2 bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-2">
+              <span class="text-sm">❄️</span><span class="text-xs font-bold text-emerald-900">Gate 3 · Backend Freeze</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- BUDGETS -->
+        <div class="deck-card p-4 border-t-4 border-t-sky-600">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-xs font-extrabold uppercase tracking-wider text-sky-800">⏱️ The 2 Budgets</h3>
+            <span class="text-[10px] font-mono text-slate-400">you must respect</span>
+          </div>
+          <div class="space-y-2.5">
+            <div class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 flex items-center space-x-3">
+              <span class="text-2xl font-extrabold display-tight text-sky-700">≤4h</span>
+              <div>
+                <span class="text-xs font-bold text-slate-800 block">Task Budget</span>
+                <span class="text-[11px] text-slate-500">No subtask is bigger than 4 hours</span>
               </div>
-              <div class="p-2 bg-slate-50 rounded-lg border border-slate-200 flex justify-between">
-                <span class="text-slate-700">2. Repository layer & room cache fallback</span>
-                <span class="text-indigo-700 font-bold">3.5h</span>
-              </div>
-              <div class="p-2 bg-slate-50 rounded-lg border border-slate-200 flex justify-between">
-                <span class="text-slate-700">3. UI composable & viewmodel state binding</span>
-                <span class="text-indigo-700 font-bold">4.0h</span>
-              </div>
-              <div class="p-2 bg-slate-50 rounded-lg border border-slate-200 flex justify-between">
-                <span class="text-slate-700">4. Edge-case error dialogs & analytics events</span>
-                <span class="text-indigo-700 font-bold">3.0h</span>
+            </div>
+            <div class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 flex items-center space-x-3">
+              <span class="text-2xl font-extrabold display-tight text-sky-700">≤10%</span>
+              <div>
+                <span class="text-xs font-bold text-slate-800 block">Bug Budget</span>
+                <span class="text-[11px] text-slate-500">Fix time ≤ 10% of locked dev hours</span>
               </div>
             </div>
           </div>
-          <div class="text-[11px] text-slate-600 bg-slate-50 p-2.5 rounded-lg border border-slate-200 mt-3">
-            <strong>Why it matters:</strong> Engineers can never be silently stuck for days. Any blocker is surfaced within 24 hours at daily standups.
+        </div>
+
+        <!-- CALENDAR -->
+        <div class="deck-card p-4 border-t-4 border-t-emerald-600">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-xs font-extrabold uppercase tracking-wider text-emerald-800">📅 The 1 Calendar</h3>
+            <span class="text-[10px] font-mono text-slate-400">you must trust</span>
+          </div>
+          <div class="flex h-9 rounded-lg overflow-hidden border border-slate-200 text-[10px] font-mono text-white mb-2.5">
+            <div class="bg-emerald-500/90 flex items-center justify-center" style="width:64%">D1–18</div>
+            <div class="bg-emerald-700 flex items-center justify-center" style="width:36%">D19–28</div>
+          </div>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            One fixed monthly cadence: UAT cutoff <strong class="text-slate-800">Day 19</strong>, backend frozen <strong class="text-slate-800">Day 22</strong>, stores by <strong class="text-slate-800">Day 28</strong>. Every month. No exceptions.
+          </p>
+        </div>
+      </div>
+
+      <div class="takeaway-banner w-full bg-indigo-50/80 border border-indigo-200/80 rounded-xl p-3.5 flex items-start space-x-3 shadow-xs">
+        <span class="text-indigo-600 text-base">💡</span>
+        <div class="text-xs text-slate-700 leading-relaxed">
+          <strong class="text-indigo-900 font-semibold">Say this:</strong> "If you remember one sentence from today, make it this one — three gates, two budgets, one calendar."
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SLIDE 4 · ACT 2: The five golden rules -->
+    <!-- ============================================================ -->
+    <section class="slide flex-col justify-center w-full py-4" data-slide="4">
+      <div class="mb-4">
+        <div class="flex items-center space-x-2 mb-1">
+          <span class="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
+          <span class="kicker text-indigo-600">Act 2 · Five Non-Negotiables</span>
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold display-tight text-slate-900">The Five Golden Rules</h2>
+        <p class="text-slate-600 text-sm mt-1">Each rule maps straight onto the framework — nothing here is ceremony for its own sake.</p>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-3">
+        <div class="deck-card p-3.5 hover:border-indigo-300 transition-all">
+          <span class="text-indigo-700 font-mono font-extrabold text-lg block mb-1">01</span>
+          <h4 class="text-xs font-bold text-slate-900 mb-1">Box Before Build</h4>
+          <p class="text-[11px] text-slate-600 leading-relaxed mb-2">Never refine a ticket without an architect's one-page Box Solution.</p>
+          <span class="text-[10px] font-mono text-indigo-700 bg-indigo-50 border border-indigo-200 px-1.5 py-0.5 rounded">feeds Gate 1</span>
+        </div>
+        <div class="deck-card p-3.5 hover:border-indigo-300 transition-all">
+          <span class="text-indigo-700 font-mono font-extrabold text-lg block mb-1">02</span>
+          <h4 class="text-xs font-bold text-slate-900 mb-1">Lock at ARB</h4>
+          <p class="text-[11px] text-slate-600 leading-relaxed mb-2">Cross-product review permanently locks hours and release dates.</p>
+          <span class="text-[10px] font-mono text-indigo-700 bg-indigo-50 border border-indigo-200 px-1.5 py-0.5 rounded">= Gate 1</span>
+        </div>
+        <div class="deck-card p-3.5 hover:border-sky-300 transition-all">
+          <span class="text-sky-700 font-mono font-extrabold text-lg block mb-1">03</span>
+          <h4 class="text-xs font-bold text-slate-900 mb-1">Chunk to ≤ 4 Hours</h4>
+          <p class="text-[11px] text-slate-600 leading-relaxed mb-2">Small, verifiable subtasks surface blockers within 24 hours.</p>
+          <span class="text-[10px] font-mono text-sky-700 bg-sky-50 border border-sky-200 px-1.5 py-0.5 rounded">= Budget 1</span>
+        </div>
+        <div class="deck-card p-3.5 hover:border-sky-300 transition-all">
+          <span class="text-sky-700 font-mono font-extrabold text-lg block mb-1">04</span>
+          <h4 class="text-xs font-bold text-slate-900 mb-1">Enforce 10% Buffer</h4>
+          <p class="text-[11px] text-slate-600 leading-relaxed mb-2">Cap bug-fixing time to expose code-quality debt early.</p>
+          <span class="text-[10px] font-mono text-sky-700 bg-sky-50 border border-sky-200 px-1.5 py-0.5 rounded">= Budget 2</span>
+        </div>
+        <div class="deck-card p-3.5 hover:border-emerald-300 transition-all">
+          <span class="text-emerald-700 font-mono font-extrabold text-lg block mb-1">05</span>
+          <h4 class="text-xs font-bold text-slate-900 mb-1">BE Freeze First</h4>
+          <p class="text-[11px] text-slate-600 leading-relaxed mb-2">Backend deploys to production before mobile sanity ever starts.</p>
+          <span class="text-[10px] font-mono text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded">= Gate 3</span>
+        </div>
+      </div>
+
+      <p class="text-[11px] text-slate-500 mb-3">
+        <span class="font-mono font-bold text-slate-700">And Gate 2 (UAT Sign-off)?</span> It's earned — by holding both budgets through the sprint.
+      </p>
+
+      <div class="takeaway-banner w-full bg-indigo-50/80 border border-indigo-200/80 rounded-xl p-3.5 flex items-start space-x-3 shadow-xs">
+        <span class="text-indigo-600 text-base">💡</span>
+        <div class="text-xs text-slate-700 leading-relaxed">
+          <strong class="text-indigo-900 font-semibold">Why it works:</strong> five memorable rules beat fifty policies. Every engineer can recite these — and therefore knows exactly what the organization will and won't tolerate.
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SLIDE 5 · ACT 2: The cast -->
+    <!-- ============================================================ -->
+    <section class="slide flex-col justify-center w-full py-4" data-slide="5">
+      <div class="mb-4">
+        <div class="flex items-center space-x-2 mb-1">
+          <span class="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
+          <span class="kicker text-indigo-600">Act 2 · Who Runs This</span>
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold display-tight text-slate-900">Autonomous Squads, Matrix Governance</h2>
+        <p class="text-slate-600 text-sm mt-1">Spotify-style squads for speed — a cross-product architecture board for coherence.</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 mb-4">
+        <!-- Topology stack -->
+        <div class="lg:col-span-7 flex flex-col">
+          <div class="deck-card p-3.5 bg-slate-50/60">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-bold text-slate-800">1 · Business & UAT</span>
+              <span class="text-[10px] font-mono text-slate-500">the "why"</span>
+            </div>
+            <p class="text-[11px] text-slate-600">Product Owners own vision & PRDs · UAT team owns business acceptance & Go/No-Go.</p>
+          </div>
+          <div class="flow-arrow text-xs py-0.5">↑</div>
+          <div class="deck-card p-3.5 border-indigo-200 bg-indigo-50/40">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-bold text-indigo-900">2 · Leadership & the ARB</span>
+              <span class="text-[10px] font-mono text-indigo-500">the "what fits"</span>
+            </div>
+            <p class="text-[11px] text-slate-600">Solution Architect draws Box Solutions · Squad Main Leads (1 lead, 1+ squads) · Release Lead owns the calendar · <strong class="text-indigo-800">ARB = joint council of Core, Payments (POL), Subscriptions (SOL) & Platform architects</strong>.</p>
+          </div>
+          <div class="flow-arrow text-xs py-0.5">↑</div>
+          <div class="deck-card p-3.5">
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="text-xs font-bold text-slate-800">3 · The Squad Pool</span>
+              <span class="text-[10px] font-mono text-slate-500">the "how"</span>
+            </div>
+            <div class="grid grid-cols-2 gap-1.5 text-[11px]">
+              <div class="bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5"><strong class="text-slate-800">Each squad:</strong> Android · iOS · Backend · QA · SM · Dev Lead</div>
+              <div class="bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5"><strong class="text-slate-800">Fluid staffing:</strong> loan engineers between squads; taskforces for revamps; Growth squads keep shipping</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 7 SPOCs -->
+        <div class="lg:col-span-5 deck-card p-4">
+          <div class="border-b border-slate-200 pb-2 mb-2.5">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-800">7 Owners on Every Ticket</span>
+            <p class="text-[11px] text-slate-500">No diffusion of responsibility — the ticket names them.</p>
+          </div>
+          <ul class="space-y-1 text-xs">
+            <li class="flex justify-between items-center py-1 border-b border-slate-100"><span class="text-slate-700 font-medium">Product Owner</span><span class="text-indigo-700 font-mono text-[10px] bg-indigo-50 px-1.5 py-0.5 rounded">intent</span></li>
+            <li class="flex justify-between items-center py-1 border-b border-slate-100"><span class="text-slate-700 font-medium">Integration SPOC (SA)</span><span class="text-indigo-700 font-mono text-[10px] bg-indigo-50 px-1.5 py-0.5 rounded">blueprint</span></li>
+            <li class="flex justify-between items-center py-1 border-b border-slate-100"><span class="text-slate-700 font-medium">Assignee (Dev Lead)</span><span class="text-indigo-700 font-mono text-[10px] bg-indigo-50 px-1.5 py-0.5 rounded">code & doc</span></li>
+            <li class="flex justify-between items-center py-1 border-b border-slate-100"><span class="text-slate-700 font-medium">Squad QA SPOC</span><span class="text-indigo-700 font-mono text-[10px] bg-indigo-50 px-1.5 py-0.5 rounded">test plan</span></li>
+            <li class="flex justify-between items-center py-1 border-b border-slate-100"><span class="text-slate-700 font-medium">Scrum Master</span><span class="text-indigo-700 font-mono text-[10px] bg-indigo-50 px-1.5 py-0.5 rounded">blockers</span></li>
+            <li class="flex justify-between items-center py-1 border-b border-slate-100"><span class="text-slate-700 font-medium">UAT SPOC</span><span class="text-indigo-700 font-mono text-[10px] bg-indigo-50 px-1.5 py-0.5 rounded">acceptance</span></li>
+            <li class="flex justify-between items-center py-1"><span class="text-slate-700 font-medium">Code Reviewers</span><span class="text-indigo-700 font-mono text-[10px] bg-indigo-50 px-1.5 py-0.5 rounded">architecture</span></li>
+          </ul>
+          <p class="text-[10px] text-slate-500 mt-2.5 font-mono">📌 all decisions via @mentions in the ticket — never in private chats</p>
+        </div>
+      </div>
+
+      <div class="takeaway-banner w-full bg-indigo-50/80 border border-indigo-200/80 rounded-xl p-3.5 flex items-start space-x-3 shadow-xs">
+        <span class="text-indigo-600 text-base">💡</span>
+        <div class="text-xs text-slate-700 leading-relaxed">
+          <strong class="text-indigo-900 font-semibold">The point:</strong> you are never alone on a feature. Before coding starts, the ticket already names the architect, the QA, and the UAT tester who are on the hook with you.
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SLIDE 6 · ACT 2: The journey (9-stage workflow) -->
+    <!-- ============================================================ -->
+    <section class="slide flex-col justify-center w-full py-4" data-slide="6">
+      <div class="mb-3">
+        <div class="flex items-center space-x-2 mb-1">
+          <span class="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
+          <span class="kicker text-indigo-600">Act 2 · The Workflow</span>
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold display-tight text-slate-900">From PRD to 100% Rollout in 9 Stages</h2>
+        <p class="text-slate-600 text-sm mt-0.5">Read each column top to bottom; each phase ends by slamming a gate shut.</p>
+      </div>
+
+      <div class="grid grid-cols-[1fr_auto_1fr_auto_1fr] gap-1.5 mb-3 text-xs items-stretch">
+        <!-- PHASE 1 -->
+        <div class="flex flex-col gap-1">
+          <div class="bg-indigo-50 border border-indigo-200 rounded-lg px-2.5 py-1 text-indigo-900 font-bold text-[11px] text-center">PHASE 1 · ARCHITECT</div>
+          <div class="deck-card p-2.5 border-l-4 border-l-indigo-500 flex-1">
+            <span class="font-mono font-bold text-indigo-600 text-[11px]">01 · PO Grooming</span>
+            <p class="text-[10.5px] text-slate-600 leading-snug mt-0.5">PRD in, one-page <strong>Box Solution</strong> out — with the FE/BE effort split.</p>
+          </div>
+          <div class="flow-arrow text-[10px]">↓</div>
+          <div class="deck-card p-2.5 border-l-4 border-l-indigo-500 flex-1">
+            <span class="font-mono font-bold text-indigo-600 text-[11px]">02 · Squad Refinement</span>
+            <p class="text-[10.5px] text-slate-600 leading-snug mt-0.5">Solution Doc + STRIDE model + tasks split to <strong>≤ 4h</strong>.</p>
+          </div>
+          <div class="flow-arrow text-[10px]">↓</div>
+          <div class="gate-card p-2.5 border-indigo-500 bg-indigo-50/60 flex-1">
+            <div class="flex items-center justify-between">
+              <span class="font-mono font-bold text-indigo-700 text-[11px]">03 · ARB Gateway</span>
+              <span class="text-[9px] font-mono font-bold text-white bg-indigo-600 px-1.5 py-0.5 rounded">🔒 GATE 1</span>
+            </div>
+            <p class="text-[10.5px] text-slate-700 leading-snug mt-0.5">Cross-product leads defend the doc, then <strong>lock hours & dates</strong>.</p>
+          </div>
+        </div>
+
+        <div class="flow-arrow text-sm">→</div>
+
+        <!-- PHASE 2 -->
+        <div class="flex flex-col gap-1">
+          <div class="bg-sky-50 border border-sky-200 rounded-lg px-2.5 py-1 text-sky-900 font-bold text-[11px] text-center">PHASE 2 · BUILD</div>
+          <div class="deck-card p-2.5 border-l-4 border-l-sky-500 flex-1">
+            <span class="font-mono font-bold text-sky-600 text-[11px]">04 · Sprint Execution</span>
+            <p class="text-[10.5px] text-slate-600 leading-snug mt-0.5">Daily 4h subtasks, honest Dev-vs-Refinement logging, 2 senior approvals.</p>
+          </div>
+          <div class="flow-arrow text-[10px]">↓</div>
+          <div class="deck-card p-2.5 border-l-4 border-l-sky-500 flex-1">
+            <span class="font-mono font-bold text-sky-600 text-[11px]">05 · Squad QA</span>
+            <p class="text-[10.5px] text-slate-600 leading-snug mt-0.5">Dev-env testing; bug fixing held inside the <strong>10% budget</strong>.</p>
+          </div>
+          <div class="flow-arrow text-[10px]">↓</div>
+          <div class="gate-card p-2.5 border-sky-500 bg-sky-50/60 flex-1">
+            <div class="flex items-center justify-between">
+              <span class="font-mono font-bold text-sky-700 text-[11px]">06 · UAT Staging</span>
+              <span class="text-[9px] font-mono font-bold text-white bg-sky-600 px-1.5 py-0.5 rounded">🎯 GATE 2</span>
+            </div>
+            <p class="text-[10.5px] text-slate-700 leading-snug mt-0.5">Business verifies; regressions fixed, legacy bugs <strong>routed to the pool</strong>.</p>
+          </div>
+        </div>
+
+        <div class="flow-arrow text-sm">→</div>
+
+        <!-- PHASE 3 -->
+        <div class="flex flex-col gap-1">
+          <div class="bg-emerald-50 border border-emerald-200 rounded-lg px-2.5 py-1 text-emerald-900 font-bold text-[11px] text-center">PHASE 3 · SHIP</div>
+          <div class="gate-card p-2.5 border-emerald-500 bg-emerald-50/60 flex-1">
+            <div class="flex items-center justify-between">
+              <span class="font-mono font-bold text-emerald-700 text-[11px]">07 · TCAB & Freeze</span>
+              <span class="text-[9px] font-mono font-bold text-white bg-emerald-600 px-1.5 py-0.5 rounded">❄️ GATE 3</span>
+            </div>
+            <p class="text-[10.5px] text-slate-700 leading-snug mt-0.5">Backend services go <strong>live before sanity starts</strong> — never test on a moving API.</p>
+          </div>
+          <div class="flow-arrow text-[10px]">↓</div>
+          <div class="deck-card p-2.5 border-l-4 border-l-emerald-500 flex-1">
+            <span class="font-mono font-bold text-emerald-600 text-[11px]">08 · Dual-Gate Sanity</span>
+            <p class="text-[10.5px] text-slate-600 leading-snug mt-0.5">Release team merges squad branches; QA pool sanity, then UAT pool Go.</p>
+          </div>
+          <div class="flow-arrow text-[10px]">↓</div>
+          <div class="deck-card p-2.5 border-l-4 border-l-emerald-500 flex-1">
+            <span class="font-mono font-bold text-emerald-600 text-[11px]">09 · Staged Rollout</span>
+            <p class="text-[10.5px] text-slate-600 leading-snug mt-0.5">5 → 20 → 50 → 100% on the stores, watched live on Crashlytics.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="takeaway-banner w-full bg-indigo-50/80 border border-indigo-200/80 rounded-xl p-3.5 flex items-start space-x-3 shadow-xs">
+        <span class="text-indigo-600 text-base">💡</span>
+        <div class="text-xs text-slate-700 leading-relaxed">
+          <strong class="text-indigo-900 font-semibold">Say this:</strong> walk the three columns left to right. Each one ends with a gate slamming: <strong>scope locked</strong> → <strong>quality capped</strong> → <strong>backend frozen</strong>. Nothing advances with a gate open.
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SLIDE 7 · ACT 3: Gate 1 deep dive (ARB) -->
+    <!-- ============================================================ -->
+    <section class="slide flex-col justify-center w-full py-4" data-slide="7">
+      <div class="mb-4">
+        <div class="flex items-center space-x-2 mb-1">
+          <span class="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
+          <span class="kicker text-indigo-600">Act 3 · The Gates, Up Close</span>
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold display-tight text-slate-900">Gate 1 · ARB: Where Scope Gets Locked</h2>
+        <p class="text-slate-600 text-sm mt-1">A 30-minute review that deletes weeks of downstream surprises.</p>
+      </div>
+
+      <div class="grid grid-cols-[1fr_auto_1fr_auto_1fr] gap-1.5 mb-3 text-xs">
+        <div class="deck-card p-4">
+          <span class="text-[10px] font-mono font-bold text-indigo-700 block mb-1.5">STEP 1 · SUBMIT</span>
+          <h3 class="text-sm font-bold text-slate-900 mb-1">The Exhibit</h3>
+          <p class="text-[11px] text-slate-600 leading-relaxed">Solution Doc with sequence flows, failure fallbacks, STRIDE analysis — and the ≤ 4h task list. Circulated ≥ 24h before the slot.</p>
+        </div>
+        <div class="flow-arrow text-sm">→</div>
+        <div class="deck-card p-4">
+          <span class="text-[10px] font-mono font-bold text-indigo-700 block mb-1.5">STEP 2 · DEFEND</span>
+          <h3 class="text-sm font-bold text-slate-900 mb-1">The Grilling</h3>
+          <p class="text-[11px] text-slate-600 leading-relaxed mb-1.5">The council hunts corner cases:</p>
+          <ul class="text-[11px] text-slate-600 space-y-0.5 font-mono">
+            <li>· gateway dies mid-payment?</li>
+            <li>· partial refund on retry?</li>
+            <li>· retry storm on 2G?</li>
+          </ul>
+        </div>
+        <div class="flow-arrow text-sm">→</div>
+        <div class="gate-card p-4 border-amber-400 bg-amber-50/40">
+          <span class="text-[10px] font-mono font-bold text-amber-700 block mb-1.5">STEP 3 · LOCK 🔒</span>
+          <h3 class="text-sm font-bold text-slate-900 mb-1.5">4 Things Become Immutable</h3>
+          <ul class="text-[11px] font-mono text-slate-700 space-y-1">
+            <li class="flex items-center space-x-1.5"><span class="text-emerald-600">✔</span> Dev Hours</li>
+            <li class="flex items-center space-x-1.5"><span class="text-emerald-600">✔</span> QA Hours</li>
+            <li class="flex items-center space-x-1.5"><span class="text-emerald-600">✔</span> UAT Delivery Date</li>
+            <li class="flex items-center space-x-1.5"><span class="text-emerald-600">✔</span> Release Month Tag</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="deck-card p-3 mb-3">
+        <p class="text-[11px] text-slate-600">
+          <strong class="text-slate-800">Who's in the room:</strong>
+          <span class="font-mono text-[10.5px] text-indigo-700 bg-indigo-50 border border-indigo-200 rounded px-1.5 py-0.5 mx-0.5">Core Product Leads</span>
+          <span class="font-mono text-[10.5px] text-indigo-700 bg-indigo-50 border border-indigo-200 rounded px-1.5 py-0.5 mx-0.5">Main Product Leads</span>
+          <span class="font-mono text-[10.5px] text-indigo-700 bg-indigo-50 border border-indigo-200 rounded px-1.5 py-0.5 mx-0.5">POL · Payments</span>
+          <span class="font-mono text-[10.5px] text-indigo-700 bg-indigo-50 border border-indigo-200 rounded px-1.5 py-0.5 mx-0.5">SOL · Subscriptions</span>
+          <span class="font-mono text-[10.5px] text-indigo-700 bg-indigo-50 border border-indigo-200 rounded px-1.5 py-0.5 mx-0.5">Platform Architects</span>
+          — new endpoints get security, token-reuse, and backward-compatibility checks before they exist.
+        </p>
+      </div>
+
+      <div class="takeaway-banner w-full bg-indigo-50/80 border border-indigo-200/80 rounded-xl p-3.5 flex items-start space-x-3 shadow-xs">
+        <span class="text-indigo-600 text-base">💡</span>
+        <div class="text-xs text-slate-700 leading-relaxed">
+          <strong class="text-indigo-900 font-semibold">Say this:</strong> "ARB approval is your shield." After the lock, product cannot quietly add scope to your active sprint — any change means re-estimation and re-approval.
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SLIDE 8 · ACT 3: Design before code -->
+    <!-- ============================================================ -->
+    <section class="slide flex-col justify-center w-full py-4" data-slide="8">
+      <div class="mb-4">
+        <div class="flex items-center space-x-2 mb-1">
+          <span class="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
+          <span class="kicker text-indigo-600">Act 3 · Design Before Code</span>
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold display-tight text-slate-900">One Blueprint & One Contract per Feature</h2>
+        <p class="text-slate-600 text-sm mt-1">Nobody codes from a two-line ticket. Two documents make ambiguity impossible.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-3">
+        <div class="deck-card p-4">
+          <div class="flex items-center justify-between mb-2.5">
+            <span class="text-xs font-bold text-indigo-800">📐 THE ARCHITECT'S BOX SOLUTION</span>
+            <span class="text-[10px] font-mono text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded">1 page · drawn at grooming</span>
+          </div>
+          <p class="text-xs text-slate-600 mb-3 leading-relaxed">The system boundary, sketched before builders buy materials:</p>
+          <div class="space-y-2 font-mono text-xs">
+            <div class="p-2.5 bg-slate-50 rounded-lg border border-slate-200">
+              <span class="text-slate-400 text-[10px] block uppercase">Touched microservices</span>
+              <span class="text-slate-800 font-semibold">Payment (POL) · Subscription (SOL) · Core Profile</span>
+            </div>
+            <div class="p-2.5 bg-slate-50 rounded-lg border border-slate-200">
+              <span class="text-slate-400 text-[10px] block uppercase">Baseline effort split</span>
+              <span class="text-indigo-700 font-semibold">e.g. 40% Frontend / 60% Backend</span>
+            </div>
+            <div class="p-2.5 bg-slate-50 rounded-lg border border-slate-200">
+              <span class="text-slate-400 text-[10px] block uppercase">Downstream systems</span>
+              <span class="text-slate-800 font-semibold">External gateways & telco billing</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="deck-card p-4">
+          <div class="flex items-center justify-between mb-2.5">
+            <span class="text-xs font-bold text-sky-800">📜 THE SQUAD'S SOLUTION DOC</span>
+            <span class="text-[10px] font-mono text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded">Confluence · the ARB exhibit</span>
+          </div>
+          <p class="text-xs text-slate-600 mb-3 leading-relaxed">The engineering contract the squad defends at Gate 1:</p>
+          <ul class="space-y-2 text-xs text-slate-700">
+            <li class="flex items-start space-x-2"><span class="text-emerald-600 font-bold">✔</span><span><strong>Sequence diagrams</strong> — happy paths <em>and</em> timeout/retry failures</span></li>
+            <li class="flex items-start space-x-2"><span class="text-emerald-600 font-bold">✔</span><span><strong>Network failure matrix</strong> — offline cache, flaky 3G, backoff with jitter</span></li>
+            <li class="flex items-start space-x-2"><span class="text-emerald-600 font-bold">✔</span><span><strong>STRIDE threat model</strong> — fraud, tampering, replay risks</span></li>
+            <li class="flex items-start space-x-2"><span class="text-emerald-600 font-bold">✔</span><span><strong>Blockers + ≤ 4h task list</strong> — dependencies and granular decomposition</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="flex justify-center mb-3">
+        <span class="text-[11px] font-mono font-bold text-slate-700 bg-white border-2 border-slate-300 rounded-lg px-3 py-1.5 shadow-xs">NO BOX → NO SPRINT&nbsp;&nbsp;·&nbsp;&nbsp;NO DOC → NO ARB</span>
+      </div>
+
+      <div class="takeaway-banner w-full bg-indigo-50/80 border border-indigo-200/80 rounded-xl p-3.5 flex items-start space-x-3 shadow-xs">
+        <span class="text-indigo-600 text-base">💡</span>
+        <div class="text-xs text-slate-700 leading-relaxed">
+          <strong class="text-indigo-900 font-semibold">Engineering principle:</strong> an hour of diagramming is worth a week of debugging. The blueprint kills architecture drift; the contract kills "I assumed the API worked differently".
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SLIDE 9 · ACT 3: Budget 1 (4-hour rule) -->
+    <!-- ============================================================ -->
+    <section class="slide flex-col justify-center w-full py-4" data-slide="9">
+      <div class="mb-4">
+        <div class="flex items-center space-x-2 mb-1">
+          <span class="w-1.5 h-1.5 rounded-full bg-sky-500"></span>
+          <span class="kicker text-sky-600">Act 3 · Budget 1</span>
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold display-tight text-slate-900">No Task Bigger Than 4 Hours</h2>
+        <p class="text-slate-600 text-sm mt-1">Small tasks aren't micromanagement — they're smoke detectors for blockers.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4">
+        <div class="deck-card p-4">
+          <span class="text-xs font-bold text-sky-800 block mb-2">A 16-HOUR FEATURE, DECOMPOSED</span>
+          <div class="space-y-1.5 font-mono text-xs">
+            <div class="flex items-center space-x-2">
+              <span class="text-slate-600 w-56 truncate">1 · DTO models & serialization tests</span>
+              <div class="flex-1 h-4 bg-slate-100 rounded"><div class="h-full bg-sky-500 rounded" style="width:100%"></div></div>
+              <span class="text-sky-700 font-bold w-8 text-right">4.0h</span>
+            </div>
+            <div class="flex items-center space-x-2">
+              <span class="text-slate-600 w-56 truncate">2 · Repository layer & cache fallback</span>
+              <div class="flex-1 h-4 bg-slate-100 rounded"><div class="h-full bg-sky-400 rounded" style="width:87%"></div></div>
+              <span class="text-sky-700 font-bold w-8 text-right">3.5h</span>
+            </div>
+            <div class="flex items-center space-x-2">
+              <span class="text-slate-600 w-56 truncate">3 · UI + viewmodel state binding</span>
+              <div class="flex-1 h-4 bg-slate-100 rounded"><div class="h-full bg-sky-500 rounded" style="width:100%"></div></div>
+              <span class="text-sky-700 font-bold w-8 text-right">4.0h</span>
+            </div>
+            <div class="flex items-center space-x-2">
+              <span class="text-slate-600 w-56 truncate">4 · Error dialogs & analytics</span>
+              <div class="flex-1 h-4 bg-slate-100 rounded"><div class="h-full bg-sky-400 rounded" style="width:75%"></div></div>
+              <span class="text-sky-700 font-bold w-8 text-right">3.0h</span>
+            </div>
+          </div>
+          <div class="mt-3 flex items-center space-x-2 bg-sky-50 border border-sky-200 rounded-lg p-2.5">
+            <span>🚨</span>
+            <p class="text-[11px] text-slate-700"><strong class="text-sky-900">Smoke-detector effect:</strong> a developer can be stuck for hours, never for days — blockers surface within 24h at standup.</p>
           </div>
         </div>
 
         <div class="deck-card p-4 flex flex-col justify-between">
           <div>
-            <div class="flex items-center space-x-2 text-xs font-bold text-sky-700 mb-2">
-              <span class="w-2 h-2 rounded-full bg-sky-600"></span>
-              <span>TIME CLASSIFICATION TAXONOMY</span>
-            </div>
-            <p class="text-xs text-slate-600 leading-relaxed mb-3">
-              Time logged in Jira is strictly segregated into high-value coding vs. discovery overhead:
-            </p>
-
+            <span class="text-xs font-bold text-slate-800 block mb-2">…AND HONEST HOURS FUEL THE DASHBOARD</span>
             <div class="space-y-2.5">
               <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-200">
                 <div class="flex justify-between text-xs mb-1">
-                  <span class="font-bold text-sky-800">Refinement Time</span>
-                  <span class="text-[10px] font-mono text-slate-600 bg-slate-200/80 px-1.5 py-0.5 rounded">Monitored Overhead</span>
+                  <span class="font-bold text-emerald-800">Dev Time</span>
+                  <span class="text-[10px] font-mono text-emerald-800 bg-emerald-100 px-1.5 py-0.5 rounded">velocity</span>
                 </div>
-                <p class="text-[11px] text-slate-600 leading-relaxed">
-                  Time spent in discovery meetings, KT sessions, writing Confluence docs, and PO clarifications.
-                </p>
+                <p class="text-[11px] text-slate-600 leading-relaxed">Coding, unit tests, PRs, review fixes — target <strong>≥ 90%</strong> of locked hours delivered.</p>
               </div>
-
               <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-200">
                 <div class="flex justify-between text-xs mb-1">
-                  <span class="font-bold text-emerald-800">Dev Time (Active Coding)</span>
-                  <span class="text-[10px] font-mono text-emerald-800 bg-emerald-100 px-1.5 py-0.5 rounded">High-Value Velocity</span>
+                  <span class="font-bold text-amber-700">Refinement Time</span>
+                  <span class="text-[10px] font-mono text-amber-700 bg-amber-100 px-1.5 py-0.5 rounded">≤ 20% overhead</span>
                 </div>
-                <p class="text-[11px] text-slate-600 leading-relaxed">
-                  Writing clean code, unit tests, building PRs, and resolving peer reviews. The primary velocity metric.
-                </p>
+                <p class="text-[11px] text-slate-600 leading-relaxed">Meetings, KT, docs, PO questions — monitored so squads don't stall in endless discovery.</p>
               </div>
-
-              <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-200">
-                <div class="flex justify-between text-xs mb-1">
-                  <span class="font-bold text-purple-800">Central Jira Dashboard</span>
-                  <span class="text-[10px] font-mono text-purple-800 bg-purple-100 px-1.5 py-0.5 rounded">Squad Analytics</span>
-                </div>
-                <p class="text-[11px] text-slate-600 leading-relaxed">
-                  Rolls up squad boards: tracks Monthly Dev Completion, UAT Delivery alignment, quarterly volume, and Live Issue Quotas.
-                </p>
+              <div class="flex items-center space-x-2 text-[11px] text-slate-600 bg-indigo-50/60 border border-indigo-200 rounded-lg p-2.5">
+                <span>📊</span><span>The central Jira dashboard rolls up both — per engineer, per squad, weekly.</span>
               </div>
             </div>
           </div>
@@ -893,85 +810,84 @@
       <div class="takeaway-banner w-full bg-indigo-50/80 border border-indigo-200/80 rounded-xl p-3.5 flex items-start space-x-3 shadow-xs">
         <span class="text-indigo-600 text-base">💡</span>
         <div class="text-xs text-slate-700 leading-relaxed">
-          <strong class="text-indigo-900 font-semibold">Presenter Cue:</strong> Explain that 4-hour chunking is designed for developer peace-of-mind. Smaller PRs get reviewed in 30 minutes instead of sitting in review queues for days.
+          <strong class="text-indigo-900 font-semibold">Say this:</strong> "4-hour tasks protect <em>you</em>. Small PRs get reviewed in 30 minutes instead of rotting in a queue for days — and nobody discovers at sprint end that you were blocked since Tuesday."
         </div>
       </div>
     </section>
 
     <!-- ============================================================ -->
-    <!-- SLIDE 9: The 10% Defect Buffer Rule (Interactive) -->
+    <!-- SLIDE 10 · ACT 3: Budget 2 (10% buffer, interactive) -->
     <!-- ============================================================ -->
-    <section class="slide flex-col justify-center w-full py-4" data-slide="9">
+    <section class="slide flex-col justify-center w-full py-4" data-slide="10">
       <div class="mb-4">
-        <span class="text-xs font-mono uppercase tracking-wider font-semibold text-indigo-600">Defect Governance</span>
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">Squad QA & The 10% Defect Buffer Rule</h2>
-        <p class="text-slate-600 text-sm">A mathematical safeguard ensuring bug fixing does not cannibalize sprint commitments.</p>
+        <div class="flex items-center space-x-2 mb-1">
+          <span class="w-1.5 h-1.5 rounded-full bg-sky-500"></span>
+          <span class="kicker text-sky-600">Act 3 · Budget 2</span>
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold display-tight text-slate-900">The 10% Bug Buffer: Quality Has a Budget</h2>
+        <p class="text-slate-600 text-sm mt-1">Bug fixing is planned, capped, and monitored — never an open tab that eats the sprint.</p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4">
-        <!-- Interactive Simulator -->
+        <!-- Interactive simulator -->
         <div class="deck-card p-5 border-indigo-200 bg-indigo-50/20 flex flex-col justify-between">
           <div>
             <div class="flex items-center justify-between mb-3">
-              <span class="text-xs font-bold uppercase tracking-wider text-indigo-900">Interactive 10% Buffer Calculator</span>
-              <span class="text-[11px] font-mono text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded font-semibold">Live Simulation</span>
+              <span class="text-xs font-bold uppercase tracking-wider text-indigo-900">Try it: the bug-budget calculator</span>
+              <span class="text-[11px] font-mono text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded font-semibold">live</span>
             </div>
 
-            <div class="mb-4">
+            <div class="mb-3">
               <div class="flex justify-between items-center text-xs mb-1.5">
-                <label for="dev-hours-input" class="text-slate-700 font-medium">Locked Dev Hours Estimate:</label>
+                <label for="dev-hours-input" class="text-slate-700 font-medium">Locked Dev Hours:</label>
                 <span id="calc-hours-display" class="font-mono text-indigo-700 font-bold text-sm bg-white px-2 py-0.5 rounded border border-indigo-200">40 Hours</span>
               </div>
               <input type="range" min="10" max="120" value="40" step="5" class="w-full cursor-pointer accent-indigo-600" id="dev-hours-input" oninput="updateBufferCalc(this.value)">
               <div class="flex justify-between text-[10px] text-slate-400 font-mono mt-1">
-                <span>10h (Quick Task)</span>
-                <span>40h (Standard Epic)</span>
-                <span>120h (Major Feature)</span>
+                <span>10h quick task</span><span>40h standard epic</span><span>120h major feature</span>
               </div>
             </div>
 
-            <div class="p-3.5 bg-white rounded-xl border border-indigo-200 shadow-xs space-y-2">
+            <div class="p-3.5 bg-white rounded-xl border border-indigo-200 shadow-xs space-y-2.5">
               <div class="flex justify-between items-center">
-                <span class="text-xs text-slate-600">Max Permissible Bug Fix Time:</span>
+                <span class="text-xs text-slate-600">Your bug budget:</span>
                 <span id="calc-buffer-display" class="text-base font-mono font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">4.0 Hours</span>
               </div>
-              <div class="text-[11px] text-slate-500 leading-relaxed">
+              <div class="flex h-3.5 rounded-full overflow-hidden border border-slate-200">
+                <div id="bar-dev" class="h-full bg-indigo-500 transition-all duration-300 flex items-center justify-center text-[8px] font-mono text-white" style="width:90%">DEV 90%</div>
+                <div id="bar-bug" class="h-full bg-emerald-500 transition-all duration-300 flex items-center justify-center text-[8px] font-mono text-white" style="width:10%">10%</div>
+              </div>
+              <div class="text-[11px] text-slate-500">
                 Formula: <code class="font-mono text-indigo-700 bg-slate-50 px-1 py-0.5 rounded border border-slate-200">Locked Dev Hours × 0.10</code>
               </div>
             </div>
           </div>
 
           <div class="text-[11px] text-slate-600 mt-4 bg-slate-50 p-2.5 rounded-lg border border-slate-200">
-            <strong>Rule:</strong> Bug fixes on dev tickets are strictly budgeted. If a task requires more than 10% of its estimate to stabilize, it signals architectural debt or ambiguous acceptance criteria.
+            <strong>Rule:</strong> if stabilizing a task costs more than 10% of its estimate, the problem isn't the bug — it's architectural debt or ambiguous acceptance criteria.
           </div>
         </div>
 
-        <!-- Principles -->
+        <!-- Two paths -->
         <div class="deck-card p-5 flex flex-col justify-between">
-          <div>
-            <div class="flex items-center space-x-2 text-xs font-bold text-slate-800 mb-2">
-              <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
-              <span>SHIFT-LEFT DEFECT DISCOVERY</span>
+          <div class="space-y-3">
+            <div>
+              <span class="text-xs font-bold text-slate-800 block mb-2">TWO WAYS THIS GOES</span>
             </div>
-            <p class="text-xs text-slate-600 leading-relaxed mb-4">
-              Finding and fixing a bug on the Dev environment costs 10x less time than discovering it during UAT or in Production.
-            </p>
-
-            <div class="space-y-3">
-              <div class="p-3 bg-slate-50 rounded-lg border border-slate-200">
-                <span class="text-xs font-bold text-slate-800 block mb-1">Within 10% Buffer (Green Path)</span>
-                <p class="text-slate-600 leading-relaxed text-[11px]">
-                  Minor typos, styling tweaks, edge-case null checks. Resolved smoothly by the developer without impacting sprint velocity.
-                </p>
-              </div>
-
-              <div class="p-3 bg-slate-50 rounded-lg border border-slate-200">
-                <span class="text-xs font-bold text-rose-700 block mb-1">Breaching 10% Buffer (Quality Alarm)</span>
-                <p class="text-slate-600 leading-relaxed text-[11px]">
-                  Triggers a constructive retro with the Squad Lead: Did the developer test edge cases locally? Was the API specification ambiguous?
-                </p>
-              </div>
+            <div class="p-3.5 bg-emerald-50/60 rounded-lg border border-emerald-200">
+              <span class="text-xs font-bold text-emerald-800 block mb-1">✅ Within budget — the green path</span>
+              <p class="text-[11px] text-slate-600 leading-relaxed">Typos, styling, edge-case null checks. Fixed quietly by the developer; the sprint never feels it.</p>
             </div>
+            <div class="p-3.5 bg-rose-50/60 rounded-lg border border-rose-200">
+              <span class="text-xs font-bold text-rose-700 block mb-1">🚨 Over budget — the quality alarm</span>
+              <p class="text-[11px] text-slate-600 leading-relaxed mb-1.5">Fixing stops; a short retro with the Squad Lead starts:</p>
+              <ul class="text-[11px] text-slate-600 font-mono space-y-0.5">
+                <li>· were edge cases tested locally?</li>
+                <li>· was the API spec ambiguous?</li>
+                <li>· is there design debt to raise?</li>
+              </ul>
+            </div>
+            <p class="text-[11px] text-slate-500 leading-relaxed">Shift-left economics: a defect caught on the Dev env costs <strong class="text-slate-700">10× less</strong> than the same defect in UAT or production.</p>
           </div>
         </div>
       </div>
@@ -979,181 +895,253 @@
       <div class="takeaway-banner w-full bg-indigo-50/80 border border-indigo-200/80 rounded-xl p-3.5 flex items-start space-x-3 shadow-xs">
         <span class="text-indigo-600 text-base">💡</span>
         <div class="text-xs text-slate-700 leading-relaxed">
-          <strong class="text-indigo-900 font-semibold">Engineering Principle:</strong> If a task takes 10 hours to debug, it wasn't a "bug"—it was an incomplete feature. The 10% rule protects engineers from silently taking blame for architectural flaws.
+          <strong class="text-indigo-900 font-semibold">Say this:</strong> "If it takes 10 hours to debug, it wasn't a bug — it was an unfinished feature. The 10% alarm makes sure architects own that early, not the developer alone at 2 AM."
         </div>
       </div>
     </section>
 
     <!-- ============================================================ -->
-    <!-- SLIDE 10: UAT & The Live Issue Pool -->
-    <!-- ============================================================ -->
-    <section class="slide flex-col justify-center w-full py-4" data-slide="10">
-      <div class="mb-4">
-        <span class="text-xs font-mono uppercase tracking-wider font-semibold text-indigo-600">Acceptance & Triage</span>
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">UAT Staging & Defect Bifurcation</h2>
-        <p class="text-slate-600 text-sm">How to eliminate friction between Squad QA and UAT while protecting quality metrics.</p>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4">
-        <div class="deck-card p-4 border-rose-200 bg-rose-50/20 flex flex-col justify-between">
-          <div>
-            <div class="flex items-center space-x-2 text-rose-700 text-xs font-bold mb-2">
-              <span class="w-2.5 h-2.5 rounded-full bg-rose-600"></span>
-              <span>DEFECT TYPE A: RECENT REGRESSION / STORY BUG</span>
-            </div>
-            <p class="text-xs text-slate-700 leading-relaxed mb-3">
-              The defect was directly introduced by the squad's recent code changes. Must be fixed by the squad developer before UAT sign-off.
-            </p>
-            <div class="bg-white p-3 rounded-lg border border-rose-200 text-xs shadow-xs">
-              <span class="text-rose-700 font-bold block mb-1">Impacts Squad QA KPI:</span>
-              <span class="text-slate-600 leading-relaxed text-[11px]">
-                Measured as <strong>UAT Bug Leakage Rate</strong>. A higher volume of leaked bugs directly lowers the Squad QA's performance rating.
-              </span>
-            </div>
-          </div>
-          <div class="text-[11px] text-slate-600 mt-3 bg-slate-50 p-2.5 rounded-lg border border-slate-200">
-            Incentivizes Squad QA to find all regressions <em>before</em> Staging handoff.
-          </div>
-        </div>
-
-        <div class="deck-card p-4 border-teal-200 bg-teal-50/20 flex flex-col justify-between">
-          <div>
-            <div class="flex items-center space-x-2 text-teal-800 text-xs font-bold mb-2">
-              <span class="w-2.5 h-2.5 rounded-full bg-teal-600"></span>
-              <span>DEFECT TYPE B: PRE-EXISTING LIVE DEFECT</span>
-            </div>
-            <p class="text-xs text-slate-700 leading-relaxed mb-3">
-              Discovered during UAT, but also reproduces on the current live production app. It is decoupled from the current feature release.
-            </p>
-            <div class="bg-white p-3 rounded-lg border border-teal-200 text-xs shadow-xs">
-              <span class="text-teal-800 font-bold block mb-1">Transferred to Live Issue Pool:</span>
-              <span class="text-slate-600 leading-relaxed text-[11px]">
-                Solution Architect validates the defect. Squads draw from this pool to fulfill their mandatory <strong>Monthly Live Issue Quotas</strong>.
-              </span>
-            </div>
-          </div>
-          <div class="text-[11px] text-slate-600 mt-3 bg-slate-50 p-2.5 rounded-lg border border-slate-200">
-            Protects feature delivery dates from legacy tech debt derailment.
-          </div>
-        </div>
-      </div>
-
-      <div class="takeaway-banner w-full bg-indigo-50/80 border border-indigo-200/80 rounded-xl p-3.5 flex items-start space-x-3 shadow-xs">
-        <span class="text-indigo-600 text-base">💡</span>
-        <div class="text-xs text-slate-700 leading-relaxed">
-          <strong class="text-indigo-900 font-semibold">Engineering Principle:</strong> You never have to fear UAT discovering legacy bugs. Pre-existing issues are moved to the Live Issue Pool so sprint delivery remains 100% on schedule.
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================================================ -->
-    <!-- SLIDE 11: Release Cadence & Backend Freeze -->
+    <!-- SLIDE 11 · ACT 3: UAT triage flow -->
     <!-- ============================================================ -->
     <section class="slide flex-col justify-center w-full py-4" data-slide="11">
       <div class="mb-4">
-        <span class="text-xs font-mono uppercase tracking-wider font-semibold text-indigo-600">Release Operations</span>
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">The Monthly Release Calendar & Backend Freeze</h2>
-        <p class="text-slate-600 text-sm">Decoupling microservice production deployments from mobile store reviews.</p>
+        <div class="flex items-center space-x-2 mb-1">
+          <span class="w-1.5 h-1.5 rounded-full bg-sky-500"></span>
+          <span class="kicker text-sky-600">Act 3 · Fair Triage</span>
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold display-tight text-slate-900">Every UAT Bug Gets a Verdict</h2>
+        <p class="text-slate-600 text-sm mt-1">One question decides who owns the fix — and it keeps metrics honest.</p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-4 text-xs">
-        <div class="deck-card p-3.5">
-          <span class="text-indigo-700 font-mono font-bold text-xs block mb-1">DAYS 01 - 18</span>
-          <h4 class="font-bold text-slate-900 mb-1">Sprint Execution</h4>
-          <p class="text-slate-600 text-[11px] leading-relaxed">Dev implementation, PR code reviews, and testing in the Dev Environment via VPN.</p>
+      <!-- Decision flow -->
+      <div class="flex items-center justify-center space-x-3 mb-2">
+        <div class="deck-card px-4 py-2.5 text-xs font-bold text-slate-800">🐞 Bug found in UAT</div>
+        <div class="flow-arrow text-sm">→</div>
+        <div class="deck-card px-4 py-2.5 text-xs font-bold text-indigo-900 border-indigo-300 bg-indigo-50/60">Does it reproduce on <span class="underline decoration-indigo-400">live production</span>?</div>
+      </div>
+      <div class="grid grid-cols-2 gap-3 max-w-3xl mx-auto mb-3">
+        <div class="flex flex-col items-center">
+          <span class="text-[10px] font-mono font-bold text-rose-600 bg-rose-50 border border-rose-200 rounded px-2 py-0.5 my-1">NO ↓</span>
+          <div class="deck-card p-4 border-rose-200 bg-rose-50/20 w-full">
+            <span class="text-xs font-bold text-rose-700 block mb-1.5">TYPE A · Story Regression</span>
+            <ul class="text-[11px] text-slate-600 space-y-1">
+              <li>• Introduced by <strong>this squad's recent PR</strong></li>
+              <li>• Fixed by the squad <strong>before UAT sign-off</strong></li>
+              <li>• Counts against the QA KPI: <strong>leakage &lt; 2%</strong></li>
+            </ul>
+          </div>
         </div>
-
-        <div class="deck-card p-3.5">
-          <span class="text-sky-700 font-mono font-bold text-xs block mb-1">DAY 19</span>
-          <h4 class="font-bold text-slate-900 mb-1">Staging / UAT Cutoff</h4>
-          <p class="text-slate-600 text-[11px] leading-relaxed">Features deployed to Staging; business acceptance runs on VPN-secured builds.</p>
-        </div>
-
-        <div class="deck-card p-3.5 border-indigo-300 bg-indigo-50/30">
-          <span class="text-indigo-800 font-mono font-bold text-xs block mb-1">DAYS 21 - 22</span>
-          <h4 class="font-bold text-indigo-950 mb-1">TCAB & BE Live Freeze</h4>
-          <p class="text-slate-700 text-[11px] leading-relaxed">All backend microservices deploy to LIVE production under TCAB before sanity starts.</p>
-        </div>
-
-        <div class="deck-card p-3.5">
-          <span class="text-emerald-700 font-mono font-bold text-xs block mb-1">DAYS 23 - 28</span>
-          <h4 class="font-bold text-slate-900 mb-1">Dual-Gate Sanity</h4>
-          <p class="text-slate-600 text-[11px] leading-relaxed">Release candidate branch verified by QA Sanity Pool, followed by final commercial UAT sign-off.</p>
+        <div class="flex flex-col items-center">
+          <span class="text-[10px] font-mono font-bold text-teal-700 bg-teal-50 border border-teal-200 rounded px-2 py-0.5 my-1">YES ↓</span>
+          <div class="deck-card p-4 border-teal-200 bg-teal-50/20 w-full">
+            <span class="text-xs font-bold text-teal-800 block mb-1.5">TYPE B · Pre-Existing Live Defect</span>
+            <ul class="text-[11px] text-slate-600 space-y-1">
+              <li>• SA validates → <strong>detached from the feature</strong></li>
+              <li>• Routed to the <strong>Live Issue Pool</strong></li>
+              <li>• Fixed via the squad's <strong>monthly quota</strong></li>
+            </ul>
+          </div>
         </div>
       </div>
 
-      <div class="deck-card p-4 mb-4">
-        <h4 class="text-xs font-bold text-slate-900 mb-2">Branch Consolidation & Rotating Release Team</h4>
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-[11px] text-slate-600">
-          <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-200">
-            <strong class="text-slate-800 block mb-0.5">Squad-Wise Branches:</strong>
-            Squad Leads merge completed items into their respective squad release branches.
+      <div class="deck-card p-3 mb-3 max-w-3xl mx-auto">
+        <p class="text-[11px] text-slate-600 text-center">
+          <strong class="text-slate-800">Why the split matters:</strong> the squad's delivery date is protected from legacy debt, the QA KPI only measures what QA could have caught, and old potholes still get fixed — on quota.
+        </p>
+      </div>
+
+      <div class="takeaway-banner w-full bg-indigo-50/80 border border-indigo-200/80 rounded-xl p-3.5 flex items-start space-x-3 shadow-xs">
+        <span class="text-indigo-600 text-base">💡</span>
+        <div class="text-xs text-slate-700 leading-relaxed">
+          <strong class="text-indigo-900 font-semibold">Engineering principle:</strong> never fear UAT finding an old bug. If it reproduces on production, it was never your sprint's regression — it goes to the pool and your feature still ships on time.
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SLIDE 12 · ACT 3: Gate 3 + the calendar -->
+    <!-- ============================================================ -->
+    <section class="slide flex-col justify-center w-full py-4" data-slide="12">
+      <div class="mb-4">
+        <div class="flex items-center space-x-2 mb-1">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+          <span class="kicker text-emerald-600">Act 3 · Ship It</span>
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold display-tight text-slate-900">Gate 3 · The Backend Freezes First</h2>
+        <p class="text-slate-600 text-sm mt-1">One fixed monthly rhythm — and a cardinal rule that ends moving-target testing forever.</p>
+      </div>
+
+      <!-- Calendar timeline -->
+      <div class="deck-card p-4 mb-3">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-bold text-slate-800">THE 28-DAY RELEASE CALENDAR</span>
+          <span class="text-[10px] font-mono text-slate-400">same every month</span>
+        </div>
+        <div class="flex h-11 rounded-lg overflow-hidden border border-slate-200 text-white font-mono">
+          <div class="bg-indigo-500/90 flex flex-col items-center justify-center leading-tight" style="width:64.3%"><span class="text-[11px] font-bold">Days 1–18</span><span class="text-[9px] opacity-90">sprint + squad QA</span></div>
+          <div class="bg-sky-500 flex flex-col items-center justify-center leading-tight" style="width:7.2%"><span class="text-[10px] font-bold">D19</span><span class="text-[8.5px] opacity-90">UAT</span></div>
+          <div class="bg-sky-700 flex flex-col items-center justify-center leading-tight" style="width:7.2%"><span class="text-[10px] font-bold">D20</span><span class="text-[8.5px] opacity-90">fixes</span></div>
+          <div class="bg-indigo-800 flex flex-col items-center justify-center leading-tight ring-2 ring-amber-400 ring-inset" style="width:10.7%"><span class="text-[10px] font-bold">D21–22</span><span class="text-[8.5px] opacity-90">❄️ freeze</span></div>
+          <div class="bg-emerald-600 flex flex-col items-center justify-center leading-tight" style="width:7.1%"><span class="text-[10px] font-bold">D23–27</span><span class="text-[8.5px] opacity-90">sanity</span></div>
+          <div class="bg-emerald-800 flex flex-col items-center justify-center leading-tight" style="width:3.5%"><span class="text-[10px] font-bold">D28</span></div>
+        </div>
+        <div class="flex flex-wrap gap-x-4 gap-y-1 mt-2 text-[10.5px] text-slate-600">
+          <span><span class="inline-block w-2 h-2 rounded-sm bg-indigo-500/90 mr-1"></span>sprint execution (≥90% dev hours)</span>
+          <span><span class="inline-block w-2 h-2 rounded-sm bg-sky-500 mr-1"></span>staging handover + UAT</span>
+          <span><span class="inline-block w-2 h-2 rounded-sm bg-indigo-800 mr-1 ring-1 ring-amber-400"></span><strong>TCAB → BE live in production → frozen</strong></span>
+          <span><span class="inline-block w-2 h-2 rounded-sm bg-emerald-600 mr-1"></span>dual-gate sanity + rollout</span>
+        </div>
+      </div>
+
+      <!-- Rollout funnel + cardinal rule -->
+      <div class="grid grid-cols-1 md:grid-cols-5 gap-3 mb-3 items-stretch">
+        <div class="deck-card p-3 md:col-span-3">
+          <span class="text-xs font-bold text-slate-800 block mb-2">STAGED ROLLOUT, WATCHED LIVE</span>
+          <div class="flex items-center space-x-1.5 text-center">
+            <div class="flex-1 bg-emerald-50 border border-emerald-200 rounded-lg py-1.5"><span class="text-sm font-extrabold text-emerald-700 block">5%</span><span class="text-[9.5px] font-mono text-slate-500">canary D1</span></div>
+            <span class="flow-arrow text-xs">→</span>
+            <div class="flex-1 bg-emerald-100 border border-emerald-200 rounded-lg py-1.5"><span class="text-sm font-extrabold text-emerald-700 block">20%</span><span class="text-[9.5px] font-mono text-slate-500">D2</span></div>
+            <span class="flow-arrow text-xs">→</span>
+            <div class="flex-1 bg-emerald-200/70 border border-emerald-300 rounded-lg py-1.5"><span class="text-sm font-extrabold text-emerald-800 block">50%</span><span class="text-[9.5px] font-mono text-slate-500">D3</span></div>
+            <span class="flow-arrow text-xs">→</span>
+            <div class="flex-1 bg-emerald-600 rounded-lg py-1.5"><span class="text-sm font-extrabold text-white block">100%</span><span class="text-[9.5px] font-mono text-emerald-100">GA D4</span></div>
           </div>
-          <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-200">
-            <strong class="text-slate-800 block mb-0.5">Consolidated Sanity:</strong>
-            Final sanity candidate branch created by merging all squad main release branches.
-          </div>
-          <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-200">
-            <strong class="text-slate-800 block mb-0.5">Rotating Dev Team:</strong>
-            Monthly rotating senior squad members manage branch merges and store submission.
-          </div>
+          <p class="text-[10.5px] text-slate-500 mt-2 font-mono">guard: ≥ 99.8% crash-free sessions · spike → hotfix → re-verify → re-upload</p>
+        </div>
+        <div class="gate-card p-3 border-indigo-300 bg-indigo-50/50 md:col-span-2 flex flex-col justify-center">
+          <span class="text-xs font-extrabold text-indigo-900 block mb-1">❄️ THE CARDINAL RULE</span>
+          <p class="text-[11px] text-slate-700 leading-relaxed">Mobile sanity <strong>never</strong> runs against a changing backend. BE deploys to production first; mobile sanity runs second.</p>
         </div>
       </div>
 
       <div class="takeaway-banner w-full bg-indigo-50/80 border border-indigo-200/80 rounded-xl p-3.5 flex items-start space-x-3 shadow-xs">
         <span class="text-indigo-600 text-base">💡</span>
         <div class="text-xs text-slate-700 leading-relaxed">
-          <strong class="text-indigo-900 font-semibold">The Cardinal Rule:</strong> Mobile sanity testing NEVER starts against a changing backend. Backend microservices freeze and deploy to production first; mobile sanity runs second.
+          <strong class="text-indigo-900 font-semibold">Say this:</strong> "Backward-plan from Day 19. If a feature can't reach staging by the 19th, it belongs in next month's release — not in a heroic all-nighter that breaks three others."
         </div>
       </div>
     </section>
 
     <!-- ============================================================ -->
-    <!-- SLIDE 12: Five Golden Rules & Executive Reference -->
+    <!-- SLIDE 13 · ACT 4: The scoreboard -->
     <!-- ============================================================ -->
-    <section class="slide flex-col justify-center items-center text-center py-4 w-full" data-slide="12">
-      <div class="mb-5">
-        <span class="text-xs font-mono uppercase tracking-wider font-semibold text-indigo-600">Executive Summary</span>
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">Five Golden Rules for High-Scale Teams</h2>
-        <p class="text-slate-600 text-sm">The non-negotiable principles that maintain quality at super-app velocity.</p>
+    <section class="slide flex-col justify-center w-full py-4" data-slide="13">
+      <div class="mb-4">
+        <div class="flex items-center space-x-2 mb-1">
+          <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+          <span class="kicker text-amber-600">Act 4 · What Good Looks Like</span>
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold display-tight text-slate-900">The Scoreboard</h2>
+        <p class="text-slate-600 text-sm mt-1">Eight numbers, reviewed weekly and monthly on the central Jira dashboard. No vanity metrics.</p>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-5 gap-3 max-w-4xl w-full mb-6 text-left">
-        <div class="deck-card p-3.5 hover:border-indigo-300 transition-all">
-          <span class="text-indigo-700 font-mono font-bold text-sm block mb-1">01</span>
-          <h4 class="text-xs font-bold text-slate-900 mb-1">Box Before Build</h4>
-          <p class="text-[11px] text-slate-600 leading-relaxed">Never let a squad refine a ticket without an architect's Box Solution blueprint.</p>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+        <div class="deck-card p-3.5 text-center">
+          <span class="text-2xl font-extrabold display-tight text-indigo-700 block">100%</span>
+          <span class="text-[11px] font-bold text-slate-800 block mb-0.5">On-time UAT handover</span>
+          <span class="text-[10px] font-mono text-slate-400">squad</span>
         </div>
-
-        <div class="deck-card p-3.5 hover:border-indigo-300 transition-all">
-          <span class="text-indigo-700 font-mono font-bold text-sm block mb-1">02</span>
-          <h4 class="text-xs font-bold text-slate-900 mb-1">Lock at ARB</h4>
-          <p class="text-[11px] text-slate-600 leading-relaxed">Cross-product review (Core Products, Main Leads, POL/SOL) permanently locks dev hours and release dates.</p>
+        <div class="deck-card p-3.5 text-center">
+          <span class="text-2xl font-extrabold display-tight text-rose-600 block">&lt; 2%</span>
+          <span class="text-[11px] font-bold text-slate-800 block mb-0.5">UAT bug leakage</span>
+          <span class="text-[10px] font-mono text-slate-400">squad QA</span>
         </div>
-
-        <div class="deck-card p-3.5 hover:border-indigo-300 transition-all">
-          <span class="text-indigo-700 font-mono font-bold text-sm block mb-1">03</span>
-          <h4 class="text-xs font-bold text-slate-900 mb-1">Chunk to 4 Hours</h4>
-          <p class="text-[11px] text-slate-600 leading-relaxed">Small, verifiable subtasks surface blockers within 24 hours at daily standups.</p>
+        <div class="deck-card p-3.5 text-center">
+          <span class="text-2xl font-extrabold display-tight text-sky-700 block">≥ 90%</span>
+          <span class="text-[11px] font-bold text-slate-800 block mb-0.5">Locked dev hours delivered</span>
+          <span class="text-[10px] font-mono text-slate-400">developers</span>
         </div>
-
-        <div class="deck-card p-3.5 hover:border-indigo-300 transition-all">
-          <span class="text-indigo-700 font-mono font-bold text-sm block mb-1">04</span>
-          <h4 class="text-xs font-bold text-slate-900 mb-1">Enforce 10% Buffer</h4>
-          <p class="text-[11px] text-slate-600 leading-relaxed">Mathematically cap bug-fixing time to diagnose code quality debt early.</p>
+        <div class="deck-card p-3.5 text-center">
+          <span class="text-2xl font-extrabold display-tight text-sky-700 block">≤ 10%</span>
+          <span class="text-[11px] font-bold text-slate-800 block mb-0.5">Bug-fix vs dev-time ratio</span>
+          <span class="text-[10px] font-mono text-slate-400">developers</span>
         </div>
-
-        <div class="deck-card p-3.5 hover:border-indigo-300 transition-all">
-          <span class="text-indigo-700 font-mono font-bold text-sm block mb-1">05</span>
-          <h4 class="text-xs font-bold text-slate-900 mb-1">BE Freeze First</h4>
-          <p class="text-[11px] text-slate-600 leading-relaxed">Always deploy backend services to production before mobile sanity testing starts.</p>
+        <div class="deck-card p-3.5 text-center">
+          <span class="text-2xl font-extrabold display-tight text-amber-600 block">≤ 20%</span>
+          <span class="text-[11px] font-bold text-slate-800 block mb-0.5">Refinement overhead</span>
+          <span class="text-[10px] font-mono text-slate-400">lead & SM</span>
+        </div>
+        <div class="deck-card p-3.5 text-center">
+          <span class="text-2xl font-extrabold display-tight text-teal-700 block">100%</span>
+          <span class="text-[11px] font-bold text-slate-800 block mb-0.5">Live-issue quota fulfilled</span>
+          <span class="text-[10px] font-mono text-slate-400">squad + SA</span>
+        </div>
+        <div class="deck-card p-3.5 text-center">
+          <span class="text-2xl font-extrabold display-tight text-emerald-700 block">100%</span>
+          <span class="text-[11px] font-bold text-slate-800 block mb-0.5">Store submission on calendar date</span>
+          <span class="text-[10px] font-mono text-slate-400">release team</span>
+        </div>
+        <div class="deck-card p-3.5 text-center">
+          <span class="text-2xl font-extrabold display-tight text-emerald-700 block">≥ 99.8%</span>
+          <span class="text-[11px] font-bold text-slate-800 block mb-0.5">Crash-free sessions</span>
+          <span class="text-[10px] font-mono text-slate-400">whole team</span>
         </div>
       </div>
 
-      <div class="takeaway-banner max-w-4xl w-full bg-indigo-50/80 border border-indigo-200/80 rounded-xl p-3.5 text-left flex items-start space-x-3 shadow-xs">
+      <div class="takeaway-banner w-full bg-indigo-50/80 border border-indigo-200/80 rounded-xl p-3.5 flex items-start space-x-3 shadow-xs">
+        <span class="text-indigo-600 text-base">💡</span>
+        <div class="text-xs text-slate-700 leading-relaxed">
+          <strong class="text-indigo-900 font-semibold">Say this:</strong> "Every KPI here traces back to a gate or a budget you've already seen. Nothing is measured that the model doesn't actively protect."
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SLIDE 14 · ACT 4: Adoption & close -->
+    <!-- ============================================================ -->
+    <section class="slide flex-col justify-center w-full py-4" data-slide="14">
+      <div class="mb-4">
+        <div class="flex items-center space-x-2 mb-1">
+          <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+          <span class="kicker text-amber-600">Act 4 · Make It Yours</span>
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold display-tight text-slate-900">Adopt It in Three Waves</h2>
+        <p class="text-slate-600 text-sm mt-1">Don't boil the ocean — each wave pays for itself before the next one starts.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+        <div class="deck-card p-4 border-l-4 border-l-sky-500">
+          <span class="text-[10px] font-mono font-bold text-sky-700 block mb-1">WAVE 1 · WEEKS 1–2</span>
+          <h3 class="text-sm font-bold text-slate-900 mb-1.5">Time Hygiene</h3>
+          <ul class="text-[11px] text-slate-600 space-y-1">
+            <li>• ≤ 4h subtasks, every ticket</li>
+            <li>• Dev vs. Refinement logging</li>
+            <li>• <code class="font-mono text-[10px] bg-slate-100 px-1 rounded">[BLOCKER]</code> tag with 4h SLA</li>
+          </ul>
+        </div>
+        <div class="deck-card p-4 border-l-4 border-l-indigo-500">
+          <span class="text-[10px] font-mono font-bold text-indigo-700 block mb-1">WAVE 2 · SPRINTS 1–2</span>
+          <h3 class="text-sm font-bold text-slate-900 mb-1.5">Quality Gates</h3>
+          <ul class="text-[11px] text-slate-600 space-y-1">
+            <li>• 10% bug budget + quality alarm</li>
+            <li>• Defect bifurcation at UAT</li>
+            <li>• Live Issue Pool with quotas</li>
+          </ul>
+        </div>
+        <div class="deck-card p-4 border-l-4 border-l-emerald-500">
+          <span class="text-[10px] font-mono font-bold text-emerald-700 block mb-1">WAVE 3 · THE QUARTER</span>
+          <h3 class="text-sm font-bold text-slate-900 mb-1.5">Full Governance</h3>
+          <ul class="text-[11px] text-slate-600 space-y-1">
+            <li>• Box Solutions + ARB gateway</li>
+            <li>• TCAB backend freeze</li>
+            <li>• The 28-day release calendar</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Rules recap strip -->
+      <div class="flex flex-wrap justify-center gap-2 mb-4">
+        <span class="text-[11px] font-mono font-semibold text-indigo-800 bg-indigo-50 border border-indigo-200 rounded-full px-3 py-1">1 · Box Before Build</span>
+        <span class="text-[11px] font-mono font-semibold text-indigo-800 bg-indigo-50 border border-indigo-200 rounded-full px-3 py-1">2 · Lock at ARB</span>
+        <span class="text-[11px] font-mono font-semibold text-sky-800 bg-sky-50 border border-sky-200 rounded-full px-3 py-1">3 · Chunk to ≤ 4h</span>
+        <span class="text-[11px] font-mono font-semibold text-sky-800 bg-sky-50 border border-sky-200 rounded-full px-3 py-1">4 · Enforce 10% Buffer</span>
+        <span class="text-[11px] font-mono font-semibold text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-full px-3 py-1">5 · BE Freeze First</span>
+      </div>
+
+      <div class="takeaway-banner max-w-4xl w-full mx-auto bg-indigo-50/80 border border-indigo-200/80 rounded-xl p-3.5 text-left flex items-start space-x-3 shadow-xs">
         <span class="text-indigo-600 text-base">📘</span>
         <div class="text-xs text-slate-700 leading-relaxed">
-          <strong class="text-indigo-900 font-semibold">Operational Reference:</strong> Open the <a href="https://github.com/ihjohny/squad-model/blob/main/ENTERPRISE_MOBILE_SUPERAPP_WORKFLOW.md" target="_blank" rel="noopener" class="text-indigo-700 font-semibold underline decoration-indigo-300 underline-offset-2 hover:decoration-indigo-600">Master Engineering Playbook</a> (<code class="text-indigo-700 font-mono text-[11px] bg-white px-1.5 py-0.5 rounded border border-indigo-200">ENTERPRISE_MOBILE_SUPERAPP_WORKFLOW.md</code>) for complete lifecycle specifications, the monthly release calendar, RACI contracts, and operational checklists.
+          <strong class="text-indigo-900 font-semibold">Go deeper:</strong> the <a href="https://github.com/ihjohny/squad-model/blob/main/ENTERPRISE_MOBILE_SUPERAPP_WORKFLOW.md" target="_blank" rel="noopener" class="text-indigo-700 font-semibold underline decoration-indigo-300 underline-offset-2 hover:decoration-indigo-600">Master Engineering Playbook</a> has the full lifecycle, the 7-SPOC RACI contract, STRIDE matrix, checklists — everything to run this starting Monday.
         </div>
       </div>
     </section>
@@ -1279,6 +1267,12 @@
       const buffer = (hours * 0.10).toFixed(1);
       document.getElementById('calc-hours-display').textContent = hours + ' Hours';
       document.getElementById('calc-buffer-display').textContent = buffer + ' Hours';
+      const barDev = document.getElementById('bar-dev');
+      const barBug = document.getElementById('bar-bug');
+      if (barDev && barBug) {
+        barDev.style.width = '90%';
+        barBug.style.width = '10%';
+      }
     }
 
     window.addEventListener('keydown', (e) => {
@@ -1337,6 +1331,7 @@
     if (initialSlide) currentSlide = initialSlide;
 
     updateSlide();
+    updateBufferCalc(document.getElementById('dev-hours-input').value);
   </script>
 </body>
 </html>

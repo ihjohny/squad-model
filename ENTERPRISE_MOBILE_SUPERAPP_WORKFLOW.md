@@ -25,6 +25,25 @@
 
 This document formalizes the end-to-end engineering, architecture, governance, sprint execution, release cadence, and quality frameworks for high-concurrency mobile super-applications. It provides a clear, high-velocity operating model while maintaining the **deep technical rigor** required for mission-critical telecom and fintech platforms.
 
+> **[!TIP]**
+> **The whole model in one sentence: Three Gates. Two Budgets. One Calendar.**
+> Pass the **Gates** (ARB Scope Lock → UAT Sign-off → Backend Freeze), respect the **Budgets** (≤ 4 h per task, ≤ 10% of dev time for bugs), and trust the **Calendar** (one fixed 28-day release rhythm). Every rule in this document is one of those six things.
+
+### The Model in One Picture
+
+```mermaid
+flowchart LR
+    subgraph PLAN["🏗️ PLAN · Phase 1"]
+        A[Box Solution] --> B[Solution Doc + STRIDE] --> C{{"🔒 GATE 1<br/>ARB Scope Lock"}}
+    end
+    subgraph BUILD["⚡ BUILD · Phase 2"]
+        C --> D["≤ 4 h subtasks<br/>(Budget 1)"] --> E["≤ 10% bug fixing<br/>(Budget 2)"] --> F{{"🎯 GATE 2<br/>UAT Sign-off"}}
+    end
+    subgraph SHIP["🚀 SHIP · Phase 3"]
+        F --> G{{"❄️ GATE 3<br/>Backend Freeze"}} --> H[Dual-Gate Sanity] --> I["Staged Rollout<br/>5% → 100%"]
+    end
+```
+
 ### ⚡ The Five Golden Rules of Our Engineering Culture
 
 ```
@@ -157,6 +176,18 @@ To maintain velocity while ensuring architectural coherence across microservices
 ### The 7-SPOC Ticket Ownership Contract
 Every main Jira ticket binds 7 designated owners to eliminate ambiguity:
 
+| # | SPOC | Owns |
+| :--- | :--- | :--- |
+| 1 | **Product Owner (PO)** | PRD & business intent |
+| 2 | **Integration SPOC (SA)** | Box Solution & ARB defense |
+| 3 | **Assignee (Dev Lead)** | Solution Doc & code |
+| 4 | **Squad QA SPOC** | Dev Environment test plan |
+| 5 | **Scrum Master (SM)** | Blocker resolution |
+| 6 | **UAT SPOC** | Staging business acceptance |
+| 7 | **Code Reviewers (Senior FE + BE)** | Architecture & PR approvals |
+
+The full Jira template these owners are bound to:
+
 ```
 +--------------------------------------------------------------------------------------+
 | MAIN JIRA TICKET TEMPLATE FIELDS                                                     |
@@ -184,7 +215,8 @@ Every main Jira ticket binds 7 designated owners to eliminate ambiguity:
 +--------------------------------------------------------------------------------------+
 ```
 
-> 💬 **Ticket Communication Rule:** All clarifications, technical questions, architectural decisions, and blocker notifications must be documented directly in the main Jira ticket comments with explicit `@mention` tagging of the designated SPOC. No critical decisions should remain hidden in private chat channels.
+> [!IMPORTANT]
+> **Ticket Communication Rule:** all clarifications, technical questions, architectural decisions, and blocker notifications must be documented directly in the main Jira ticket comments with explicit `@mention` tagging of the designated SPOC. No critical decisions should remain hidden in private chat channels.
 
 ---
 
@@ -314,7 +346,9 @@ flowchart TD
   ```
 
   *(e.g., a 40-hour dev ticket allows max 4.0 hours of bug fixing.)*
-- **Quality Alarm**: Breaching the 10% buffer indicates incomplete implementation or misunderstood requirements, triggering an immediate quality retro between Developer and Squad Lead.
+
+> [!WARNING]
+> **Quality Alarm:** breaching the 10% buffer signals incomplete implementation or misunderstood requirements — trigger an immediate quality retro between Developer and Squad Lead. Do not silently absorb the overrun.
 
 #### Stage 6: Staging Deployment, UAT Governance & Live Issue Pool
 - On or before the committed **UAT Delivery Date**, all feature artifacts are deployed to the Staging Environment via VPN.
@@ -328,7 +362,9 @@ flowchart TD
 #### Stage 7: TCAB & Pre-Sanity Backend Freeze
 - **Fixed Monthly Cadence**: Every month operates on a fixed store release date preceded by a strict **Sanity Start Date**.
 - **TCAB Preparation**: Backend engineers submit a Technical Change Advisory Board (TCAB) RFC for database migrations, config changes, and microservice deployments.
-- **The Cardinal Rule**: All backend microservices scheduled for release must be deployed to LIVE production under TCAB **before the mobile sanity start date begins**. Mobile sanity testing never runs against fluctuating backend APIs.
+
+> [!IMPORTANT]
+> **The Cardinal Rule — BE Freeze First:** all backend microservices scheduled for release must be deployed to LIVE production under TCAB **before the mobile sanity start date begins**. Mobile sanity testing never runs against fluctuating backend APIs.
 
 #### Stage 8: Branch Consolidation, Dual-Gate Sanity & Release Team
 - **Squad-Wise Branching**: Each squad maintains a dedicated release branch (`squad/a-release-vX.Y.Z`). The Squad Lead merges all completed squad release items into this branch.
@@ -439,7 +475,8 @@ Every month runs on a fixed, repeatable cadence. The calendar below is the canon
 | **Days 25–27** | UAT sanity pool & final Go/No-Go (Gate 2) | UAT Team & Release Lead | Official store submission "Go-Ahead" |
 | **Day 28** | Staged store rollout: 5% → 20% → 50% → 100% | Release Lead | ≥ 99.8% crash-free sessions; rollback plan armed |
 
-> 📌 **Planning Rule:** Backward-plan every feature from Day 19 (UAT cutoff). If a feature cannot realistically reach Staging by Day 19, it belongs in next month's release — not in a heroic sprint.
+> [!TIP]
+> **Planning Rule:** backward-plan every feature from Day 19 (UAT cutoff). If a feature cannot realistically reach Staging by Day 19, it belongs in next month's release — not in a heroic sprint.
 
 ---
 
