@@ -5,217 +5,218 @@ paginate: true
 ---
 
 # Scaling Mobile Super-App Engineering Teams
-## *A Battle-Tested Operating Model for High-Velocity Mobile Organizations*
+## *How our mobile teams ship*
 
-> This markdown deck mirrors `presentation.html` slide for slide — the `> 💡` blocks are presenter notes.
-
----
-
-## Act 1 · The Problem
-
-### Standard Agile Breaks at Super-App Scale
-
-- **30% of the sprint** eaten by bug spills, because edge cases were never reviewed upfront.
-- **20 hours** logged as "coding" but spent in clarification meetings — sprint metrics lie.
-- **Phantom bugs** from moving targets: backend deploys land while mobile QA is mid-test.
-- **Silent cross-product breakage:** Squad A changes a checkout payload; Squad B's subscription purchase crashes.
-
-> 💡 **The point:** none of these are talent problems — they are *coordination* problems. Coordination is exactly what the model automates.
+> The same slides as `presentation.html`, in plain markdown. The `> 💡` blocks are presenter notes.
 
 ---
 
-## Act 2 · The Model at a Glance
+## The problem
 
-### Approved. Scheduled. Protected.
+### Why normal agile breaks at this scale
 
-How every feature travels from idea to store — three verbs, three owners:
+- **30% of the sprint** goes to bug fixing, because edge cases never got reviewed.
+- **20 hours** of meetings logged as coding, so the metrics stop meaning anything.
+- **Tests run twice:** a backend deploys mid-run, the results are void, QA starts over.
+- **Silent breakage:** Squad A changes a checkout payload. Squad B's subscription flow crashes in staging, two days before submission.
 
-- **✅ Approved — by the DAF:** the solution doc is reviewed by the cross-product forum, the task solution & approach are approved before coding, and dev & QA estimates are verified against the task breakdown.
-- **📅 Scheduled — by the SM:** dev-completion and UAT dates are locked by the SM — not by the DAF — anchored to business needs and the planned release version/month, on one fixed 28-day release rhythm.
-- **🛡️ Protected — by guardrails:** tasks chunked to ≤ 4 hours, bug fixing capped at 10% of dev hours, and the backend frozen before sanity starts.
-
-> 💡 **Say this:** "Three verbs run this model — the DAF approves it, the SM schedules it, the guardrails protect it."
-
----
-
-## Act 2 · Five Non-Negotiables
-
-### The Five Golden Rules
-
-1. **Box Before Build** *(SA draws it)* — never refine a ticket without an architect's one-page Box Solution.
-2. **Approve at DAF** *(DAF decides)* — the forum approves the task solution and verifies dev & QA estimates.
-3. **Chunk to ≤ 4 Hours** *(engineers own it)* — small, verifiable subtasks surface blockers within 24 hours.
-4. **Enforce 10% Buffer** *(dev + QA own it)* — cap bug-fixing time to expose design debt early.
-5. **BE Freeze First** *(release team owns it)* — backend deploys to production before mobile sanity ever starts.
-
-*Approval ≠ scheduling: the DAF verifies the plan; the SM commits the dates from business needs and the planned release version/month.*
-
-> 💡 **Why it works:** five memorable rules beat fifty policies. Every engineer knows exactly what the organization will and won't tolerate.
+> 💡 **Note:** none of this is a talent problem. It's what happens when six teams can't see what the other five are doing.
 
 ---
 
-## Act 2 · Who Runs This
+## The big picture
 
-### Autonomous Squads, Matrix Governance
+### How it all fits together
 
-- **Layer 1 — Business & UAT** *(the "why")*: Product Owners own vision & PRDs; UAT owns business acceptance and Go/No-Go.
-- **Layer 2 — Leadership & the DAF** *(the "what fits")*: Solution Architect draws Box Solutions; Squad Main Leads (1 lead, 1+ squads); Release Lead owns store operations; the **DAF** is the joint forum of Core, Payments (POL), Subscriptions (SOL) & Platform architects.
-- **Layer 3 — The Squad Pool** *(the "how")*: each squad = Android, iOS, Backend, QA, SM, Dev Lead. Fluid staffing: inter-squad loans, revamp taskforces, Growth squads keep shipping.
-- **7 owners on every ticket**: PO → intent · SA → blueprint · Dev Lead → code & doc · QA → test plan · SM → dates & blockers · UAT → acceptance · Reviewers → architecture.
-- **Communication rule:** all decisions via `@mentions` in the ticket — never in private chats.
+Every feature goes through the same three steps:
 
-> 💡 **The point:** you are never alone on a feature. Before coding starts, the ticket already names the architect, the QA, and the UAT tester who are on the hook with you.
+- **The DAF approves** (before code): reviews the solution doc, checks the approach and the edge cases, confirms the dev and QA estimates hold up.
+- **The SM schedules** (from the release plan): sets the dev completion date and the UAT handover date, fitted to the release version and month.
+- **The rules protect** (during the sprint): tasks stay under 4 hours, bug fixing stays under 10% of dev hours, the backend freezes before sanity testing.
 
----
-
-## Act 2 · The Workflow
-
-### From PRD to 100% Rollout in 9 Stages
-
-**Phase 1 · Architect** — 01 PO Grooming (PRD in, Box Solution out) → 02 Squad Refinement (Solution Doc + STRIDE + ≤ 4h tasks) → **03 DAF Review ✅** (forum approves the approach & verifies estimates)
-
-**Phase 2 · Build** — 04 SM Scheduling & Sprint (SM locks dates from the release plan; daily 4h subtasks, honest logging, 2 approvals) → 05 Squad QA (bug fixing held inside the 10% buffer) → **06 UAT Staging 🎯** (regressions fixed, legacy bugs routed to the pool)
-
-**Phase 3 · Ship** — **07 TCAB & Freeze ❄️** (backend live before sanity starts) → 08 Dual-Gate Sanity (QA pool, then UAT pool Go) → 09 Staged Rollout (5 → 20 → 50 → 100%, watched on Crashlytics)
-
-> 💡 **Say this:** walk the three columns left to right. Each ends with a hard stop: *solution approved → dates committed → backend frozen*. Nothing advances until the previous phase is sealed.
+> 💡 **Note:** approval and scheduling are deliberately separate. The people reviewing the solution are not the people committing to dates.
 
 ---
 
-## Act 3 · Inside the Process
+## Five rules
 
-### The DAF: Where Solutions Get Approved
+### The five golden rules
 
-- **Step 1 — Submit:** Solution Doc with sequence flows, failure fallbacks, STRIDE analysis, and the ≤ 4h task list — circulated ≥ 24 h ahead.
-- **Step 2 — Defend:** the forum hunts corner cases: *gateway dies mid-payment? partial refund on retry? retry storm on 2G?*
-- **Step 3 — Approve ✓:** the forum signs off — solution approach approved, task breakdown validated, dev & QA hours verified realistic.
-- **Who's in the room:** Core Product Leads · Main Product Leads · POL (Payments) · SOL (Subscriptions) · Platform Architects.
+1. **Box Before Build** *(the SA draws it)* — no squad starts work without an architect's one-page sketch of the system.
+2. **Approve at DAF** *(DAF decides)* — the forum signs off on the solution and the estimates before coding starts.
+3. **Chunk to ≤ 4 Hours** *(engineers own it)* — if a task is bigger than four hours, split it until it isn't.
+4. **Enforce 10% Buffer** *(dev + QA own it)* — bug fixing gets at most 10% of the dev estimate.
+5. **BE Freeze First** *(release team owns it)* — backend goes to production before mobile sanity testing starts.
 
-**The split that keeps it honest:**
+Approval and scheduling are separate jobs: the DAF verifies the plan, the SM sets the dates.
 
-- **The DAF decides 🧠** — solution approach · task breakdown · estimate validity (dev & QA hours).
-- **The SM locks 📅** — dev-completion date · UAT handover date · release version/month — from business needs & the planned release.
-
-> 💡 **Say this:** "DAF approval is your shield." Once the solution is approved and the SM has scheduled the sprint, product cannot quietly add scope — any change means re-estimation and re-approval.
+> 💡 **Note:** five lines any engineer can recite. That's the point. If a rule needs a paragraph to explain, it doesn't get followed.
 
 ---
 
-## Act 3 · Design Before Code
+## Teams
 
-### One Blueprint & One Contract per Feature
+### How the teams are set up
 
-- **📐 The Architect's Box Solution** (1 page, drawn at grooming):
-  - Touched microservices: Payment (POL) · Subscription (SOL) · Core Profile
-  - Baseline effort split, e.g. 40% Frontend / 60% Backend
-  - Downstream systems: external gateways & telco billing
-- **📜 The Squad's Solution Doc** (Confluence, the DAF exhibit):
-  - Sequence diagrams for happy paths *and* timeout/retry failures
-  - Network failure matrix: offline cache, flaky 3G, backoff with jitter
-  - STRIDE threat model · blockers + ≤ 4h task list
+- **Business & UAT** (what gets built): product owners write the PRDs. UAT accepts features on staging and gives the final go/no-go.
+- **Tech leads & the DAF** (how it fits together): the solution architect sketches each feature. Squad main leads run delivery, one lead across one or more squads. The release lead owns store operations. The DAF is a joint forum of Core, Payments (POL), Subscriptions (SOL) and Platform architects.
+- **The squads** (who builds it): each squad has Android, iOS, backend, QA, a dev lead and a scrum master. Engineers loan between squads when priorities spike.
+- **7 owners on every ticket**: PO (the why), SA (the sketch), dev lead (code & doc), QA (test plan), SM (dates & blockers), UAT (acceptance), reviewers (architecture).
+- All decisions go in ticket comments with @mentions. Nothing important lives in DMs.
 
-**No Box → No Sprint. No Doc → No DAF.**
-
-> 💡 **Engineering principle:** an hour of diagramming is worth a week of debugging. The blueprint kills architecture drift; the contract kills "I assumed the API worked differently".
+> 💡 **Note:** you're never the only person on a feature. The ticket already says who reviews it, who tests it, and who signs it off.
 
 ---
 
-## Act 3 · Execution Rhythm
+## The pipeline
 
-### No Task Bigger Than 4 Hours
+### Nine stages, three phases
 
-- A 16-hour feature decomposes into: *DTO & serialization tests [4h] · repository & cache fallback [3.5h] · UI + state binding [4h] · error dialogs & analytics [3h]*.
-- **Smoke-detector effect:** a developer can be stuck for hours, never for days — blockers surface within 24 h at standup.
-- **Honest hours fuel the dashboard:** Dev Time (target ≥ 90% of locked hours delivered) vs. Refinement Time (≤ 20% overhead), rolled up per engineer and per squad.
+**Phase 1 · Plan** — 01 PO Grooming (PRD in, one-page sketch out) → 02 Squad Refinement (solution doc, security checklist, 4h tasks) → **03 DAF Review ✅** (forum approves, estimates confirmed)
 
-> 💡 **Say this:** "4-hour tasks protect *you*. Small PRs get reviewed in 30 minutes instead of rotting in a queue for days — and nobody discovers at sprint end that you were blocked since Tuesday."
+**Phase 2 · Build** — 04 SM Scheduling & Sprint (dates set from the release plan, daily 4h tasks, honest time logs) → 05 Squad QA (testing on dev, bug fixing within 10%) → **06 UAT Staging 🎯** (regressions fixed, old bugs to the pool)
+
+**Phase 3 · Ship** — **07 TCAB & Freeze ❄️** (backend in production before sanity starts) → 08 Dual-Gate Sanity (QA sanity, then UAT) → 09 Staged Rollout (5, 20, 50, then 100%, watching Crashlytics)
+
+> 💡 **Note:** if a stage can't be finished, work stops there. That's much cheaper than finding out in production.
 
 ---
 
-## Act 3 · Quality Discipline
+## The DAF
 
-### Squad QA & the 10% Bug Buffer Rule
+### What happens in a DAF review
+
+- **Before, the write-up:** the squad shares the solution doc — sequence flows, failure handling, the security checklist, the 4h task list. At least a day before the slot.
+- **In the room, the questions:** the panel asks about the cases nobody planned for. Gateway dies mid-payment? Partial refund on retry? Retry storm on a bad connection?
+- **After, the sign-off:** approach approved, task list checked, dev and QA hours confirmed. If it needs work, it comes back with notes.
+- **Who's in the room:** Core Product Leads, Main Product Leads, POL, SOL, Platform Architects.
+
+The split that keeps it honest:
+
+- **The DAF decides:** the approach, the task breakdown, whether the estimates hold up.
+- **The SM locks:** dev completion date, UAT handover date, release version and month. From business needs and the release plan, not from the review.
+
+> 💡 **Note:** once the DAF has approved and the SM has scheduled, the scope is fixed. New requests go through estimation again. They don't come in through the side door.
+
+---
+
+## Docs before code
+
+### Two documents before any code
+
+- **📐 The architect's Box Solution** (one page, at grooming):
+  - Touched microservices: Payment (POL), Subscription (SOL), Core Profile
+  - Rough effort split, e.g. 40% Frontend / 60% Backend
+  - Downstream systems: external gateways, telco billing
+- **📜 The squad's solution doc** (Confluence, for the DAF review):
+  - Sequence diagrams for the happy path and the failure paths
+  - What happens offline: flaky networks, timeouts, retry and caching rules
+  - The STRIDE security checklist for anything touching money or identity
+  - Blockers and the 4h task list
+
+**No box, no sprint. No doc, no DAF.**
+
+> 💡 **Note:** an hour on these documents routinely saves a week of debugging. "I assumed the API worked differently" is what this is designed to prevent.
+
+---
+
+## Daily work
+
+### No task bigger than four hours
+
+- A 16-hour feature splits into: DTO models and tests (4h), repository and cache fallback (3.5h), UI and state binding (4h), error dialogs and analytics (3h).
+- A developer can be blocked for a few hours, but never for days. Standup catches it within 24.
+- Honest time logs feed the dashboard: Dev Time (target: 90% of the estimate delivered) vs. Refinement Time (capped at 20% of squad time).
+
+> 💡 **Note:** small PRs get reviewed in half an hour. Three-day PRs sit in the queue for days. That's most of the argument for the 4-hour rule right there.
+
+---
+
+## Quality
+
+### The 10% bug buffer, in practice
 
 ```
-Max Allowed Bug-Fix Time  ≤  10% × Locked Dev Hours
+Max bug-fixing time  ≤  10% × locked dev hours
 ```
 
-- Example: a 40-hour locked ticket carries a **4.0-hour** allowance. (Interactive calculator lives on this slide in `presentation.html`.)
-- **Green path (within the buffer):** typos, styling, edge-case null checks — fixed quietly, the sprint never feels it.
-- **Quality alarm (buffer breached):** fixing stops; retro with the Squad Lead — were edge cases tested locally? was the API spec ambiguous? is there design debt to raise?
-- Shift-left economics: a defect caught on the Dev env costs **10× less** than in UAT or production.
+- Example: a 40-hour estimate carries a 4.0-hour allowance. (Interactive calculator on this slide in `presentation.html`.)
+- **Within the buffer:** typos, styling, missed null checks. Fixed quietly, and the sprint never feels it.
+- **Buffer blown:** fixing stops. Dev and lead sit down — were the edge cases tested locally? Was the spec ambiguous? Is there design debt to file?
+- A bug caught on the dev environment costs roughly a tenth of the same bug found after UAT.
 
-> 💡 **Say this:** "If it takes 10 hours to debug, it wasn't a bug — it was an unfinished feature. The 10% alarm makes sure architects own that early, not the developer alone at 2 AM."
-
----
-
-## Act 3 · Fair Triage
-
-### Every UAT Bug Gets a Verdict
-
-One question decides who owns the fix: **does it reproduce on live production?**
-
-- **NO → Type A · Story Regression:** introduced by this squad's recent PR; fixed before UAT sign-off; counts against the QA KPI (leakage < 2%).
-- **YES → Type B · Pre-Existing Live Defect:** SA validates → detached from the feature → Live Issue Pool → fixed via the squad's monthly quota.
-
-Why the split matters: delivery dates are protected from legacy debt, the QA KPI only measures what QA could have caught, and old potholes still get fixed — on quota.
-
-> 💡 **Engineering principle:** never fear UAT finding an old bug. If it reproduces on production, it was never your sprint's regression — it goes to the pool and your feature still ships on time.
+> 💡 **Note:** if a fix takes ten hours, it was never a bug. The estimate or the design was wrong, and it's better to learn that in week one.
 
 ---
 
-## Act 3 · Ship It
+## When UAT finds a bug
 
-### The Backend Freezes First
+### Two kinds of bugs
 
-The 28-day calendar, same every month:
+One question decides who fixes it and what it counts against: does it also happen on the live app?
 
-- **Days 1–18** sprint execution + squad QA (≥ 90% dev hours)
-- **Day 19** staging handover · **Day 20** UAT fixes & sign-off
-- **Days 21–22** ❄️ TCAB → backend live in production → **frozen**
-- **Days 23–27** dual-gate sanity (QA pool, then UAT Go) · **Day 28** staged rollout
+- **No → a regression from this sprint:** introduced by this squad's recent PR, fixed before UAT sign-off, counts against the QA leakage KPI (under 2%).
+- **Yes → a pre-existing live bug:** the SA confirms it exists in production, it's detached from the feature and sent to the Live Issue Pool, and it's fixed through the squad's monthly quota.
 
-Staged rollout, watched live: **5% → 20% → 50% → 100%** over four days, guard ≥ 99.8% crash-free sessions; spike → hotfix → re-verify → re-upload.
+The split keeps the release date safe from old debt, measures QA only on what it could have caught, and still gets the old bugs fixed on a schedule.
 
-> 💡 **Cardinal rule:** mobile sanity *never* runs against a changing backend. BE deploys to production first; mobile sanity runs second. Backward-plan from Day 19 — if a feature can't make staging by then, it belongs in next month's release.
+> 💡 **Note:** if it happens in production, it was never your sprint's regression. Hand it over and keep your date.
 
 ---
 
-## Act 4 · What Good Looks Like
+## Releases
 
-### The Scoreboard
+### The backend freezes first
+
+The same 28 days, every month:
+
+- **Days 1–18** sprint and squad QA (90% of dev hours done)
+- **Day 19** staging handover · **Day 20** fixes and UAT sign-off
+- **Days 21–22** ❄️ TCAB, backend live in production, frozen
+- **Days 23–27** dual-gate sanity (QA, then UAT) · **Day 28** rollout starts
+
+Rollout: **5, 20, 50, then 100%** of users over four days, crash-free sessions held at 99.8% or better. Rollback plan stays armed: spike → hotfix → re-verify → re-upload.
+
+> 💡 **Cardinal rule:** mobile sanity never runs against a changing backend. Backend deploys first, sanity runs second. And if a feature can't reach staging by day 19, it waits for next month — heroics are how three working features break at once.
+
+---
+
+## The numbers
+
+### What we measure
 
 | Target | Metric | Owner |
 | :--- | :--- | :--- |
-| 100% | On-time UAT handover | Squad |
-| < 2% | UAT bug leakage | Squad QA |
-| ≥ 90% | Locked dev hours delivered | Developers |
-| ≤ 10% | Bug-fix vs dev-time ratio | Developers |
-| ≤ 20% | Refinement overhead | Lead & SM |
-| 100% | Live-issue quota fulfilled | Squad + SA |
-| 100% | Store submission on calendar date | Release team |
-| ≥ 99.8% | Crash-free sessions | Whole team |
+| 100% | UAT handover on the committed date | Squad |
+| < 2% | bugs leaked from QA to UAT | Squad QA |
+| ≥ 90% | of estimated dev hours delivered | Developers |
+| ≤ 10% | bug-fix hours against dev estimate | Developers |
+| ≤ 20% | of squad time spent in refinement | Lead & SM |
+| 100% | of the monthly live-issue quota | Squad + SA |
+| 100% | store submission on the planned date | Release team |
+| ≥ 99.8% | crash-free sessions in rollout | Whole team |
 
-> 💡 **Say this:** every KPI maps to a mechanism you've already seen. Nothing is measured that the model doesn't actively protect.
+> 💡 **Note:** each of these maps to a rule you've already seen. We don't measure anything the process doesn't actively protect.
 
 ---
 
-## Act 4 · Make It Yours
+## Getting started
 
-### Adopt It in Three Waves
+### Rolling it out? Do it in three passes.
 
-- **Wave 1 (Weeks 1–2) — Time Hygiene:** ≤ 4h subtasks, Dev vs. Refinement logging, `[BLOCKER]` tag with a 4h SLA.
-- **Wave 2 (Sprints 1–2) — Quality Discipline:** 10% bug buffer + alarm, defect bifurcation, Live Issue Pool quotas.
-- **Wave 3 (The Quarter) — Full Governance:** Box Solutions + DAF review, TCAB backend freeze, the 28-day calendar.
+- **Pass 1 (weeks 1–2), time hygiene:** 4h tasks everywhere, dev and refinement hours logged separately, `[BLOCKER]` tag cleared within 4h.
+- **Pass 2 (sprints 1–2), quality discipline:** the 10% buffer and its alarm, sorting UAT bugs by type, the Live Issue Pool with monthly quotas.
+- **Pass 3 (the quarter), the full process:** box solutions and DAF reviews, the TCAB backend freeze, the 28-day release calendar.
 
 Recap: **Box Before Build · Approve at DAF · Chunk to ≤ 4h · Enforce 10% Buffer · BE Freeze First.**
 
-> 📘 **Go deeper:** the Master Engineering Playbook (`ENTERPRISE_MOBILE_SUPERAPP_WORKFLOW.md`) has the full lifecycle, the 7-SPOC RACI contract, STRIDE matrix, and operational checklists — everything to run this starting Monday.
+> 📘 **Full details:** the Master Engineering Playbook (`ENTERPRISE_MOBILE_SUPERAPP_WORKFLOW.md`) has the complete lifecycle, the ticket template, the security checklist and the release checklists.
 
 ---
 
-## Presenting This Deck
+## Presenting this deck
 
-- **Google Slides / Keynote:** paste each slide's bullet block onto a matching slide; the `> 💡` blocks are presenter notes.
-- **Marp:** render directly — `marp SLIDES.md --pdf` (front matter configures pagination).
+- **Google Slides / Keynote:** paste each slide's bullets onto a matching slide; the `> 💡` blocks are presenter notes.
+- **Marp:** render directly with `marp SLIDES.md --pdf` (the front matter sets pagination).
 - **Obsidian:** the `---` separators split slides in most slide plugins; the 💡 blocks double as callouts.
-- The acts are the story: **Act 1** why the model exists → **Act 2** the model at a glance → **Act 3** the process up close → **Act 4** the payoff and adoption.
+- Suggested flow: the problem first, then the big picture, then the pipeline and the DAF in detail, and finish on the numbers and the rollout plan.

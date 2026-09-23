@@ -14,7 +14,7 @@
 7. [Precision Time Engineering & Defect Governance](#7-precision-time-engineering--defect-governance)
 8. [Git Branching & Secure Environment Architecture](#8-git-branching--secure-environment-architecture)
 9. [The Monthly Release Calendar](#9-the-monthly-release-calendar)
-10. [Common Anti-Patterns & the Guardrails That Stop Them](#10-common-anti-patterns--the-guardrails-that-stop-them)
+10. [Common Failure Modes and What Stops Them](#10-common-failure-modes-and-what-stops-them)
 11. [Role-by-Role Quick Reference Cheatsheets](#11-role-by-role-quick-reference-cheatsheets)
 12. [Balanced Scorecard & Engineering KPI Framework](#12-balanced-scorecard--engineering-kpi-framework)
 13. [Operational Checklists](#13-operational-checklists)
@@ -26,10 +26,9 @@
 This document formalizes the end-to-end engineering, architecture, governance, sprint execution, release cadence, and quality frameworks for high-concurrency mobile super-applications. It provides a clear, high-velocity operating model while maintaining the **deep technical rigor** required for mission-critical telecom and fintech platforms.
 
 > **[!TIP]**
-> **How work flows — in one sentence:** the architect boxes it, the squad refines it, the **DAF** approves it, the **SM** schedules it, the calendar ships it.
-> The **DAF (Design Authority Forum)** reviews the solution doc, approves the task solution, and verifies Dev/QA estimates. The **SM** locks the delivery dates from business needs and the planned release version/month. Guardrails — ≤ 4 h tasks, the 10% bug buffer, and the pre-sanity backend freeze — protect the sprint in between.
+> The short version: an architect sketches the solution, the squad writes it up, the **DAF** reviews and approves it, and the **SM** sets the dates against the release calendar. During the sprint, two limits do most of the work: tasks stay under 4 hours, and bug fixing stays under 10% of the dev estimate.
 
-### The Model in One Picture
+### The pipeline at a glance
 
 ```mermaid
 flowchart LR
@@ -54,7 +53,8 @@ flowchart LR
   5. BE Freeze First        ── All backend microservices deploy to production BEFORE mobile sanity begins.
 ```
 
-> 🧭 **How to read this document:** New engineers should read sections 2–5 in order. Leads and architects can jump straight to the [release calendar](#9-the-monthly-release-calendar), [KPI scorecard](#12-balanced-scorecard--engineering-kpi-framework), and [checklists](#13-operational-checklists).
+> **[!TIP]**
+> New to the team? Read sections 2 through 5 in order. If you're a lead or an architect, jump straight to the [release calendar](#9-the-monthly-release-calendar), the [KPI table](#12-balanced-scorecard--engineering-kpi-framework), and the [checklists](#13-operational-checklists).
 
 ---
 
@@ -65,7 +65,7 @@ Standard terms keep squads aligned across engineering, product, and leadership:
 | Term | Full Name | Plain-English Meaning | Real-World Analogy |
 | :--- | :--- | :--- | :--- |
 | **Box Solution** | Architectural Blueprint | A 1-page system diagram prepared by the Solution Architect during grooming. It defines touched microservices and the baseline Frontend/Backend effort split (e.g., 40% FE / 60% BE). | The blueprint an architect draws before builders buy materials. |
-| **DAF** | Design Authority Forum | A regular cross-product panel of Team Leads, System Architects, Core Product Leads, and Main Product Leads (Core Products, Payments/POL, Subscriptions/SOL, and Platform Services). It reviews the solution doc, approves the task solution, and verifies Dev/QA estimates. It does **not** lock dates — the SM locks delivery dates from business needs and the planned release version/month. | A building inspection board checking structural safety and fire code before issuing a permit — it approves the design; the contractor sets the schedule. |
+| **DAF** | Design Authority Forum | A regular cross-product panel of Team Leads, System Architects, Core Product Leads, and Main Product Leads (Core Products, Payments/POL, Subscriptions/SOL, and Platform Services). It reviews the solution doc, approves the task solution, and verifies Dev/QA estimates. It does **not** lock dates. The SM locks delivery dates from business needs and the planned release version/month. | A building inspection board checking structural safety and fire code before issuing a permit: it approves the design, the contractor sets the schedule. |
 | **POL** | Payment Orchestration Layer | The central payment platform connecting digital wallets, cards, and banks with idempotency and retry safeguards. | A secure cashier terminal that accepts cash, cards, and vouchers safely. |
 | **SOL** | Subscription Orchestration Layer | The central engine managing recurring packs, auto-renewals, billing cycles, and balance deduction fallbacks. | A recurring subscription service (like Netflix billing). |
 | **STRIDE** | Threat Modeling Framework | A 6-part security checklist (Spoofing, Tampering, Repudiation, Info Disclosure, DoS, Elevation of Privilege) required for sensitive features. | A rigorous building security audit checking doors, locks, cameras, and alarms. |
@@ -352,7 +352,7 @@ flowchart TD
   *(e.g., a 40-hour dev ticket allows max 4.0 hours of bug fixing.)*
 
 > [!WARNING]
-> **Quality Alarm:** breaching the 10% buffer signals incomplete implementation or misunderstood requirements — trigger an immediate quality retro between Developer and Squad Lead. Do not silently absorb the overrun.
+> **Quality Alarm:** breaching the 10% buffer signals incomplete implementation or misunderstood requirements. Trigger an immediate quality retro between developer and Squad Lead, and don't quietly absorb the overrun.
 
 #### Stage 6: Staging Deployment, UAT Governance & Live Issue Pool
 - On or before the committed **UAT Delivery Date**, all feature artifacts are deployed to the Staging Environment via VPN.
@@ -467,9 +467,9 @@ To track delivery across distributed squads, squad-level Jira boards roll up int
 
 ## 9. The Monthly Release Calendar
 
-Every month runs on a fixed, repeatable cadence. The calendar below is the canonical schedule that the 9-stage lifecycle maps onto; the Release Lead owns it, and every squad plans backward from it.
+The same 28 days, every month. The Release Lead owns this calendar; squads plan backward from it.
 
-| Window | Milestone | Primary Owner | Exit Criteria |
+| Window | Milestone | Primary Owner | Done When |
 | :--- | :--- | :--- | :--- |
 | **Days 1–18** | Sprint execution: coding, PR reviews, Squad QA on Dev Environment | Squad Developers & QA | Dev hours ≥ 90% complete; bug fixing within the 10% buffer |
 | **Day 19** | UAT staging cutoff — all feature artifacts deployed to Staging | Squad Leads | Tickets in `UAT Backlog` before the deadline timestamp; zero open P0/P1 |
@@ -480,23 +480,23 @@ Every month runs on a fixed, repeatable cadence. The calendar below is the canon
 | **Day 28** | Staged store rollout: 5% → 20% → 50% → 100% | Release Lead | ≥ 99.8% crash-free sessions; rollback plan armed |
 
 > [!TIP]
-> **Planning Rule:** backward-plan every feature from Day 19 (UAT cutoff). If a feature cannot realistically reach Staging by Day 19, it belongs in next month's release — not in a heroic sprint.
+> **Planning rule:** plan backward from Day 19 (the UAT cutoff). If a feature can't realistically reach staging by Day 19, it goes in next month's release. Heroic end-of-month pushes are how working features break.
 
 ---
 
-## 10. Common Anti-Patterns & the Guardrails That Stop Them
+## 10. Common Failure Modes and What Stops Them
 
-Every guardrail in this model exists because a real failure mode made it necessary. Recognize the anti-pattern early and apply its guardrail:
+Every rule in this document exists because something went wrong without it. If you recognize one of these happening, the third column is the rule that fixes it:
 
-| Anti-Pattern | What It Looks Like | Guardrail That Stops It |
+| Failure Mode | What It Looks Like | What Stops It |
 | :--- | :--- | :--- |
-| **The Black-Box Task** | A "3-day task" where the developer is silently stuck; discovered at sprint end. | 4-Hour Rule + daily standup declarations. |
-| **Scope Sneak-In** | Product adds "one small ask" mid-sprint after approval and scheduling. | DAF-approved scope + SM-locked schedule — new scope means re-estimation and re-scheduling. |
-| **Bug Whack-a-Mole** | Bug fixing quietly consumes 30–40% of sprint capacity. | 10% Bug Buffer + quality alarm retro with the Squad Lead. |
-| **Blame-the-Messenger QA** | UAT finds a legacy bug and the squad's QA KPI takes the hit. | Defect Bifurcation — pre-existing defects route to the Live Issue Pool. |
-| **Moving-Target Testing** | Backend APIs change while mobile sanity is running; phantom bugs everywhere. | Pre-Sanity Backend Freeze enforced by TCAB. |
-| **Invisible Work** | 20 hours of clarification meetings logged as "coding time", corrupting velocity. | Strict Refinement vs. Dev Time classification in Jira. |
-| **Endless Refinement** | Tickets sit in refinement for weeks without moving. | Refinement-time monitoring + the backlog hygiene rule (≤ 20% overhead KPI). |
+| **The black-box task** | A "3-day task" where the developer is quietly stuck, and nobody finds out until the sprint ends. | 4-Hour Rule + daily standup declarations. |
+| **Scope sneak-in** | Product adds "one small ask" after the solution is approved and the sprint is scheduled. | DAF-approved scope + SM-locked schedule. New scope means new estimates and a new schedule. |
+| **Bug whack-a-mole** | Bug fixing quietly consumes 30–40% of the sprint. | The 10% cap, and the retro it triggers with the Squad Lead. |
+| **Blaming QA for old bugs** | UAT finds a legacy bug and the squad's QA takes the hit for it. | Defect bifurcation: pre-existing bugs go to the Live Issue Pool. |
+| **Testing against a moving backend** | APIs change while mobile sanity is running; everything fails for no clear reason. | The pre-sanity backend freeze, enforced through TCAB. |
+| **Invisible work** | 20 hours of clarification meetings logged as "coding time". | Strict Refinement vs. Dev Time logging in Jira. |
+| **Endless refinement** | Tickets sit in refinement for weeks without moving. | Refinement-time monitoring and the 20% overhead cap. |
 
 ---
 

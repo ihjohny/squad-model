@@ -4,126 +4,124 @@
 
 ### *Enterprise Mobile Super-App Operating Model & Engineering Playbook*
 
-A practical, battle-tested operating model for scaling mobile engineering teams, cross-product architecture governance, and predictable monthly releases in enterprise super-apps (telecom, fintech, payments).
+How our mobile teams work: how squads are set up, how solutions get approved, and how a release ships on the same schedule every month.
 
-[![Slides](https://img.shields.io/badge/Interactive_Slides-14_deck_·_4_acts-4338ca)](https://ihjohny.github.io/squad-model/presentation.html)
+[![Slides](https://img.shields.io/badge/Interactive_Slides-14_slides-4338ca)](https://ihjohny.github.io/squad-model/presentation.html)
 [![Playbook](https://img.shields.io/badge/Master_Playbook-13_sections-0d9488)](./ENTERPRISE_MOBILE_SUPERAPP_WORKFLOW.md)
 [![Markdown Deck](https://img.shields.io/badge/SLIDES.md-Marp_ready-059669)](./SLIDES.md)
 
 👉 **[Launch the Interactive Presentation](https://ihjohny.github.io/squad-model/presentation.html)**
 
-> **How work flows:** the architect boxes it → the squad refines it → the **DAF** approves it → the **SM** schedules it → the calendar ships it. Guardrails (≤ 4 h tasks, the 10% bug buffer, the pre-sanity backend freeze) protect the sprint in between.
+**The short version:** an architect sketches the solution, the squad writes it up, the DAF reviews and approves it, and the SM sets the dates against a fixed monthly release calendar. During the sprint, two limits do most of the work: tasks stay under 4 hours, and bug fixing stays under 10% of the dev estimate.
 
 </div>
 
 ---
 
-## 📚 Core Documentation & Presentation
+## 📚 What's in here
 
-| Resource | Description | Format |
+| Resource | What it is | Format |
 | :--- | :--- | :--- |
-| 🖥️ **[Interactive Slide Deck](https://ihjohny.github.io/squad-model/presentation.html)** | 14 slides told in four acts — *Why → The Model → How It Runs → Payoff* — with a live 10% bug-budget calculator, a 9-stage workflow map, a 28-day release timeline, a UAT triage decision tree, and presenter takeaways (press <kbd>T</kbd>). Deep-link any slide with `#N`. | [Open Live Slides ↗](https://ihjohny.github.io/squad-model/presentation.html) |
-| 📘 **[Master Engineering Playbook](ENTERPRISE_MOBILE_SUPERAPP_WORKFLOW.md)** | The complete guide: 30-second quickstart, plain-English glossary, daily engineer routine, 7-SPOC RACI model, 9-stage lifecycle, STRIDE threat model, 4-hour task rule, 10% bug buffer, monthly release calendar, anti-pattern guardrails, role cheatsheets, KPI scorecard, and operational checklists. | Markdown Document |
-| 📝 **[Markdown Slide Deck](SLIDES.md)** | Clean slide text with presenter cues for Google Slides, Keynote, Marp, or Obsidian. Ships Marp-ready front matter: run `marp SLIDES.md --pdf` to export. | Markdown Deck |
+| 🖥️ **[Interactive Slide Deck](https://ihjohny.github.io/squad-model/presentation.html)** | 14 slides: the problem, how teams are set up, the 9-stage pipeline, a worked example of a DAF review, a live 10% buffer calculator, the release timeline, and the metrics we hold ourselves to. Presenter notes toggle with <kbd>T</kbd>. Any slide can be linked directly with `#N` in the URL. | [Open the slides ↗](https://ihjohny.github.io/squad-model/presentation.html) |
+| 📘 **[Master Engineering Playbook](ENTERPRISE_MOBILE_SUPERAPP_WORKFLOW.md)** | Everything in detail: the glossary, a squad engineer's day, the 7-SPOC ticket contract, the full 9-stage lifecycle, the STRIDE security checklist, the release calendar, common failure modes, role cheatsheets, and checklists for each handoff. | Markdown |
+| 📝 **[Markdown Slide Deck](SLIDES.md)** | The same slides as plain markdown with presenter notes. Works in Google Slides, Keynote, Obsidian, and Marp (`marp SLIDES.md --pdf`). | Markdown |
 
 ---
 
-## ⚡ The Five Golden Rules at a Glance
+## ⚡ The five golden rules
 
 ```
-  1. Box Before Build       ── Define system boundaries & FE/BE effort ratios before squad intake.
-  2. Approve at DAF         ── The Design Authority Forum approves the task solution & verifies estimates; the SM locks dates from business needs.
-  3. Chunk to ≤ 4 Hours     ── Granular tasks surface blockers within 24 hours at morning standups.
-  4. Enforce 10% Bug Buffer ── Mathematically cap QA bug-fixing time to maintain sprint commitments.
-  5. BE Freeze First        ── All backend microservices deploy to production BEFORE mobile sanity starts.
+  1. Box Before Build       ── An architect sketches the system before the squad starts work.
+  2. Approve at DAF         ── The Design Authority Forum approves the solution and verifies estimates. The SM sets the dates.
+  3. Chunk to ≤ 4 Hours     ── If a task is bigger than four hours, split it until it isn't.
+  4. Enforce 10% Bug Buffer ── Bug fixing gets at most 10% of the dev estimate.
+  5. BE Freeze First        ── Backend deploys to production before mobile sanity testing starts.
 ```
 
 ---
 
-## 🔢 The Numbers That Run the Model
+## 🔢 The numbers behind the process
 
-Memorize these nine numbers — they encode the entire operating model:
-
-| Number | Meaning | Owner |
+| Number | What it means | Who owns it |
 | :--- | :--- | :--- |
-| **≤ 4 h** | Maximum size of any Jira subtask (blockers surface within 24 h) | Every Engineer |
-| **2** | Minimum senior approvals per pull request (Senior FE + Senior BE) | Developer |
-| **10%** | Bug-fixing time cap, relative to locked dev hours | Developer & Squad QA |
-| **< 2%** | UAT bug-leakage rate target (defects missed by Squad QA) | Squad QA |
-| **≥ 80%** | Unit-test coverage on new business logic before QA handoff | Developer |
-| **≤ 20%** | Refinement-time overhead as a share of total squad effort | Squad Lead & SM |
-| **100%** | On-time UAT handover and on-time store submission | Squad & Release Team |
-| **≥ 99.8%** | Crash-free user sessions during staged rollout | Entire Mobile Team |
-| **5→20→50→100%** | Staged store rollout gates (Day 1 → Day 4) | Release Lead |
+| **≤ 4 h** | Biggest allowed size of a Jira subtask | Every engineer |
+| **2** | Senior approvals needed per pull request | Developer |
+| **10%** | Bug-fixing cap, as a share of the dev estimate | Developer & Squad QA |
+| **< 2%** | Defects QA is allowed to leak to UAT | Squad QA |
+| **≥ 80%** | Unit test coverage on new business logic | Developer |
+| **≤ 20%** | Meeting/refinement share of squad time | Squad Lead & SM |
+| **100%** | UAT handover and store submission on the committed dates | Squad & Release Team |
+| **≥ 99.8%** | Crash-free sessions during rollout | Whole team |
+| **5→20→50→100%** | Staged store rollout over four days | Release Lead |
 
 ---
 
-## 🚀 The 9-Stage Super-App Pipeline
+## 🚀 The 9-stage pipeline
 
 ```
-[Phase 1: Architecture & Planning]
+[Phase 1: Plan]
   [1. PO Grooming & Box Solution]
             │
             ▼
-  [2. Squad Intake & 4h Refinement]  ── Confluence Solution Doc & STRIDE Threat Model
+  [2. Squad Intake & 4h Refinement]  ── Solution doc, STRIDE security checklist
             │
             ▼
-  [3. DAF Review & Approval]        ── Solution approved, estimates verified; SM locks dates
-            │                                      ✅ DAF approved · SM-locked schedule
-[Phase 2: Sprint Execution & Quality]
-  [4. Sprint Execution & Code Review]── Daily 4h Subtasks, Dev vs. Refinement Time Tracking
+  [3. DAF Review]                   ── Solution approved, estimates verified
+            │                                      ✅ Then the SM locks the dates
+[Phase 2: Build]
+  [4. SM Scheduling & Sprint]        ── Daily 4h subtasks, dev vs refinement time logs
             │
             ▼
-  [5. Squad QA & Defect Buffer]      ── Max 10% bug-fixing threshold on Dev Env (VPN)
+  [5. Squad QA]                      ── Bug fixing capped at 10% of the estimate
             │                                      ⏱️ CHECKPOINT: 10% cap enforced
             ▼
-  [6. UAT & Staging Verification]    ── Zero defect leakage KPI & Live Issue Pool triage
+  [6. UAT & Staging]                 ── New regressions fixed, old bugs to the Live Issue Pool
             │                                      🎯 CHECKPOINT: UAT sign-off
-[Phase 3: Production & Rollout]
-  [7. TCAB & Backend Freeze]         ── Production deployment before sanity start date
+[Phase 3: Ship]
+  [7. TCAB & Backend Freeze]         ── Backend in production before sanity starts
             │                                      ❄️ CHECKPOINT: BE frozen first
             ▼
-  [8. Branch Merge & Sanity Cycle]   ── Squad branch consolidation & dual-gate sanity (QA + UAT)
+  [8. Branch Merge & Sanity]        ── Squad branches merged, QA sanity then UAT sanity
             │
             ▼
-  [9. Staged Store Rollout]          ── 5% -> 20% -> 50% -> 100% with Crashlytics watch (≥ 99.8%)
+  [9. Staged Store Rollout]          ── 5% -> 20% -> 50% -> 100%, Crashlytics watched (≥ 99.8%)
 ```
 
 ---
 
-## 🗂️ Repository Structure
+## 🗂️ Repository layout
 
 ```
 squad-model/
-├── README.md                                  ← You are here: overview & quick reference
-├── ENTERPRISE_MOBILE_SUPERAPP_WORKFLOW.md     ← Master playbook: the complete deep dive
-├── SLIDES.md                                  ← Marp-ready markdown deck with presenter cues
-└── presentation.html                          ← Interactive HTML deck (served via GitHub Pages)
+├── README.md                                  ← This file
+├── ENTERPRISE_MOBILE_SUPERAPP_WORKFLOW.md     ← The full playbook
+├── SLIDES.md                                  ← The deck as markdown (Marp-ready)
+└── presentation.html                          ← The interactive deck (GitHub Pages)
 ```
 
 ---
 
-## 🧭 How to Use This Repo
+## 🧭 Using it
 
-**Present it.** Open the [live slide deck](https://ihjohny.github.io/squad-model/presentation.html) (or serve `presentation.html` locally). Navigate with <kbd>←</kbd> <kbd>→</kbd> or <kbd>Space</kbd>, toggle presenter takeaways with <kbd>T</kbd>, go fullscreen with <kbd>F</kbd>, and share a specific slide by appending `#4` to the URL.
+**Present it.** Open the [live deck](https://ihjohny.github.io/squad-model/presentation.html) or serve `presentation.html` locally. Arrow keys or <kbd>Space</kbd> to move, <kbd>T</kbd> toggles the presenter notes, <kbd>F</kbd> goes fullscreen, and `#4` at the end of the URL opens slide 4 directly.
 
-**Read it.** Start with the [30-second quickstart](ENTERPRISE_MOBILE_SUPERAPP_WORKFLOW.md#1-executive-summary--the-30-second-quickstart) and [glossary](ENTERPRISE_MOBILE_SUPERAPP_WORKFLOW.md#2-plain-english-jargon-buster-the-super-app-glossary) in the playbook, then follow its table of contents role by role.
+**Read it.** Start with the [glossary](ENTERPRISE_MOBILE_SUPERAPP_WORKFLOW.md#2-plain-english-jargon-buster-the-super-app-glossary) and the [pipeline](ENTERPRISE_MOBILE_SUPERAPP_WORKFLOW.md#5-the-9-stage-super-app-delivery-lifecycle), then follow the playbook's table of contents for your role.
 
-**Export it.** `SLIDES.md` renders directly in Marp (`marp SLIDES.md --pdf`) and Obsidian, so you can rebrand and present offline.
+**Export it.** `SLIDES.md` renders in Marp (`marp SLIDES.md --pdf`) and Obsidian if you want to rebrand it or present offline.
 
-**Adopt it.** Don't boil the ocean — roll the model out in three waves:
+**Adopt it.** A sensible order, one piece at a time:
 
-| Wave | Timeframe | What to Introduce |
+| Step | When | What to introduce |
 | :--- | :--- | :--- |
-| 1 — Time Hygiene | Weeks 1–2 | ≤ 4 h subtasks, Dev vs. Refinement time logging, `[BLOCKER]` escalation tag |
-| 2 — Quality Gates | Sprints 1–2 | 10% bug buffer, UAT leakage KPI, defect bifurcation & Live Issue Pool |
-| 3 — Governance | Quarter | Box Solutions, the DAF review, TCAB backend freeze & the monthly release calendar |
+| 1 | Weeks 1–2 | 4h subtasks, separate dev/refinement time logs, `[BLOCKER]` tag |
+| 2 | Sprints 1–2 | The 10% bug buffer, sorting UAT bugs by type, the Live Issue Pool |
+| 3 | The quarter | Box solutions, DAF reviews, the TCAB backend freeze, the release calendar |
 
 ---
 
-## 📖 Where to Go Next
+## 📖 Pointers
 
-- New engineer onboarding → play the [deck](https://ihjohny.github.io/squad-model/presentation.html) first, then the [playbook lifecycle](ENTERPRISE_MOBILE_SUPERAPP_WORKFLOW.md#5-the-9-stage-super-app-delivery-lifecycle).
-- Leading a release → the [release calendar](ENTERPRISE_MOBILE_SUPERAPP_WORKFLOW.md#9-the-monthly-release-calendar) and [Checklist D](ENTERPRISE_MOBILE_SUPERAPP_WORKFLOW.md#checklist-d-backend-tcab--release).
-- Reviewing a solution doc → the [STRIDE matrix](ENTERPRISE_MOBILE_SUPERAPP_WORKFLOW.md#6-stride-threat-modeling-for-mobile-features) and [DAF submission checklist](ENTERPRISE_MOBILE_SUPERAPP_WORKFLOW.md#checklist-a-solution-document--daf-submission).
-- Tracking team health → the [KPI scorecard](ENTERPRISE_MOBILE_SUPERAPP_WORKFLOW.md#12-balanced-scorecard--engineering-kpi-framework).
+- New engineer onboarding: watch the [deck](https://ihjohny.github.io/squad-model/presentation.html), then read the [lifecycle](ENTERPRISE_MOBILE_SUPERAPP_WORKFLOW.md#5-the-9-stage-super-app-delivery-lifecycle).
+- Running a release: the [release calendar](ENTERPRISE_MOBILE_SUPERAPP_WORKFLOW.md#9-the-monthly-release-calendar) and [Checklist D](ENTERPRISE_MOBILE_SUPERAPP_WORKFLOW.md#checklist-d-backend-tcab--release).
+- Reviewing a solution doc: the [STRIDE checklist](ENTERPRISE_MOBILE_SUPERAPP_WORKFLOW.md#6-stride-threat-modeling-for-mobile-features) and the [DAF submission checklist](ENTERPRISE_MOBILE_SUPERAPP_WORKFLOW.md#checklist-a-solution-document--daf-submission).
+- Team health: the [KPI table](ENTERPRISE_MOBILE_SUPERAPP_WORKFLOW.md#12-balanced-scorecard--engineering-kpi-framework).
