@@ -12,8 +12,7 @@ A practical, battle-tested operating model for scaling mobile engineering teams,
 
 👉 **[Launch the Interactive Presentation](https://ihjohny.github.io/squad-model/presentation.html)**
 
-> **The whole model in one sentence: Three Gates. Two Budgets. One Calendar.**
-> Pass the gates (ARB Scope Lock → UAT Sign-off → Backend Freeze), respect the budgets (≤ 4 h per task, ≤ 10% of dev time for bugs), and trust the calendar (one fixed 28-day release rhythm). Every rule below is one of those six things.
+> **How work flows:** the architect boxes it → the squad refines it → the **DAF** approves it → the **SM** schedules it → the calendar ships it. Guardrails (≤ 4 h tasks, the 10% bug buffer, the pre-sanity backend freeze) protect the sprint in between.
 
 </div>
 
@@ -33,7 +32,7 @@ A practical, battle-tested operating model for scaling mobile engineering teams,
 
 ```
   1. Box Before Build       ── Define system boundaries & FE/BE effort ratios before squad intake.
-  2. Lock at ARB            ── Cross-product architecture review (Core Products, Main Leads, POL/SOL) locks dev hours, QA hours, and release dates.
+  2. Approve at DAF         ── The Design Authority Forum approves the task solution & verifies estimates; the SM locks dates from business needs.
   3. Chunk to ≤ 4 Hours     ── Granular tasks surface blockers within 24 hours at morning standups.
   4. Enforce 10% Bug Buffer ── Mathematically cap QA bug-fixing time to maintain sprint commitments.
   5. BE Freeze First        ── All backend microservices deploy to production BEFORE mobile sanity starts.
@@ -69,20 +68,20 @@ Memorize these nine numbers — they encode the entire operating model:
   [2. Squad Intake & 4h Refinement]  ── Confluence Solution Doc & STRIDE Threat Model
             │
             ▼
-  [3. ARB Architectural Gateway]    ── Core Products, Main Leads, POL/SOL & Estimation Lock
-            │                                      🔒 GATE: Scope & dates locked
+  [3. DAF Review & Approval]        ── Solution approved, estimates verified; SM locks dates
+            │                                      ✅ DAF approved · SM-locked schedule
 [Phase 2: Sprint Execution & Quality]
   [4. Sprint Execution & Code Review]── Daily 4h Subtasks, Dev vs. Refinement Time Tracking
             │
             ▼
   [5. Squad QA & Defect Buffer]      ── Max 10% bug-fixing threshold on Dev Env (VPN)
-            │                                      ⏱️ GATE: 10% cap enforced
+            │                                      ⏱️ CHECKPOINT: 10% cap enforced
             ▼
   [6. UAT & Staging Verification]    ── Zero defect leakage KPI & Live Issue Pool triage
-            │                                      🎯 GATE: UAT sign-off
+            │                                      🎯 CHECKPOINT: UAT sign-off
 [Phase 3: Production & Rollout]
   [7. TCAB & Backend Freeze]         ── Production deployment before sanity start date
-            │                                      ❄️ GATE: BE frozen first
+            │                                      ❄️ CHECKPOINT: BE frozen first
             ▼
   [8. Branch Merge & Sanity Cycle]   ── Squad branch consolidation & dual-gate sanity (QA + UAT)
             │
@@ -118,7 +117,7 @@ squad-model/
 | :--- | :--- | :--- |
 | 1 — Time Hygiene | Weeks 1–2 | ≤ 4 h subtasks, Dev vs. Refinement time logging, `[BLOCKER]` escalation tag |
 | 2 — Quality Gates | Sprints 1–2 | 10% bug buffer, UAT leakage KPI, defect bifurcation & Live Issue Pool |
-| 3 — Governance | Quarter | Box Solutions, ARB gateway, TCAB backend freeze & the monthly release calendar |
+| 3 — Governance | Quarter | Box Solutions, the DAF review, TCAB backend freeze & the monthly release calendar |
 
 ---
 
@@ -126,5 +125,5 @@ squad-model/
 
 - New engineer onboarding → play the [deck](https://ihjohny.github.io/squad-model/presentation.html) first, then the [playbook lifecycle](ENTERPRISE_MOBILE_SUPERAPP_WORKFLOW.md#5-the-9-stage-super-app-delivery-lifecycle).
 - Leading a release → the [release calendar](ENTERPRISE_MOBILE_SUPERAPP_WORKFLOW.md#9-the-monthly-release-calendar) and [Checklist D](ENTERPRISE_MOBILE_SUPERAPP_WORKFLOW.md#checklist-d-backend-tcab--release).
-- Reviewing a solution doc → the [STRIDE matrix](ENTERPRISE_MOBILE_SUPERAPP_WORKFLOW.md#6-stride-threat-modeling-for-mobile-features) and [ARB submission checklist](ENTERPRISE_MOBILE_SUPERAPP_WORKFLOW.md#checklist-a-solution-document--arb-submission).
+- Reviewing a solution doc → the [STRIDE matrix](ENTERPRISE_MOBILE_SUPERAPP_WORKFLOW.md#6-stride-threat-modeling-for-mobile-features) and [DAF submission checklist](ENTERPRISE_MOBILE_SUPERAPP_WORKFLOW.md#checklist-a-solution-document--daf-submission).
 - Tracking team health → the [KPI scorecard](ENTERPRISE_MOBILE_SUPERAPP_WORKFLOW.md#12-balanced-scorecard--engineering-kpi-framework).

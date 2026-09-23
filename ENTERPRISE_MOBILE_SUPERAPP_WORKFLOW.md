@@ -26,21 +26,21 @@
 This document formalizes the end-to-end engineering, architecture, governance, sprint execution, release cadence, and quality frameworks for high-concurrency mobile super-applications. It provides a clear, high-velocity operating model while maintaining the **deep technical rigor** required for mission-critical telecom and fintech platforms.
 
 > **[!TIP]**
-> **The whole model in one sentence: Three Gates. Two Budgets. One Calendar.**
-> Pass the **Gates** (ARB Scope Lock → UAT Sign-off → Backend Freeze), respect the **Budgets** (≤ 4 h per task, ≤ 10% of dev time for bugs), and trust the **Calendar** (one fixed 28-day release rhythm). Every rule in this document is one of those six things.
+> **How work flows — in one sentence:** the architect boxes it, the squad refines it, the **DAF** approves it, the **SM** schedules it, the calendar ships it.
+> The **DAF (Design Authority Forum)** reviews the solution doc, approves the task solution, and verifies Dev/QA estimates. The **SM** locks the delivery dates from business needs and the planned release version/month. Guardrails — ≤ 4 h tasks, the 10% bug buffer, and the pre-sanity backend freeze — protect the sprint in between.
 
 ### The Model in One Picture
 
 ```mermaid
 flowchart LR
     subgraph PLAN["🏗️ PLAN · Phase 1"]
-        A[Box Solution] --> B[Solution Doc + STRIDE] --> C{{"🔒 GATE 1<br/>ARB Scope Lock"}}
+        A[Box Solution] --> B[Solution Doc + STRIDE] --> C{{"✅ DAF<br/>Approves Solution<br/>& Verifies Estimates"}}
     end
     subgraph BUILD["⚡ BUILD · Phase 2"]
-        C --> D["≤ 4 h subtasks<br/>(Budget 1)"] --> E["≤ 10% bug fixing<br/>(Budget 2)"] --> F{{"🎯 GATE 2<br/>UAT Sign-off"}}
+        C --> D["SM Locks Dates to<br/>Release Version"] --> E["≤ 4 h Subtasks"] --> F["≤ 10% Bug Fixing"] --> G{{"🎯 UAT<br/>Sign-off"}}
     end
     subgraph SHIP["🚀 SHIP · Phase 3"]
-        F --> G{{"❄️ GATE 3<br/>Backend Freeze"}} --> H[Dual-Gate Sanity] --> I["Staged Rollout<br/>5% → 100%"]
+        G --> H{{"❄️ Backend<br/>Freeze"}} --> I[Dual-Gate Sanity] --> J["Staged Rollout<br/>5% → 100%"]
     end
 ```
 
@@ -48,7 +48,7 @@ flowchart LR
 
 ```
   1. Box Before Build       ── Never start squad refinement without an architect's Box Solution blueprint.
-  2. Lock at ARB            ── Cross-product architecture review (Core Products, Main Leads, POL/SOL) locks dev hours, QA hours, and release dates.
+  2. Approve at DAF         ── The Design Authority Forum approves the task solution & verifies estimates; the SM locks dates from business needs.
   3. Chunk to ≤ 4 Hours     ── Granular subtasks surface blockers within 24 hours at morning standups.
   4. Enforce 10% Bug Buffer ── Mathematically cap QA bug-fixing time to maintain sprint commitments.
   5. BE Freeze First        ── All backend microservices deploy to production BEFORE mobile sanity begins.
@@ -65,7 +65,7 @@ Standard terms keep squads aligned across engineering, product, and leadership:
 | Term | Full Name | Plain-English Meaning | Real-World Analogy |
 | :--- | :--- | :--- | :--- |
 | **Box Solution** | Architectural Blueprint | A 1-page system diagram prepared by the Solution Architect during grooming. It defines touched microservices and the baseline Frontend/Backend effort split (e.g., 40% FE / 60% BE). | The blueprint an architect draws before builders buy materials. |
-| **ARB** | Architecture Review Board | A regular cross-product panel of Team Leads, System Architects, Core Product Leads, and Main Product Leads (Core Products, Payments/POL, Subscriptions/SOL, and Platform Services). It reviews solution docs, checks edge cases, and locks Dev/QA estimates and release dates. | A building inspection board checking structural safety and fire code before issuing a permit. |
+| **DAF** | Design Authority Forum | A regular cross-product panel of Team Leads, System Architects, Core Product Leads, and Main Product Leads (Core Products, Payments/POL, Subscriptions/SOL, and Platform Services). It reviews the solution doc, approves the task solution, and verifies Dev/QA estimates. It does **not** lock dates — the SM locks delivery dates from business needs and the planned release version/month. | A building inspection board checking structural safety and fire code before issuing a permit — it approves the design; the contractor sets the schedule. |
 | **POL** | Payment Orchestration Layer | The central payment platform connecting digital wallets, cards, and banks with idempotency and retry safeguards. | A secure cashier terminal that accepts cash, cards, and vouchers safely. |
 | **SOL** | Subscription Orchestration Layer | The central engine managing recurring packs, auto-renewals, billing cycles, and balance deduction fallbacks. | A recurring subscription service (like Netflix billing). |
 | **STRIDE** | Threat Modeling Framework | A 6-part security checklist (Spoofing, Tampering, Repudiation, Info Disclosure, DoS, Elevation of Privilege) required for sensitive features. | A rigorous building security audit checking doors, locks, cameras, and alarms. |
@@ -128,7 +128,7 @@ To maintain velocity while ensuring architectural coherence across microservices
                                            ^
                                            |
 +---------------------------------------------------------------------------------------+
-|                 ARB: ARCHITECTURE REVIEW BOARD (CROSS-PRODUCT FORUM)                  |
+|                 DAF: DESIGN AUTHORITY FORUM (CROSS-PRODUCT FORUM)                    |
 |  - Joint Council of Leads, System Architects, and Product Leads across domains:      |
 |    • Core Product Leads & Main Product Leads                                         |
 |    • Payment Orchestration Layer (POL) Leads & Architects                            |
@@ -157,9 +157,10 @@ To maintain velocity while ensuring architectural coherence across microservices
    - **Squad Main Lead**: Guides engineering delivery and resource allocation. A Squad Main Lead may oversee one or more squads.
    - **Release Lead**: Coordinates monthly store release dates, manages release candidate branches, and oversees store deployment operations.
 
-2. **ARB (Architecture Review Board)**:
+2. **DAF (Design Authority Forum)**:
    - A joint council of Team Leads, System Architects, Core Product Leads, and Main Product Leads across key domains (Core Products, Main Product Leads, Payment Orchestration - POL, Subscription Orchestration - SOL, and Platform Services).
-   - Validates technical feasibility, edge cases, and security controls, and permanently locks Dev and QA time estimates.
+   - Reviews the Confluence solution doc, approves the task solution, and verifies Dev and QA time estimates against the task breakdown.
+   - **Not a scheduling body**: the DAF does not lock delivery dates. After approval, the Scrum Master locks the Dev Completion Target, UAT Delivery Date, and Release Version/Month based on business needs and the planned release calendar.
 
 3. **Dev Squad Pool & Staffing Dynamics**:
    - **Squad Composition**: Each squad contains dedicated Frontend (Android & iOS), Backend (BE), Squad QA, an Internal Dev Lead, and is supported by a Squad Main Lead.
@@ -179,7 +180,7 @@ Every main Jira ticket binds 7 designated owners to eliminate ambiguity:
 | # | SPOC | Owns |
 | :--- | :--- | :--- |
 | 1 | **Product Owner (PO)** | PRD & business intent |
-| 2 | **Integration SPOC (SA)** | Box Solution & ARB defense |
+| 2 | **Integration SPOC (SA)** | Box Solution & DAF defense |
 | 3 | **Assignee (Dev Lead)** | Solution Doc & code |
 | 4 | **Squad QA SPOC** | Dev Environment test plan |
 | 5 | **Scrum Master (SM)** | Blocker resolution |
@@ -199,15 +200,15 @@ The full Jira template these owners are bound to:
 |                                                                                      |
 |  [Accountability Matrix (RACI)]                                                      |
 |  - 1. Product Owner (PO):    [Business Owner Name]       ➔ Owns PRD & Intent         |
-|  - 2. Integration SPOC (SA): [Assigned Architect]        ➔ Owns Box Solution & ARB   |
+|  - 2. Integration SPOC (SA): [Assigned Architect]        ➔ Owns Box Solution & DAF   |
 |  - 3. Assignee (Dev Lead):   [Primary Feature Owner]     ➔ Owns Solution Doc & Code  |
 |  - 4. Squad QA SPOC:         [Primary QA Engineer]       ➔ Owns Dev Env Test Plan    |
 |  - 5. Scrum Master (SM):     [Assigned Squad SM]         ➔ Owns Blocker Resolution   |
 |  - 6. UAT SPOC:              [Business QA Tester]        ➔ Owns Staging Acceptance   |
 |  - 7. Code Reviewers:        [Senior FE, Senior BE]      ➔ Owns Architecture & PRs   |
 |                                                                                      |
-|  [Milestone Dates - Locked by ARB]                                                   |
-|  - ARB Approval Date:        [YYYY-MM-DD]                                            |
+|  [Milestone Dates - Locked by SM]                                                    |
+|  - DAF Approval Date:        [YYYY-MM-DD]                                            |
 |  - Dev Completion Target:    [YYYY-MM-DD]                                            |
 |  - Staging / UAT Handover:   [YYYY-MM-DD]                                            |
 |  - TCAB Submission Date:     [YYYY-MM-DD] (Backend Only)                             |
@@ -238,15 +239,16 @@ flowchart TD
         H --> I[Granular Task Breakdown: 4h chunks]
     end
 
-    subgraph S3["Stage 3: ARB Architecture Gateway"]
-        I --> J[Book ARB Review Slot]
-        J --> K{ARB Evaluation}
+    subgraph S3["Stage 3: DAF Review & Approval"]
+        I --> J[Book DAF Review Slot]
+        J --> K{DAF Evaluation}
         K -- Needs Revision --> F
-        K -- Approved --> L[Lock Dev/QA Estimations & Release Month]
+        K -- Approved --> L[DAF Approves Solution & Baselines Estimates]
+        L --> L2[SM Locks Delivery Dates & Release Version]
     end
 
     subgraph S4["Stage 4: Sprint Execution"]
-        L --> M[Dev Creates 4h Subtasks under Main Ticket]
+        L2 --> M[Dev Creates 4h Subtasks under Main Ticket]
         M --> N[Active Coding & Daily Time Logging]
         N --> O[Peer Code Review FE & BE]
     end
@@ -315,16 +317,18 @@ flowchart TD
 - **Time Logging**: Time spent in this discovery and planning phase is logged strictly as `Refinement Time`.
 - **Backlog Hygiene Rule**: Squads cannot hold tickets in refinement indefinitely. If pipeline has a momentary lull, engineers pull upcoming tasks from the backlog and start early refinement.
 
-#### Stage 3: ARB Architectural Gateway
-- **Council Slot Booking**: Once the Solution Doc and task breakdowns are finalized, the squad books a review slot on the regular ARB session.
+#### Stage 3: DAF Review & Approval
+- **Council Slot Booking**: Once the Solution Doc and task breakdowns are finalized, the squad books a review slot on the regular DAF session.
 - **The Defense**: Squad developers present the Solution Doc, sequence flows, edge cases, and granular task estimates to the panel of cross-product leads and architects (Core Product Leads, Main Product Leads, POL, SOL, and Platform Architecture).
-- **Feedback & Re-alignment**: The ARB panel provides feedback on edge cases, security controls, and integration risks. If revisions are requested, the squad realigns the document and reschedules.
-- **The Milestone Lock**: Upon formal approval, the ARB permanently locks:
-  - **Dev Time (Hours)**
-  - **QA Time (Hours)**
+- **Feedback & Re-alignment**: The DAF panel provides feedback on edge cases, security controls, and integration risks. If revisions are requested, the squad realigns the document and reschedules.
+- **Approval & Estimation Verification**: Upon formal approval, the DAF baselines:
+  - **The Task Solution** (approach, design, and task breakdown)
+  - **Dev Time (Hours)** — verified as realistic against the breakdown
+  - **QA Time (Hours)** — verified as realistic against the test scope
+- **SM Date Lock (after DAF approval)**: The Scrum Master — not the DAF — locks the delivery schedule based on business needs and the planned release version/month:
   - **Dev Completion Target Date**
   - **UAT Delivery Date**
-  - **Target Release Version Tagging** (release month calculated from locked duration)
+  - **Target Release Version Tagging** (release month taken from the release calendar)
 
 #### Stage 4: Sprint Execution, Subtasks & Time Logging
 - **Subtask Hygiene**: Engineers create daily subtasks under the main Jira ticket using predefined templates, explicitly selecting task type:
@@ -487,7 +491,7 @@ Every guardrail in this model exists because a real failure mode made it necessa
 | Anti-Pattern | What It Looks Like | Guardrail That Stops It |
 | :--- | :--- | :--- |
 | **The Black-Box Task** | A "3-day task" where the developer is silently stuck; discovered at sprint end. | 4-Hour Rule + daily standup declarations. |
-| **Scope Sneak-In** | Product adds "one small ask" mid-sprint after estimates are locked. | ARB Milestone Lock — new scope requires re-estimation and re-approval. |
+| **Scope Sneak-In** | Product adds "one small ask" mid-sprint after approval and scheduling. | DAF-approved scope + SM-locked schedule — new scope means re-estimation and re-scheduling. |
 | **Bug Whack-a-Mole** | Bug fixing quietly consumes 30–40% of sprint capacity. | 10% Bug Buffer + quality alarm retro with the Squad Lead. |
 | **Blame-the-Messenger QA** | UAT finds a legacy bug and the squad's QA KPI takes the hit. | Defect Bifurcation — pre-existing defects route to the Live Issue Pool. |
 | **Moving-Target Testing** | Backend APIs change while mobile sanity is running; phantom bugs everywhere. | Pre-Sanity Backend Freeze enforced by TCAB. |
@@ -511,7 +515,7 @@ Every guardrail in this model exists because a real failure mode made it necessa
 
 ### 📋 For Product Owners (PO)
 - **Use standard templates**: Every PRD must define user journeys, business acceptance criteria, and telemetry.
-- **Respect the ARB lock**: Once estimates and release dates are locked, avoid adding new requirements mid-sprint.
+- **Respect the DAF approval & SM schedule**: Once the solution is approved and the SM has locked the sprint dates, avoid adding new requirements mid-sprint.
 - **Triage live defects**: Work with the Solution Architect to route legacy bugs into the Live Issue Pool.
 
 ### ⏱️ For Scrum Masters (SM)
@@ -539,14 +543,14 @@ Every guardrail in this model exists because a real failure mode made it necessa
 
 ## 13. Operational Checklists
 
-### Checklist A: Solution Document & ARB Submission
+### Checklist A: Solution Document & DAF Submission
 - [ ] Confluence Solution Document created under feature Epic.
 - [ ] End-to-end Sequence Diagrams showing mobile, BFF, POL/SOL, and downstream services.
 - [ ] Network timeout, retry policies, and offline cache strategies specified.
 - [ ] **STRIDE Threat Modeling** matrix completed and reviewed.
 - [ ] Task breakdown decomposed into ≤ 4-hour granular units.
 - [ ] Squad QA estimation and test scope attached.
-- [ ] ARB slot booked and prerequisites distributed to reviewers ≥ 24 h in advance.
+- [ ] DAF slot booked and prerequisites distributed to reviewers ≥ 24 h in advance.
 
 ### Checklist B: Squad QA Handoff
 - [ ] Code merged into squad feature branch; clean CI build.
