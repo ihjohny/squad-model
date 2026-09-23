@@ -3,8 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Interactive 12-slide deck: the enterprise mobile super-app operating model — ARB governance, 4-hour task chunking, the 10% bug buffer, and the pre-sanity backend freeze.">
+  <meta name="color-scheme" content="light">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Scaling Mobile Super-App Engineering Teams">
+  <meta property="og:description" content="A battle-tested operating model for high-velocity mobile organizations: ARB governance, 4-hour task chunking, 10% bug buffer, and pre-sanity backend freeze.">
+  <meta property="og:url" content="https://ihjohny.github.io/squad-model/presentation.html">
   <title>Enterprise Mobile Super-App Engineering Playbook & Operating Model</title>
-  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234338ca'/%3E%3Ctext x='16' y='21' font-family='monospace' font-size='12' font-weight='700' text-anchor='middle' fill='white'%3ESM%3C/text%3E%3C/svg%3E">
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -92,7 +99,16 @@
       border: 2px solid #ffffff;
     }
 
+    @media (prefers-reduced-motion: reduce) {
+      .slide {
+        transition: none;
+      }
+    }
+
     @media print {
+      @page {
+        size: landscape;
+      }
       body {
         background: #ffffff !important;
         color: #0f172a !important;
@@ -135,24 +151,29 @@
       </button>
 
       <!-- Slide Counter Pill -->
-      <div class="flex items-center space-x-2 text-xs font-mono text-slate-600 bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200 shadow-xs">
+      <div class="flex items-center space-x-2 text-xs font-mono text-slate-600 bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200 shadow-xs" aria-live="polite">
         <span>Slide <span id="current-slide-num" class="text-indigo-700 font-bold">1</span> / <span id="total-slides-num">12</span></span>
       </div>
 
       <!-- Arrow Controls -->
       <div class="flex items-center space-x-1.5">
-        <button onclick="prevSlide()" class="p-1.5 rounded-lg bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 hover:text-slate-900 shadow-xs transition-all disabled:opacity-30 disabled:cursor-not-allowed" id="prev-btn" title="Previous Slide (← / Up)">
+        <button onclick="prevSlide()" class="p-1.5 rounded-lg bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 hover:text-slate-900 shadow-xs transition-all disabled:opacity-30 disabled:cursor-not-allowed" id="prev-btn" title="Previous Slide (← / Up)" aria-label="Previous slide">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
         </button>
-        <button onclick="nextSlide()" class="p-1.5 rounded-lg bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 hover:text-slate-900 shadow-xs transition-all disabled:opacity-30 disabled:cursor-not-allowed" id="next-btn" title="Next Slide (→ / Space)">
+        <button onclick="nextSlide()" class="p-1.5 rounded-lg bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 hover:text-slate-900 shadow-xs transition-all disabled:opacity-30 disabled:cursor-not-allowed" id="next-btn" title="Next Slide (→ / Space)" aria-label="Next slide">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
         </button>
-        <button onclick="toggleFullscreen()" class="p-1.5 rounded-lg bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 hover:text-slate-900 shadow-xs transition-all hidden sm:inline-flex" title="Toggle Fullscreen (F)">
+        <button onclick="toggleFullscreen()" class="p-1.5 rounded-lg bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 hover:text-slate-900 shadow-xs transition-all hidden sm:inline-flex" title="Toggle Fullscreen (F)" aria-label="Toggle fullscreen">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m4 0v4m0-4l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path></svg>
         </button>
       </div>
     </div>
   </header>
+
+  <!-- Deck Progress Bar -->
+  <div class="no-print fixed top-0 left-0 right-0 h-[3px] z-[60] pointer-events-none">
+    <div id="progress-bar" class="h-full bg-gradient-to-r from-indigo-600 via-sky-500 to-emerald-500 transition-all duration-300" style="width: 8.33%"></div>
+  </div>
 
   <!-- Slide Content Viewport -->
   <main class="flex-1 flex flex-col justify-center p-4 sm:p-6 lg:p-8 max-w-6xl mx-auto w-full">
@@ -567,7 +588,7 @@
               </span>
               <span class="text-[10px] font-mono text-emerald-800 bg-emerald-100 px-1.5 rounded font-bold">Stores + Ops</span>
             </div>
-            <p class="text-[11px] text-slate-600 leading-snug">5% → 20% → 50% → 100% store rollout with real-time Firebase Crashlytics monitoring radar.</p>
+            <p class="text-[11px] text-slate-600 leading-snug">5% → 20% → 50% → 100% store rollout with real-time Firebase Crashlytics monitoring.</p>
           </div>
           <div class="mt-2 pt-1 border-t border-emerald-100 flex items-center justify-between text-[10px] font-mono">
             <span class="text-emerald-800 font-bold">🚀 SLA</span>
@@ -1132,7 +1153,7 @@
       <div class="takeaway-banner max-w-4xl w-full bg-indigo-50/80 border border-indigo-200/80 rounded-xl p-3.5 text-left flex items-start space-x-3 shadow-xs">
         <span class="text-indigo-600 text-base">📘</span>
         <div class="text-xs text-slate-700 leading-relaxed">
-          <strong class="text-indigo-900 font-semibold">Operational Reference:</strong> Refer to the <strong>Master Engineering Playbook</strong> (<code class="text-indigo-700 font-mono text-[11px] bg-white px-1.5 py-0.5 rounded border border-indigo-200">ENTERPRISE_MOBILE_SUPERAPP_WORKFLOW.md</code>) for complete lifecycle specifications, RACI contracts, and operational checklists.
+          <strong class="text-indigo-900 font-semibold">Operational Reference:</strong> Open the <a href="https://github.com/ihjohny/squad-model/blob/main/ENTERPRISE_MOBILE_SUPERAPP_WORKFLOW.md" target="_blank" rel="noopener" class="text-indigo-700 font-semibold underline decoration-indigo-300 underline-offset-2 hover:decoration-indigo-600">Master Engineering Playbook</a> (<code class="text-indigo-700 font-mono text-[11px] bg-white px-1.5 py-0.5 rounded border border-indigo-200">ENTERPRISE_MOBILE_SUPERAPP_WORKFLOW.md</code>) for complete lifecycle specifications, the monthly release calendar, RACI contracts, and operational checklists.
         </div>
       </div>
     </section>
@@ -1149,6 +1170,9 @@
       <span class="hidden md:inline text-slate-300">|</span>
       <span class="hidden md:inline text-slate-500">Takeaways:</span>
       <kbd class="hidden md:inline px-2 py-0.5 bg-slate-100 border border-slate-200 rounded text-slate-700 font-mono">T</kbd>
+      <span class="hidden lg:inline text-slate-300">|</span>
+      <span class="hidden lg:inline text-slate-500">Share slide:</span>
+      <kbd class="hidden lg:inline px-2 py-0.5 bg-slate-100 border border-slate-200 rounded text-slate-700 font-mono">URL + #N</kbd>
     </div>
 
     <div class="flex items-center space-x-1.5" id="dots-container"></div>
@@ -1176,6 +1200,7 @@
       const dot = document.createElement('button');
       dot.className = `w-2 h-2 rounded-full transition-all ${idx === 0 ? 'bg-indigo-600 w-6' : 'bg-slate-300 hover:bg-slate-400'}`;
       dot.title = `Jump to slide ${idx + 1}`;
+      dot.setAttribute('aria-label', `Go to slide ${idx + 1}`);
       dot.onclick = () => goToSlide(idx + 1);
       dotsContainer.appendChild(dot);
     });
@@ -1202,6 +1227,13 @@
 
       prevBtn.disabled = currentSlide === 1;
       nextBtn.disabled = currentSlide === totalSlides;
+
+      const progressBar = document.getElementById('progress-bar');
+      if (progressBar) {
+        progressBar.style.width = ((currentSlide / totalSlides) * 100).toFixed(2) + '%';
+      }
+
+      history.replaceState(null, '', '#' + currentSlide);
     }
 
     function nextSlide() {
@@ -1250,6 +1282,12 @@
     }
 
     window.addEventListener('keydown', (e) => {
+      // Never hijack browser/OS shortcuts (Cmd+F, Ctrl+T, etc.)
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      // Let form controls (e.g. the 10% buffer slider) keep their arrow keys
+      if (e.target instanceof Element && e.target.closest('input, textarea, select')) return;
+      // Let a focused button be activated by Space instead of advancing the deck
+      if (e.key === ' ' && e.target instanceof Element && e.target.closest('button')) return;
       if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
         e.preventDefault();
         nextSlide();
@@ -1280,6 +1318,23 @@
         prevSlide();
       }
     }, false);
+
+    // Deep linking: "#4" opens slide 4 directly and the URL stays shareable
+    function slideFromHash() {
+      const n = parseInt(location.hash.replace('#', ''), 10);
+      return (Number.isInteger(n) && n >= 1 && n <= totalSlides) ? n : null;
+    }
+
+    window.addEventListener('hashchange', () => {
+      const n = slideFromHash();
+      if (n && n !== currentSlide) {
+        currentSlide = n;
+        updateSlide();
+      }
+    });
+
+    const initialSlide = slideFromHash();
+    if (initialSlide) currentSlide = initialSlide;
 
     updateSlide();
   </script>

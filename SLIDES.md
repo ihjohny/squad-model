@@ -1,3 +1,9 @@
+---
+marp: true
+theme: default
+paginate: true
+---
+
 # Scaling Mobile Super-App Engineering Teams
 ## *A Battle-Tested Operating Model for High-Velocity Mobile Organizations*
 
@@ -24,7 +30,7 @@
 
 ---
 
-## Slide 3: Team Topology & The RACI Model
+## Slide 3: Team Topology & the RACI Model
 ### Autonomous Squads with Matrix Governance
 - **Lead Team**: Solution Architect (Box Solutions), Squad Main Lead (guiding 1+ squads), and Release Lead.
 - **ARB Forum**: Cross-product council of Leads & Architects from Core Products, Main Product Leads, POL (Payments), and SOL (Subscriptions).
@@ -51,7 +57,7 @@ Steps 01 → 02 → 03 (ARB Lock)          Steps 04 → 05 → 06 (10% Cap)     
 
 #### Phase 1: Architecture & Scoping
 1. **PO Grooming**: Standard PRD + Solution Architect "Box Solution" with FE/BE effort split.
-2. **Squad Refinement**: Confluence Solution Doc, STRIDE threat model, and tasks sized $\le$ 4 hours.
+2. **Squad Refinement**: Confluence Solution Doc, STRIDE threat model, and tasks sized ≤ 4 hours.
 3. **ARB Gateway**: Review with cross-product leads (Core Products, Main Leads, POL/SOL); permanently lock Dev/QA hours and target release month.
 
 #### Phase 2: Execution & Quality
@@ -62,7 +68,7 @@ Steps 01 → 02 → 03 (ARB Lock)          Steps 04 → 05 → 06 (10% Cap)     
 #### Phase 3: Production & Release
 7. **TCAB & BE Freeze**: All microservices deploy to production under TCAB *before* mobile sanity testing starts.
 8. **Sanity Candidate**: Rotating Release Team merges squad branches; run dual-gate sanity (Squad QA then UAT).
-9. **Staged Rollout**: Gradual store release (5% → 20% → 50% → 100%) with Crashlytics monitoring ($\ge$ 99.8% crash-free).
+9. **Staged Rollout**: Gradual store release (5% → 20% → 50% → 100%) with Crashlytics monitoring (≥ 99.8% crash-free).
 
 > 💡 **Presenter Cue:** Walk through the 3 phases sequentially. Emphasize that each phase ends with an explicit gate: Scope Lock, Quality Cap, and Backend Freeze.
 
@@ -78,7 +84,7 @@ Steps 01 → 02 → 03 (ARB Lock)          Steps 04 → 05 → 06 (10% Cap)     
   - Clear sequence diagrams for success and failure paths.
   - Network failure matrix (offline cache, flaky connections, retry backoff).
   - STRIDE security threat analysis.
-  - Subtask breakdown with every task $\le$ 4 hours.
+  - Subtask breakdown with every task ≤ 4 hours.
 
 > 💡 **Engineering Principle:** You never start coding from an ambiguous 2-line ticket. You always have a Box Solution blueprint and a clear solution document first.
 
@@ -86,12 +92,12 @@ Steps 01 → 02 → 03 (ARB Lock)          Steps 04 → 05 → 06 (10% Cap)     
 
 ## Slide 6: STRIDE Threat Modeling for Mobile Features
 ### Practical Security for Telecom & Financial Journeys
-- **Spoofing**: Fake headers or phone numbers $\to$ Signed mTLS tokens and SIM-binding validation.
-- **Tampering**: Altering local cached balances on rooted devices $\to$ Trust only the server-side balance ledger.
-- **Repudiation**: Disputing duplicate bundle purchases $\to$ Pass unique client idempotency keys to Payment Layer (POL).
-- **Information Disclosure**: Leaking tokens into system logs $\to$ Obfuscate code with R8 and store secrets in Keystore / Keychain.
-- **Denial of Service**: Retrying network calls on slow connections $\to$ Use exponential backoff, random jitter, and circuit breakers.
-- **Elevation of Privilege**: Bypassing UI checks to call internal APIs $\to$ Enforce scoped OAuth2 permissions at the BFF gateway.
+- **Spoofing**: Fake headers or phone numbers → Signed mTLS tokens and SIM-binding validation.
+- **Tampering**: Altering local cached balances on rooted devices → Trust only the server-side balance ledger.
+- **Repudiation**: Disputing duplicate bundle purchases → Pass unique client idempotency keys to Payment Layer (POL).
+- **Information Disclosure**: Leaking tokens into system logs → Obfuscate code with R8 and store secrets in Keystore / Keychain.
+- **Denial of Service**: Retrying network calls on slow connections → Use exponential backoff, random jitter, and circuit breakers.
+- **Elevation of Privilege**: Bypassing UI checks to call internal APIs → Enforce scoped OAuth2 permissions at the BFF gateway.
 
 > 💡 **Presenter Cue:** STRIDE is practical edge-case planning, not dry theory. It asks simple questions: "What happens if the user taps twice?" or "What if the network drops mid-payment?"
 
@@ -111,8 +117,8 @@ Steps 01 → 02 → 03 (ARB Lock)          Steps 04 → 05 → 06 (10% Cap)     
 
 ---
 
-## Slide 8: Time Engineering & The Central Jira Dashboard
-### Eliminating Invisible Work, The 4-Hour Rule & Progress Visibility
+## Slide 8: Time Engineering & the Central Jira Dashboard
+### Eliminating Invisible Work, the 4-Hour Rule & Progress Visibility
 - **The 4-Hour Rule & Subtask Hygiene**:
   - No Jira subtask may exceed 4 hours. Use standard subtask templates.
   - No multi-day black boxes. Blockers surface within 24 hours at morning standup.
@@ -127,9 +133,13 @@ Steps 01 → 02 → 03 (ARB Lock)          Steps 04 → 05 → 06 (10% Cap)     
 
 ---
 
-## Slide 9: Squad QA & The 10% Defect Buffer Rule
+## Slide 9: Squad QA & the 10% Defect Buffer Rule
 ### Mathematical Safeguards for Sprint Stability
-$$\text{Max Allowed Bug Fix Time} \le 10\% \times \text{Locked Dev Estimate}$$
+
+```
+Max Allowed Bug-Fix Time  ≤  10% × Locked Dev Estimate
+```
+
 - **Concrete Example**: A 40-hour locked dev ticket allows a maximum of **4.0 hours** for bug fixing.
 - **Shift-Left**: Catching defects on the Dev environment costs 10x less time than discovering them in UAT or production.
 - **Alarm Protocol**: If bug fixing exceeds the 10% buffer, the Squad Lead and Developer hold a short review to check code quality, API specifications, or local testing gaps.
@@ -153,12 +163,12 @@ $$\text{Max Allowed Bug Fix Time} \le 10\% \times \text{Locked Dev Estimate}$$
 
 ---
 
-## Slide 11: Release Operations & The Backend Freeze
+## Slide 11: Release Operations & the Backend Freeze
 ### Decoupling Microservices from Store Review Timelines
-- **Days 01 - 18**: Sprint development, code reviews, and Dev environment QA testing.
+- **Days 01 – 18**: Sprint development, code reviews, and Dev environment QA testing.
 - **Day 19**: UAT Staging handover over secure VPN.
-- **Days 21 - 22**: **TCAB & Backend Freeze** — all backend microservices deploy to production *before* mobile sanity testing starts.
-- **Days 23 - 28**: Rotating Release Team creates the release candidate branch, runs QA sanity, and completes business UAT.
+- **Days 21 – 22**: **TCAB & Backend Freeze** — all backend microservices deploy to production *before* mobile sanity testing starts.
+- **Days 23 – 28**: Rotating Release Team creates the release candidate branch, runs QA sanity, and completes business UAT.
 
 > 💡 **Cardinal Rule:** Mobile sanity testing NEVER runs against changing backend code. Backend microservices freeze and deploy to production first; mobile sanity runs second.
 
@@ -171,4 +181,12 @@ $$\text{Max Allowed Bug Fix Time} \le 10\% \times \text{Locked Dev Estimate}$$
 4. **Enforce 10% Buffer**: Mathematically cap bug-fixing time to diagnose code quality issues early.
 5. **BE Freeze First**: Always deploy backend services to production before mobile sanity testing starts.
 
-> 📘 **Operational Reference:** See the **Master Engineering Playbook** (`ENTERPRISE_MOBILE_SUPERAPP_WORKFLOW.md`) for complete role guides, RACI contracts, and operational checklists.
+> 📘 **Operational Reference:** See the **Master Engineering Playbook** (`ENTERPRISE_MOBILE_SUPERAPP_WORKFLOW.md`) for complete role guides, RACI contracts, release calendar, and operational checklists.
+
+---
+
+## Presenting This Deck
+
+- **Google Slides / Keynote**: Paste each slide's bullet block onto a matching slide; the `> 💡` blocks are presenter notes.
+- **Marp**: Render directly — `marp SLIDES.md --pdf` (front matter at the top configures pagination).
+- **Obsidian**: The `---` separators split slides in most slide plugins; the 💡 blocks double as callouts.

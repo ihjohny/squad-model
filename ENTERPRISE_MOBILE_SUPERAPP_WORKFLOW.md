@@ -3,7 +3,25 @@
 
 ---
 
-## 1. Executive Summary & The 30-Second Quickstart
+## Table of Contents
+
+1. [Executive Summary & the 30-Second Quickstart](#1-executive-summary--the-30-second-quickstart)
+2. [Plain-English Jargon Buster (The Super-App Glossary)](#2-plain-english-jargon-buster-the-super-app-glossary)
+3. [A Day in the Life of a Squad Engineer](#3-a-day-in-the-life-of-a-squad-engineer)
+4. [Organizational Topology & the 7-SPOC RACI Model](#4-organizational-topology--the-7-spoc-raci-model)
+5. [The 9-Stage Super-App Delivery Lifecycle](#5-the-9-stage-super-app-delivery-lifecycle)
+6. [STRIDE Threat Modeling for Mobile Features](#6-stride-threat-modeling-for-mobile-features)
+7. [Precision Time Engineering & Defect Governance](#7-precision-time-engineering--defect-governance)
+8. [Git Branching & Secure Environment Architecture](#8-git-branching--secure-environment-architecture)
+9. [The Monthly Release Calendar](#9-the-monthly-release-calendar)
+10. [Common Anti-Patterns & the Guardrails That Stop Them](#10-common-anti-patterns--the-guardrails-that-stop-them)
+11. [Role-by-Role Quick Reference Cheatsheets](#11-role-by-role-quick-reference-cheatsheets)
+12. [Balanced Scorecard & Engineering KPI Framework](#12-balanced-scorecard--engineering-kpi-framework)
+13. [Operational Checklists](#13-operational-checklists)
+
+---
+
+## 1. Executive Summary & the 30-Second Quickstart
 
 This document formalizes the end-to-end engineering, architecture, governance, sprint execution, release cadence, and quality frameworks for high-concurrency mobile super-applications. It provides a clear, high-velocity operating model while maintaining the **deep technical rigor** required for mission-critical telecom and fintech platforms.
 
@@ -16,6 +34,8 @@ This document formalizes the end-to-end engineering, architecture, governance, s
   4. Enforce 10% Bug Buffer ── Mathematically cap QA bug-fixing time to maintain sprint commitments.
   5. BE Freeze First        ── All backend microservices deploy to production BEFORE mobile sanity begins.
 ```
+
+> 🧭 **How to read this document:** New engineers should read sections 2–5 in order. Leads and architects can jump straight to the [release calendar](#9-the-monthly-release-calendar), [KPI scorecard](#12-balanced-scorecard--engineering-kpi-framework), and [checklists](#13-operational-checklists).
 
 ---
 
@@ -32,7 +52,7 @@ Standard terms keep squads aligned across engineering, product, and leadership:
 | **STRIDE** | Threat Modeling Framework | A 6-part security checklist (Spoofing, Tampering, Repudiation, Info Disclosure, DoS, Elevation of Privilege) required for sensitive features. | A rigorous building security audit checking doors, locks, cameras, and alarms. |
 | **TCAB** | Technical Change Advisory Board | The infrastructure governance council that reviews database migrations, configurations, and backend deployments. | Air traffic control approving takeoff slots and flight paths. |
 | **Live Issue Pool** | Pre-Existing Defect Backlog | A shared backlog of legacy production bugs kept separate from new feature tickets so sprint deliveries stay on schedule. | A municipal road maintenance backlog for old potholes, kept separate from new highway projects. |
-| **UAT Bug Leakage** | QA Quality Metric | The percentage of defects missed by Squad QA and caught later by business UAT testers. Target is $< 2\%$. | A water filter test: fewer impurities leaking through means higher quality. |
+| **UAT Bug Leakage** | QA Quality Metric | The percentage of defects missed by Squad QA and caught later by business UAT testers. Target: **< 2%**. | A water filter test: fewer impurities leaking through means higher quality. |
 
 ---
 
@@ -45,22 +65,22 @@ This is how daily engineering rhythm operates in practice:
               • Report on yesterday's 4-hour subtasks.
               • Declare today's planned subtask.
               • Immediately raise blockers to your Scrum Master with [BLOCKER] tag.
-  
+
   10:00 AM ── Deep Focus Dev Time
               • Work on your assigned Jira subtask (≤ 4 hours).
               • Connect to internal Dev Environment via secure VPN.
               • Implement business logic with automated unit tests (≥ 80% coverage).
-  
+
   02:00 PM ── Code Review & Collaboration
               • Open PR on Git with clean description and screenshots.
               • Request reviews: 1 Senior Squad Peer + 1 Cross-Squad Specialist.
               • Review peer PRs adhering to clean-architecture guidelines.
-  
+
   04:00 PM ── QA & Verification Cycle
               • Deploy merged code to the VPN-secured Dev Environment.
               • Hand off to Squad QA for feature verification.
               • If bugs are logged: track against your 10% bug-fixing allowance.
-  
+
   05:30 PM ── Daily Time Entry Hygiene
               • Log actual hours in Jira: "Dev Time" (coding) vs "Refinement Time" (meetings).
               • Update subtask statuses (In Progress ➔ Done).
@@ -68,7 +88,7 @@ This is how daily engineering rhythm operates in practice:
 
 ---
 
-## 4. Organizational Topology & The 7-SPOC RACI Model
+## 4. Organizational Topology & the 7-SPOC RACI Model
 
 To maintain velocity while ensuring architectural coherence across microservices and mobile apps, teams operate within a hybridized **Spotify Squad Model with Matrix Governance**.
 
@@ -259,7 +279,7 @@ flowchart TD
   - Network failure matrices, retry policies, offline caching, and edge-case handling.
   - **STRIDE Threat Modeling** for security and fraud prevention.
   - **Blocker & Dependency Analysis**: Identifying prerequisite equipment, 3rd-party dependencies, and cross-team support.
-  - Granular task decomposition into chunks of **$\le 4\text{ hours}$**.
+  - Granular task decomposition into chunks of **≤ 4 hours**.
 - **Time Logging**: Time spent in this discovery and planning phase is logged strictly as `Refinement Time`.
 - **Backlog Hygiene Rule**: Squads cannot hold tickets in refinement indefinitely. If pipeline has a momentary lull, engineers pull upcoming tasks from the backlog and start early refinement.
 
@@ -278,7 +298,7 @@ flowchart TD
 - **Subtask Hygiene**: Engineers create daily subtasks under the main Jira ticket using predefined templates, explicitly selecting task type:
   - `Refinement Time` (discovery, discussions, KT, documentation).
   - `Dev Time` (active coding, unit testing, high-value velocity).
-- **The 4-Hour Rule**: Every subtask must be broken down to $\le 4\text{ hours}$. Developers are responsible for daily time logging and updating statuses as work progresses.
+- **The 4-Hour Rule**: Every subtask must be broken down to ≤ 4 hours. Developers are responsible for daily time logging and updating statuses as work progresses.
 - **Standup Transparency**: Morning standups update the Scrum Master on yesterday's completed hours and today's planned 4-hour subtask.
 - **Blocker Escalation**: If any task is blocked, raise it immediately to the SM and document the blocker reason in the ticket comments.
 - **Peer Code Review**: Requires at least 2 approvals from senior squad peers (Senior FE and Senior BE approvers).
@@ -287,9 +307,13 @@ flowchart TD
 #### Stage 5: Squad QA & The 10% Bug Buffer Rule
 - Merged feature builds are deployed to the internal Dev Environment behind VPN.
 - Squad QA executes test plans; defects are logged as linked bug subtickets.
-- **The 10% Defect Threshold**: Total bug-fixing time is mathematically capped at **$\le 10\%$ of the original locked dev estimate**:
-  $$\text{Max Allowed Bug Fix Time} \le 10\% \times \text{Locked Dev Hours}$$
-  *(e.g., a 40-hour dev ticket allows max 4.0 hours of bug fixing).*
+- **The 10% Defect Threshold**: Total bug-fixing time is mathematically capped at **≤ 10% of the original locked dev estimate**:
+
+  ```
+  Max Allowed Bug-Fix Time  ≤  10% × Locked Dev Hours
+  ```
+
+  *(e.g., a 40-hour dev ticket allows max 4.0 hours of bug fixing.)*
 - **Quality Alarm**: Breaching the 10% buffer indicates incomplete implementation or misunderstood requirements, triggering an immediate quality retro between Developer and Squad Lead.
 
 #### Stage 6: Staging Deployment, UAT Governance & Live Issue Pool
@@ -322,7 +346,7 @@ flowchart TD
   - Day 3: 50% (Broad Adoption)
   - Day 4: 100% (General Availability)
 - **Real-Time Observability**: Release-responsible developers actively monitor Firebase Crashlytics and performance telemetry.
-- **Stability SLA**: App must maintain **$\ge 99.8\%$ Crash-Free User Sessions**.
+- **Stability SLA**: App must maintain **≥ 99.8% Crash-Free User Sessions**.
 - **Hotfix Protocol**: If a critical issue arises during rollout, developers patch the defect, re-verify via QA then UAT, and re-upload the hotfixed build to stores.
 
 ---
@@ -354,7 +378,11 @@ Every feature handling financial transactions, subscriptions, or authentication 
 - **Dev Time**: Active coding, unit test implementation, CI integration, and PR generation. The core metric of engineering velocity.
 
 ### The 10% Bug Buffer Rule
-$$\text{Max Allowed Bug Fix Time} \le 10\% \times \text{Original Locked Dev Estimate}$$
+
+```
+Max Allowed Bug-Fix Time  ≤  10% × Original Locked Dev Estimate
+```
+
 - *Example*: A 40-hour dev ticket has a 4.0-hour bug-fixing allowance.
 - *Alarm Protocol*: If bug fixing exceeds 4.0 hours, it indicates an incomplete implementation or ambiguous API, triggering a constructive review with the Tech Lead.
 
@@ -397,17 +425,51 @@ To track delivery across distributed squads, squad-level Jira boards roll up int
 
 ---
 
-## 9. Role-by-Role Quick Reference Cheatsheets
+## 9. The Monthly Release Calendar
+
+Every month runs on a fixed, repeatable cadence. The calendar below is the canonical schedule that the 9-stage lifecycle maps onto; the Release Lead owns it, and every squad plans backward from it.
+
+| Window | Milestone | Primary Owner | Exit Criteria |
+| :--- | :--- | :--- | :--- |
+| **Days 1–18** | Sprint execution: coding, PR reviews, Squad QA on Dev Environment | Squad Developers & QA | Dev hours ≥ 90% complete; bug fixing within the 10% buffer |
+| **Day 19** | UAT staging cutoff — all feature artifacts deployed to Staging | Squad Leads | Tickets in `UAT Backlog` before the deadline timestamp; zero open P0/P1 |
+| **Day 20** | UAT verification & Type-A regression fixes | UAT Team & Developers | UAT sign-off on commercial journeys |
+| **Days 21–22** | TCAB review, backend production deployment & **BE Freeze** | Backend Eng & TCAB | All release microservices live in production *before* sanity starts |
+| **Days 23–24** | Branch consolidation → `release/candidate-vX.Y.Z` → QA sanity (Gate 1) | Rotating Release Team | Smoke, integration & regression suites pass on the sanity build |
+| **Days 25–27** | UAT sanity pool & final Go/No-Go (Gate 2) | UAT Team & Release Lead | Official store submission "Go-Ahead" |
+| **Day 28** | Staged store rollout: 5% → 20% → 50% → 100% | Release Lead | ≥ 99.8% crash-free sessions; rollback plan armed |
+
+> 📌 **Planning Rule:** Backward-plan every feature from Day 19 (UAT cutoff). If a feature cannot realistically reach Staging by Day 19, it belongs in next month's release — not in a heroic sprint.
+
+---
+
+## 10. Common Anti-Patterns & the Guardrails That Stop Them
+
+Every guardrail in this model exists because a real failure mode made it necessary. Recognize the anti-pattern early and apply its guardrail:
+
+| Anti-Pattern | What It Looks Like | Guardrail That Stops It |
+| :--- | :--- | :--- |
+| **The Black-Box Task** | A "3-day task" where the developer is silently stuck; discovered at sprint end. | 4-Hour Rule + daily standup declarations. |
+| **Scope Sneak-In** | Product adds "one small ask" mid-sprint after estimates are locked. | ARB Milestone Lock — new scope requires re-estimation and re-approval. |
+| **Bug Whack-a-Mole** | Bug fixing quietly consumes 30–40% of sprint capacity. | 10% Bug Buffer + quality alarm retro with the Squad Lead. |
+| **Blame-the-Messenger QA** | UAT finds a legacy bug and the squad's QA KPI takes the hit. | Defect Bifurcation — pre-existing defects route to the Live Issue Pool. |
+| **Moving-Target Testing** | Backend APIs change while mobile sanity is running; phantom bugs everywhere. | Pre-Sanity Backend Freeze enforced by TCAB. |
+| **Invisible Work** | 20 hours of clarification meetings logged as "coding time", corrupting velocity. | Strict Refinement vs. Dev Time classification in Jira. |
+| **Endless Refinement** | Tickets sit in refinement for weeks without moving. | Refinement-time monitoring + the backlog hygiene rule (≤ 20% overhead KPI). |
+
+---
+
+## 11. Role-by-Role Quick Reference Cheatsheets
 
 ### 💻 For Developers (Frontend & Backend)
-- **Chunk your work**: Never create a 3-day task. Break it into $\le 4\text{h}$ verifiable subtasks.
+- **Chunk your work**: Never create a 3-day task. Break it into ≤ 4 h verifiable subtasks.
 - **Separate your hours**: Always log meetings as `Refinement Time` and coding as `Dev Time`.
-- **Shift testing left**: Write unit tests ($\ge 80\%$ coverage) before handing off to Squad QA.
+- **Shift testing left**: Write unit tests (≥ 80% coverage) before handing off to Squad QA.
 - **Respect the 10% buffer**: If bug fixes exceed 10% of your locked dev hours, stop and consult your Tech Lead.
 
 ### 🧪 For Squad QA Engineers
 - **Test on Dev Environment**: Catch all regressions before Staging handoff.
-- **Guard the UAT Gate**: Your primary KPI is the **UAT Bug Leakage Rate** ($< 2\%$).
+- **Guard the UAT Gate**: Your primary KPI is the **UAT Bug Leakage Rate** (< 2%).
 - **File linked bugs**: Always link bug subtickets to the main feature ticket so bug-fixing hours are tracked accurately.
 
 ### 📋 For Product Owners (PO)
@@ -416,42 +478,42 @@ To track delivery across distributed squads, squad-level Jira boards roll up int
 - **Triage live defects**: Work with the Solution Architect to route legacy bugs into the Live Issue Pool.
 
 ### ⏱️ For Scrum Masters (SM)
-- **Enforce task granularity**: Reject any Jira subtask created with an estimate $> 4\text{ hours}$.
-- **Own the blocker SLA**: Clear flagged `[BLOCKER]` items within $< 4\text{ hours}$.
+- **Enforce task granularity**: Reject any Jira subtask created with an estimate > 4 hours.
+- **Own the blocker SLA**: Clear flagged `[BLOCKER]` items within < 4 hours.
 - **Maintain time hygiene**: Ensure all squad members log Dev and Refinement hours daily.
 
 ---
 
-## 10. Balanced Scorecard & Engineering KPI Framework
+## 12. Balanced Scorecard & Engineering KPI Framework
 
 | Metric Name | Measurement Formula | Target Benchmark | Impacted Role |
 | :--- | :--- | :--- | :--- |
 | **UAT Delivery Alignment** | Actual UAT Handover Date vs. Committed | 0 Days Overrun (100% on-time) | Squad Lead & Dev |
-| **UAT Bug Leakage Rate** | (UAT Bugs / Total Feature Defects) $\times 100$ | $< 2\%$ Leakage (Critical QA KPI) | Squad QA Specialist |
-| **Dev Hours Completion** | Completed Dev Hours / Locked Dev Hours | $\ge 90\%$ Output (Weekly & Monthly) | Squad Developers |
-| **Refinement Time Overhead** | Monthly Refinement Hours / Total Squad Hours | $\le 20\%$ of Total Squad Effort | Squad Lead & SM |
-| **Bug Fixing Ratio** | Total Bug Fix Hours / Locked Dev Hours | $\le 10\%$ of Dev Time | Squad Developers |
+| **UAT Bug Leakage Rate** | (UAT Bugs / Total Feature Defects) × 100 | < 2% Leakage (Critical QA KPI) | Squad QA Specialist |
+| **Dev Hours Completion** | Completed Dev Hours / Locked Dev Hours | ≥ 90% Output (Weekly & Monthly) | Squad Developers |
+| **Refinement Time Overhead** | Monthly Refinement Hours / Total Squad Hours | ≤ 20% of Total Squad Effort | Squad Lead & SM |
+| **Bug Fixing Ratio** | Total Bug Fix Hours / Locked Dev Hours | ≤ 10% of Dev Time | Squad Developers |
 | **Monthly Live Issue Quota** | Resolved Live Pool Bugs / Monthly Quota | 100% Quota Fulfillment | Squad Pool & SA |
 | **Production Delivery Volume**| Shipped Feature Value / Quarterly Target | 100% Shipped (Monthly & Quarterly) | Entire Squad |
 | **Monthly Release Adherence** | Store Submission on Fixed Calendar Date | 100% On-Time (Release Team KPI) | Release Lead & SM |
-| **Crash-Free Stability SLA** | Firebase Crashlytics User Sessions | $\ge 99.8\%$ Stability | Entire Mobile Team |
+| **Crash-Free Stability SLA** | Firebase Crashlytics User Sessions | ≥ 99.8% Stability | Entire Mobile Team |
 
 ---
 
-## 11. Operational Checklists
+## 13. Operational Checklists
 
 ### Checklist A: Solution Document & ARB Submission
 - [ ] Confluence Solution Document created under feature Epic.
 - [ ] End-to-end Sequence Diagrams showing mobile, BFF, POL/SOL, and downstream services.
 - [ ] Network timeout, retry policies, and offline cache strategies specified.
 - [ ] **STRIDE Threat Modeling** matrix completed and reviewed.
-- [ ] Task breakdown decomposed into $\le$ 4-hour granular units.
+- [ ] Task breakdown decomposed into ≤ 4-hour granular units.
 - [ ] Squad QA estimation and test scope attached.
-- [ ] ARB slot booked and prerequisites distributed to reviewers $\ge 24\text{h}$ in advance.
+- [ ] ARB slot booked and prerequisites distributed to reviewers ≥ 24 h in advance.
 
 ### Checklist B: Squad QA Handoff
 - [ ] Code merged into squad feature branch; clean CI build.
-- [ ] Unit test coverage $\ge 80\%$ on new business logic.
+- [ ] Unit test coverage ≥ 80% on new business logic.
 - [ ] Deployed to Dev Environment with VPN connectivity verified.
 - [ ] Test execution completed; linked bugs logged and verified.
 - [ ] Cumulative bug-fixing time checked against the 10% threshold.
