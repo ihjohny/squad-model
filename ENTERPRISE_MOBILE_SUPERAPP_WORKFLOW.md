@@ -11,9 +11,9 @@ This document formalizes the end-to-end engineering, architecture, governance, s
 
 ```
   1. Box Before Build       ── Never start squad refinement without an architect's Box Solution blueprint.
-  2. Lock at ARB            ── Cross-product architecture review locks dev hours, QA hours, and release dates.
+  2. Lock at ARB            ── Cross-product architecture review (Core Products, Main Leads, POL/SOL) locks dev hours, QA hours, and release dates.
   3. Chunk to ≤ 4 Hours     ── Granular subtasks surface blockers within 24 hours at morning standups.
-  4. Enforce 5% Bug Buffer  ── Mathematically cap QA bug-fixing time to identify code quality debt early.
+  4. Enforce 10% Bug Buffer ── Mathematically cap QA bug-fixing time to maintain sprint commitments.
   5. BE Freeze First        ── All backend microservices deploy to production BEFORE mobile sanity begins.
 ```
 
@@ -21,18 +21,18 @@ This document formalizes the end-to-end engineering, architecture, governance, s
 
 ## 2. Plain-English Jargon Buster (The Super-App Glossary)
 
-In large-scale mobile and fintech ecosystems, standardized terminology ensures cross-functional alignment across squads:
+Standard terms keep squads aligned across engineering, product, and leadership:
 
 | Term | Full Name | Plain-English Meaning | Real-World Analogy |
 | :--- | :--- | :--- | :--- |
-| **Box Solution** | Architectural Blueprint | A 1-page system touchpoint diagram prepared by the Solution Architect during grooming, defining touched microservices and the baseline Frontend/Backend effort split (e.g. 40% FE / 60% BE). | The structural blueprint an architect draws before builders buy bricks. |
-| **ARB** | Architecture Review Board | A regular cross-product panel of Team Leads and Architects (Payments, Subscriptions, Core Platform) that reviews solution docs, validates edge cases/security, and permanently locks Dev/QA estimates and delivery dates. | A municipal building inspection board checking fire safety and structural code before issuing a permit. |
-| **POL** | Payment Orchestration Layer | The central microservice platform connecting to digital wallets, payment cards, and banks with idempotency and retry protection. | The central payment terminal handling cash, cards, and vouchers safely. |
-| **SOL** | Subscription Orchestration Layer | The central engine managing recurring packs, auto-renewals, billing cycles, and balance deduction fallbacks. | The recurring subscription engine (like a Netflix billing system). |
-| **STRIDE** | Threat Modeling Framework | A security checklist (Spoofing, Tampering, Repudiation, Info Disclosure, DoS, Elevation of Privilege) required for sensitive features. | A rigorous building security audit checking doors, locks, cameras, and alarms. |
-| **TCAB** | Technical Change Advisory Board | The infrastructure governance council reviewing database migrations and production backend deployments. | Air traffic control approving runway and departure slots for a commercial flight. |
-| **Live Issue Pool** | Pre-Existing Defect Backlog | A shared backlog of legacy production bugs separated from new feature tickets so your sprint delivery date isn't unfairly delayed. | A city maintenance backlog for old potholes, kept separate from new highway construction. |
-| **UAT Bug Leakage** | QA Quality Metric | The percentage of defects missed by Squad QA and caught later by the business UAT team. Target is $< 2\%$. | A measure of water filter efficiency: fewer impurities passing through means a higher rating. |
+| **Box Solution** | Architectural Blueprint | A 1-page system diagram prepared by the Solution Architect during grooming. It defines touched microservices and the baseline Frontend/Backend effort split (e.g., 40% FE / 60% BE). | The blueprint an architect draws before builders buy materials. |
+| **ARB** | Architecture Review Board | A regular cross-product panel of Team Leads, System Architects, Core Product Leads, and Main Product Leads (Core Products, Payments/POL, Subscriptions/SOL, and Platform Services). It reviews solution docs, checks edge cases, and locks Dev/QA estimates and release dates. | A building inspection board checking structural safety and fire code before issuing a permit. |
+| **POL** | Payment Orchestration Layer | The central payment platform connecting digital wallets, cards, and banks with idempotency and retry safeguards. | A secure cashier terminal that accepts cash, cards, and vouchers safely. |
+| **SOL** | Subscription Orchestration Layer | The central engine managing recurring packs, auto-renewals, billing cycles, and balance deduction fallbacks. | A recurring subscription service (like Netflix billing). |
+| **STRIDE** | Threat Modeling Framework | A 6-part security checklist (Spoofing, Tampering, Repudiation, Info Disclosure, DoS, Elevation of Privilege) required for sensitive features. | A rigorous building security audit checking doors, locks, cameras, and alarms. |
+| **TCAB** | Technical Change Advisory Board | The infrastructure governance council that reviews database migrations, configurations, and backend deployments. | Air traffic control approving takeoff slots and flight paths. |
+| **Live Issue Pool** | Pre-Existing Defect Backlog | A shared backlog of legacy production bugs kept separate from new feature tickets so sprint deliveries stay on schedule. | A municipal road maintenance backlog for old potholes, kept separate from new highway projects. |
+| **UAT Bug Leakage** | QA Quality Metric | The percentage of defects missed by Squad QA and caught later by business UAT testers. Target is $< 2\%$. | A water filter test: fewer impurities leaking through means higher quality. |
 
 ---
 
@@ -59,7 +59,7 @@ This is how daily engineering rhythm operates in practice:
   04:00 PM ── QA & Verification Cycle
               • Deploy merged code to the VPN-secured Dev Environment.
               • Hand off to Squad QA for feature verification.
-              • If bugs are logged: track against your 5% bug-fixing allowance.
+              • If bugs are logged: track against your 10% bug-fixing allowance.
   
   05:30 PM ── Daily Time Entry Hygiene
               • Log actual hours in Jira: "Dev Time" (coding) vs "Refinement Time" (meetings).
@@ -90,10 +90,11 @@ To maintain velocity while ensuring architectural coherence across microservices
                                            |
 +---------------------------------------------------------------------------------------+
 |                 ARB: ARCHITECTURE REVIEW BOARD (CROSS-PRODUCT FORUM)                  |
-|  - Combination of Team Leads and Architects from Cross-Product Domains:               |
-|    • Payment Orchestration Layer (POL) Leads / Architects                             |
-|    • Subscription Orchestration Layer (SOL) Leads / Architects                       |
-|    • Core Platform VAS & Identity Architects                                         |
+|  - Joint Council of Leads, System Architects, and Product Leads across domains:      |
+|    • Core Product Leads & Main Product Leads                                         |
+|    • Payment Orchestration Layer (POL) Leads & Architects                            |
+|    • Subscription Orchestration Layer (SOL) Leads & Architects                       |
+|    • Core Platform Services & System Architects                                      |
 +---------------------------------------------------------------------------------------+
                                            ^
                                            |
@@ -113,23 +114,23 @@ To maintain velocity while ensuring architectural coherence across microservices
 ### Team Roles & Staffing Mechanics
 
 1. **Lead Team**:
-   - **Solution Architect (SA)**: Authors initial high-level system blueprints ("Box Solutions"), defines microservice touchpoints, and validates cross-system integrity.
-   - **Squad Main Lead**: Drives squad engineering delivery and resource allocation. A single Squad Main Lead may oversee multiple squads concurrently.
-   - **Release Lead**: Coordinates monthly store release schedules, manages candidate branching, and oversees store deployment operations.
+   - **Solution Architect (SA)**: Prepares system blueprints ("Box Solutions"), defines microservice boundaries, and ensures cross-system integrity.
+   - **Squad Main Lead**: Guides engineering delivery and resource allocation. A Squad Main Lead may oversee one or more squads.
+   - **Release Lead**: Coordinates monthly store release dates, manages release candidate branches, and oversees store deployment operations.
 
 2. **ARB (Architecture Review Board)**:
-   - A joint council composed of Team Leads and Architects from cross-product domains (**Payment Orchestration Layer - POL**, **Subscription Orchestration Layer - SOL**, and Core Services).
-   - Validates technical feasibility, edge cases, security countermeasures, and permanently locks Dev and QA time estimates.
+   - A joint council of Team Leads, System Architects, Core Product Leads, and Main Product Leads across key domains (Core Products, Main Product Leads, Payment Orchestration - POL, Subscription Orchestration - SOL, and Platform Services).
+   - Validates technical feasibility, edge cases, and security controls, and permanently locks Dev and QA time estimates.
 
 3. **Dev Squad Pool & Staffing Dynamics**:
-   - **Squad Composition**: Each squad contains dedicated Frontend (Android & iOS), Backend (BE), Squad QA, an Internal Lead Developer, and is supported by a Squad Main Lead.
-   - **Senior Feature Ownership**: Every senior member on the squad is individually responsible for leading and delivering one main feature end-to-end.
-   - **Inter-Squad Member Loans**: When an urgent feature requires surge capacity, engineers can be temporarily borrowed/loaned between squads without bureaucratic friction.
-   - **Special Revamp Taskforces vs. Growth Squads**: For major architectural modernizations or complete application redesigns, a dedicated special group is assembled by combining senior engineers from multiple squads. Meanwhile, dedicated Growth squads maintain continuous day-to-day feature velocity for ongoing business needs.
+   - **Squad Composition**: Each squad contains dedicated Frontend (Android & iOS), Backend (BE), Squad QA, an Internal Dev Lead, and is supported by a Squad Main Lead.
+   - **Single Feature Ownership**: Each senior engineer takes end-to-end ownership of one main feature.
+   - **Inter-Squad Loans**: When an urgent feature needs surge capacity, engineers can be temporarily borrowed between squads without red tape.
+   - **Special Revamp Taskforces vs. Growth Squads**: For major app redesigns or core rewrites, senior engineers from multiple squads form a temporary taskforce. Meanwhile, Growth squads continue shipping daily business features.
 
 4. **Scrum Masters (SM)**:
-   - **Squad-Based SM**: Monitors task statuses, time entry hygiene, backlog health, daily update documentation, and morning standups. One SM may manage multiple squads.
-   - **Release SM**: Manages and curates the monthly release candidate item list, tracks release readiness across squads, and proactively prepares the pipeline for the next upcoming release.
+   - **Squad-Based SM**: Tracks daily subtasks, time logs, backlog health, standup updates, and blocker removal. One SM may serve multiple squads.
+   - **Release SM**: Manages the monthly release candidate scope, tracks squad readiness, and prepares the pipeline for the next upcoming release.
 
 ---
 
@@ -201,7 +202,7 @@ flowchart TD
     subgraph S5["Stage 5: Squad QA & Defect Buffer"]
         O --> P[Deploy to Dev Environment]
         P --> Q[Squad QA Testing & Bug Ticket Issuance]
-        Q --> R{Bug Time <= 5% Limit?}
+        Q --> R{Bug Time <= 10% Limit?}
         R -- Within Limits --> S[Squad QA Sign-off]
         R -- Exceeded --> T[Squad Lead Quality Alarm Review]
         T --> S
@@ -264,7 +265,7 @@ flowchart TD
 
 #### Stage 3: ARB Architectural Gateway
 - **Council Slot Booking**: Once the Solution Doc and task breakdowns are finalized, the squad books a review slot on the regular ARB session.
-- **The Defense**: Squad developers present the Solution Doc, sequence flows, corner cases, and granular task estimates to the panel of cross-product architects (POL, SOL, Core).
+- **The Defense**: Squad developers present the Solution Doc, sequence flows, edge cases, and granular task estimates to the panel of cross-product leads and architects (Core Product Leads, Main Product Leads, POL, SOL, and Platform Architecture).
 - **Feedback & Re-alignment**: The ARB panel provides feedback on edge cases, security controls, and integration risks. If revisions are requested, the squad realigns the document and reschedules.
 - **The Milestone Lock**: Upon formal approval, the ARB permanently locks:
   - **Dev Time (Hours)**
@@ -283,13 +284,13 @@ flowchart TD
 - **Peer Code Review**: Requires at least 2 approvals from senior squad peers (Senior FE and Senior BE approvers).
 - **VPN Environment Access**: All Dev and Staging environments require connecting to the internal VPN using designated engineer credentials.
 
-#### Stage 5: Squad QA & The 5% Bug Buffer Rule
+#### Stage 5: Squad QA & The 10% Bug Buffer Rule
 - Merged feature builds are deployed to the internal Dev Environment behind VPN.
 - Squad QA executes test plans; defects are logged as linked bug subtickets.
-- **The 5% Defect Threshold**: Total bug-fixing time is mathematically capped at **$\le 5\%$ of the original locked dev estimate**:
-  $$\text{Max Allowed Bug Fix Time} \le 5\% \times \text{Locked Dev Hours}$$
-  *(e.g., a 40-hour dev ticket allows max 2.0 hours of bug fixing).*
-- **Quality Alarm**: Breaching the 5% buffer indicates incomplete implementation or misunderstood requirements, triggering an immediate quality retro between Developer and Squad Lead.
+- **The 10% Defect Threshold**: Total bug-fixing time is mathematically capped at **$\le 10\%$ of the original locked dev estimate**:
+  $$\text{Max Allowed Bug Fix Time} \le 10\% \times \text{Locked Dev Hours}$$
+  *(e.g., a 40-hour dev ticket allows max 4.0 hours of bug fixing).*
+- **Quality Alarm**: Breaching the 10% buffer indicates incomplete implementation or misunderstood requirements, triggering an immediate quality retro between Developer and Squad Lead.
 
 #### Stage 6: Staging Deployment, UAT Governance & Live Issue Pool
 - On or before the committed **UAT Delivery Date**, all feature artifacts are deployed to the Staging Environment via VPN.
@@ -352,10 +353,10 @@ Every feature handling financial transactions, subscriptions, or authentication 
 - **Refinement Time**: Discovery, meeting alignment, Confluence authoring, and PO clarification. Monitored to prevent tickets stalling in squad backlogs.
 - **Dev Time**: Active coding, unit test implementation, CI integration, and PR generation. The core metric of engineering velocity.
 
-### The 5% Bug Buffer Rule
-$$\text{Max Allowed Bug Fix Time} \le 5\% \times \text{Original Locked Dev Estimate}$$
-- *Example*: A 40-hour dev ticket has a 2.0-hour bug-fixing allowance.
-- *Alarm Protocol*: If bug fixing exceeds 2.0 hours, it indicates an incomplete implementation or ambiguous API, triggering a constructive review with the Tech Lead.
+### The 10% Bug Buffer Rule
+$$\text{Max Allowed Bug Fix Time} \le 10\% \times \text{Original Locked Dev Estimate}$$
+- *Example*: A 40-hour dev ticket has a 4.0-hour bug-fixing allowance.
+- *Alarm Protocol*: If bug fixing exceeds 4.0 hours, it indicates an incomplete implementation or ambiguous API, triggering a constructive review with the Tech Lead.
 
 ### Central Jira Dashboard & Velocity Monitoring
 To track delivery across distributed squads, squad-level Jira boards roll up into a centralized engineering dashboard:
@@ -402,7 +403,7 @@ To track delivery across distributed squads, squad-level Jira boards roll up int
 - **Chunk your work**: Never create a 3-day task. Break it into $\le 4\text{h}$ verifiable subtasks.
 - **Separate your hours**: Always log meetings as `Refinement Time` and coding as `Dev Time`.
 - **Shift testing left**: Write unit tests ($\ge 80\%$ coverage) before handing off to Squad QA.
-- **Respect the 5% buffer**: If bug fixes exceed 5% of your locked dev hours, stop and consult your Tech Lead.
+- **Respect the 10% buffer**: If bug fixes exceed 10% of your locked dev hours, stop and consult your Tech Lead.
 
 ### 🧪 For Squad QA Engineers
 - **Test on Dev Environment**: Catch all regressions before Staging handoff.
@@ -429,7 +430,7 @@ To track delivery across distributed squads, squad-level Jira boards roll up int
 | **UAT Bug Leakage Rate** | (UAT Bugs / Total Feature Defects) $\times 100$ | $< 2\%$ Leakage (Critical QA KPI) | Squad QA Specialist |
 | **Dev Hours Completion** | Completed Dev Hours / Locked Dev Hours | $\ge 90\%$ Output (Weekly & Monthly) | Squad Developers |
 | **Refinement Time Overhead** | Monthly Refinement Hours / Total Squad Hours | $\le 20\%$ of Total Squad Effort | Squad Lead & SM |
-| **Bug Fixing Ratio** | Total Bug Fix Hours / Locked Dev Hours | $\le 5\%$ of Dev Time | Squad Developers |
+| **Bug Fixing Ratio** | Total Bug Fix Hours / Locked Dev Hours | $\le 10\%$ of Dev Time | Squad Developers |
 | **Monthly Live Issue Quota** | Resolved Live Pool Bugs / Monthly Quota | 100% Quota Fulfillment | Squad Pool & SA |
 | **Production Delivery Volume**| Shipped Feature Value / Quarterly Target | 100% Shipped (Monthly & Quarterly) | Entire Squad |
 | **Monthly Release Adherence** | Store Submission on Fixed Calendar Date | 100% On-Time (Release Team KPI) | Release Lead & SM |
@@ -453,7 +454,7 @@ To track delivery across distributed squads, squad-level Jira boards roll up int
 - [ ] Unit test coverage $\ge 80\%$ on new business logic.
 - [ ] Deployed to Dev Environment with VPN connectivity verified.
 - [ ] Test execution completed; linked bugs logged and verified.
-- [ ] Cumulative bug-fixing time checked against the 5% threshold.
+- [ ] Cumulative bug-fixing time checked against the 10% threshold.
 
 ### Checklist C: UAT Handover
 - [ ] All P0/P1 defects closed and verified in Dev Environment.
