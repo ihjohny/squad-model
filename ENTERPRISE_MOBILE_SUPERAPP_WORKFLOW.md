@@ -12,10 +12,10 @@
 5. [The 9-Stage Super-App Delivery Lifecycle](#5-the-9-stage-super-app-delivery-lifecycle)
 6. [STRIDE Threat Modeling for Mobile Features](#6-stride-threat-modeling-for-mobile-features)
 7. [Time Rules & the Jira Dashboard](#7-time-rules--the-jira-dashboard)
-8. [Git Branching & Secure Environment Architecture](#8-git-branching--secure-environment-architecture)
+8. [Git Branching & Environments](#8-git-branching--environments)
 9. [The Monthly Release Calendar](#9-the-monthly-release-calendar)
 10. [Common Failure Modes and What Stops Them](#10-common-failure-modes-and-what-stops-them)
-11. [Role-by-Role Quick Reference Cheatsheets](#11-role-by-role-quick-reference-cheatsheets)
+11. [Role-by-Role Quick Reference](#11-role-by-role-quick-reference)
 12. [Balanced Scorecard & Engineering KPI Framework](#12-balanced-scorecard--engineering-kpi-framework)
 13. [Operational Checklists](#13-operational-checklists)
 
@@ -50,7 +50,7 @@ Standard terms keep squads aligned across engineering, product, and leadership:
 | Term | Full Name | Plain-English Meaning | Real-World Analogy |
 | :--- | :--- | :--- | :--- |
 | **Box Solution** | Architectural Blueprint | A 1-page system diagram prepared by the Solution Architect during grooming. It defines touched microservices and the baseline Frontend/Backend effort split (e.g., 40% FE / 60% BE). | The blueprint an architect draws before builders buy materials. |
-| **DAF** | Design Authority Forum | A regular cross-product panel of Team Leads, System Architects, Core Product Leads, and Main Product Leads (Core Products, Payments/POL, Subscriptions/SOL, and Platform Services). It reviews the solution doc, approves the task solution, and verifies Dev/QA estimates. It does **not** lock dates. The SM locks delivery dates from business needs and the planned release version/month. | A building inspection board checking structural safety and fire code before issuing a permit: it approves the design, the contractor sets the schedule. |
+| **DAF** | Design Authority Forum | A cross-product panel (Core, POL, SOL and Platform leads and architects) that reviews the solution doc, approves the task solution, and verifies Dev/QA estimates. It never locks dates; the SM does (section 4). | A building inspection board: it approves the design, the contractor sets the schedule. |
 | **POL** | Payment Orchestration Layer | The central payment platform connecting digital wallets, cards, and banks with idempotency and retry safeguards. | A secure cashier terminal that accepts cash, cards, and vouchers safely. |
 | **SOL** | Subscription Orchestration Layer | The central engine managing recurring packs, auto-renewals, billing cycles, and balance deduction fallbacks. | A recurring subscription service (like Netflix billing). |
 | **STRIDE** | Threat Modeling Framework | A 6-part security checklist (Spoofing, Tampering, Repudiation, Info Disclosure, DoS, Elevation of Privilege) required for sensitive features. | A rigorous building security audit checking doors, locks, cameras, and alarms. |
@@ -62,99 +62,36 @@ Standard terms keep squads aligned across engineering, product, and leadership:
 
 ## 3. A Day in the Life of a Squad Engineer
 
-This is how daily engineering rhythm operates in practice:
-
 ```
-  09:30 AM ── Morning Standup (15 mins)
-              • Report on yesterday's 4-hour subtasks.
-              • Declare today's planned subtask.
-              • Immediately raise blockers to your Scrum Master with [BLOCKER] tag.
-
-  10:00 AM ── Deep Focus Dev Time
-              • Work on your assigned Jira subtask (≤ 4 hours).
-              • Connect to internal Dev Environment via secure VPN.
-              • Implement business logic with automated unit tests (≥ 80% coverage).
-
-  02:00 PM ── Code Review & Collaboration
-              • Open PR on Git with clean description and screenshots.
-              • Request reviews: 1 Senior Squad Peer + 1 Cross-Squad Specialist.
-              • Review peer PRs adhering to clean-architecture guidelines.
-
-  04:00 PM ── QA & Verification Cycle
-              • Deploy merged code to the VPN-secured Dev Environment.
-              • Hand off to Squad QA for feature verification.
-              • If bugs are logged: track against your 10% bug-fixing allowance.
-
-  05:30 PM ── Daily Time Entry Hygiene
-              • Log actual hours in Jira: "Dev Time" (coding) vs "Refinement Time" (meetings).
-              • Update subtask statuses (In Progress ➔ Done).
+  09:30  Standup (15 min)      · yesterday's subtasks, today's plan, [BLOCKER] items to the SM
+  10:00  Deep focus            · one ≤ 4h subtask on the VPN dev environment, unit tests included
+  02:00  Code review           · open the PR with a clean description; review your peers' PRs too
+  04:00  QA cycle              · deploy merged code, hand to Squad QA, watch the 10% allowance
+  05:30  Time hygiene          · log Dev vs. Refinement hours, update subtask statuses
 ```
 
 ---
 
 ## 4. Organizational Topology & the 7-SPOC RACI Model
 
-To maintain velocity while ensuring architectural coherence across microservices and mobile apps, teams operate within a hybridized **Spotify Squad Model with Matrix Governance**.
+Squads ship fast on their own; the layers above keep the shared systems coherent:
 
 ```
-+---------------------------------------------------------------------------------------+
-|                                    BUSINESS & UAT                                     |
-|  - Product Owners (PO): Feature Vision, Business PRD, Metric Ownership               |
-|  - UAT Team: Business Acceptance, Staging Verification, Go/No-Go Signoff              |
-+---------------------------------------------------------------------------------------+
-                                           ^
-                                           |
-+---------------------------------------------------------------------------------------+
-|                                    TECH LEADERSHIP                                    |
-|  - Solution Architect (SA): End-to-End System Design, Box Solutions, Tech Alignment   |
-|  - Squad Main Lead: Technical Delivery, Resource Allocation; oversees 1 or more squads|
-|  - Release Lead: Monthly Release Calendar, Sanity Orchestration, Store Operations     |
-+---------------------------------------------------------------------------------------+
-                                           ^
-                                           |
-+---------------------------------------------------------------------------------------+
-|                 DAF: DESIGN AUTHORITY FORUM (CROSS-PRODUCT FORUM)                    |
-|  - Joint Council of Leads, System Architects, and Product Leads across domains:      |
-|    • Core Product Leads & Main Product Leads                                         |
-|    • Payment Orchestration Layer (POL) Leads & Architects                            |
-|    • Subscription Orchestration Layer (SOL) Leads & Architects                       |
-|    • Core Platform Services & System Architects                                      |
-+---------------------------------------------------------------------------------------+
-                                           ^
-                                           |
-+---------------------------------------------------------------------------------------+
-|                                   DEV SQUAD POOL                                      |
-|  [Feature Squad 1]         [Feature Squad 2]        [Special Revamp / Core Squad]     |
-|  - Squad Main Lead         - Squad Main Lead        - Cross-Squad Combined Taskforce  |
-|  - Internal Dev Lead       - Internal Dev Lead      - Major Redesign / Refactoring    |
-|  - Android Eng (Sr/Jr)     - Android Eng (Sr/Jr)    [Growth Squads]                   |
-|  - iOS Eng (Sr/Jr)         - iOS Eng (Sr/Jr)        - Day-to-day business delivery    |
-|  - Backend Eng             - Backend Eng            * Inter-Squad Loans: Engineers    |
-|  - Squad QA Engineer       - Squad QA Engineer        can be temporarily borrowed for |
-|  - Squad Scrum Master      - Squad Scrum Master       urgent high-priority features   |
-+---------------------------------------------------------------------------------------+
+BUSINESS & UAT   Product Owners (PRD, vision) · UAT team (staging acceptance, Go/No-Go)
+      ▲
+TECH LEADERSHIP  Solution Architect (Box Solutions) · Squad Main Leads (delivery, 1+ squads
+      ▲          each) · Release Lead (release calendar, store operations)
+DAF              Design Authority Forum — joint council of Core, POL, SOL and Platform
+      ▲          leads & architects (reviews and approves solutions)
+SQUADS           Feature squads: Android · iOS · Backend · Squad QA · Dev Lead · SM,
+                 plus temporary revamp taskforces for big rewrites
 ```
 
-### Team Roles & Staffing Mechanics
+### How the layers work together
 
-1. **Lead Team**:
-   - **Solution Architect (SA)**: Draws the Box Solutions, defines microservice boundaries, and keeps cross-system integrity.
-   - **Squad Main Lead**: Guides delivery and staffing. One lead may oversee one or more squads.
-   - **Release Lead**: Owns the monthly release dates, the release candidate branches, and store deployment.
-
-2. **DAF (Design Authority Forum)**:
-   - Reviews the Confluence solution doc, approves the task solution, and verifies Dev and QA estimates against the task breakdown. (Its composition is in the chart above.)
-   - **Not a scheduling body**: it never locks dates. Scheduling belongs to the SM, below.
-
-3. **Dev Squad Pool & Staffing Dynamics**:
-   - **Squad Composition**: Each squad contains dedicated Frontend (Android & iOS), Backend (BE), Squad QA, an Internal Dev Lead, and is supported by a Squad Main Lead.
-   - **Single Feature Ownership**: Each senior engineer takes end-to-end ownership of one main feature.
-   - **Inter-Squad Loans**: When an urgent feature needs surge capacity, engineers can be temporarily borrowed between squads without red tape.
-   - **Special Revamp Taskforces vs. Growth Squads**: For major app redesigns or core rewrites, senior engineers from multiple squads form a temporary taskforce. Meanwhile, Growth squads continue shipping daily business features.
-
-4. **Scrum Masters (SM)**:
-   - **Squad-Based SM**: Locks the Dev Completion, UAT, and release dates after DAF approval (from business needs and the release calendar). Tracks daily subtasks, time logs, standups, and blocker removal. One SM may serve multiple squads.
-   - **Release SM**: Manages the monthly release candidate scope, tracks squad readiness, and prepares the pipeline for the next release.
+- **The DAF approves, it does not schedule.** It reviews the solution doc, approves the task solution, and verifies Dev/QA estimates against the task breakdown. It never locks dates.
+- **The SM schedules.** After DAF approval, the Scrum Master locks the Dev Completion, UAT, and release dates from business needs and the release calendar. One SM may serve multiple squads. A **Release SM** runs the monthly release-candidate scope and next-release pipeline.
+- **Staffing is fluid.** Each senior engineer owns one feature end to end; engineers loan between squads when priorities spike; Growth squads keep shipping while taskforces handle rewrites.
 
 ---
 
@@ -267,97 +204,57 @@ flowchart TD
 ### Stage-by-Stage Detailed Breakdown
 
 #### Stage 1: PO Grooming & The Box Solution
-- **PO PRD with Template**: The Product Owner initiates the feature request using a standardized Jira PRD template specifying business user journeys, acceptance criteria, analytics events, and business value.
-- **Architectural Grooming**: Solution Architect (SA) team grooms the ticket with the PO. Refinement notes, technical clarifications, and architectural parameters are documented directly in the ticket comments.
-- **The Box Solution Blueprint**: SA attaches a system boundary diagram to the ticket defining touched microservices (POL, SOL, Core Services) and sets the baseline effort distribution (e.g., 40% Frontend / 60% Backend).
-- **Knowledge Transfer (KT)**: When necessary, the SA conducts an initial KT session with squad engineers to explain the architectural boundaries.
-- **Queue Transition**: Once groomed and blueprint attached, the ticket transitions to `Ready for Squad`.
+- The PO raises the feature with the standard PRD template: user journeys, acceptance criteria, analytics events, business value.
+- The SA grooms it with the PO (notes go in ticket comments), attaches the **Box Solution** naming the touched microservices and the baseline FE/BE split, and runs a KT session with the squad if the boundaries need explaining.
+- Groomed ticket moves to `Ready for Squad`.
 
-#### Stage 2: Squad Intake, KT & Confluence Refinement
-- **Capacity Pulling**: Squads draw tickets from `Ready for Squad` into `Refinement in Progress` to fulfill their monthly sprint quota based on priority.
-- **Urgent Priority Fast-Track**: High-priority business tasks may be injected directly by the Squad Lead with pre-locked estimations and hard delivery dates driven by business deadlines.
-- **Squad Assignment & Initial KT**: Internal squad developers are assigned based on availability and FE/BE requirements. An initial squad meeting is held to absorb the KT and understand the ticket background.
-- **Comment-Driven Clarification**: Any ambiguities, questions, or edge cases are commented on the main ticket with explicit `@mention` tagging of the SA or PO.
-- **Confluence Solution Document**: Engineers author a formal engineering doc including:
-  - System interaction flows and sequence diagrams.
-  - Network failure matrices, retry policies, offline caching, and edge-case handling.
-  - **STRIDE Threat Modeling** for security and fraud prevention.
-  - **Blocker & Dependency Analysis**: Identifying prerequisite equipment, 3rd-party dependencies, and cross-team support.
-  - Granular task decomposition into chunks of **≤ 4 hours**.
-- **Time Logging**: Time spent in this discovery and planning phase is logged strictly as `Refinement Time`.
-- **Backlog Hygiene Rule**: Squads cannot hold tickets in refinement indefinitely. If pipeline has a momentary lull, engineers pull upcoming tasks from the backlog and start early refinement.
+#### Stage 2: Squad Intake & Confluence Refinement
+- Squads pull tickets by monthly quota and priority; urgent business tasks can be injected by the Squad Lead with pre-locked estimates and hard dates.
+- The squad digests the KT, then writes the **Confluence Solution Doc**:
+  - Sequence diagrams for every flow, including failure and retry paths.
+  - Network behavior: timeouts, offline caching, retry and backoff rules.
+  - **STRIDE threat model** (section 6) for anything touching money or identity.
+  - Blockers and dependencies, plus the task breakdown at **≤ 4 hours** per task.
+- Questions and edge cases go back to the SA or PO as `@mention` comments on the ticket.
+- All of this is logged as `Refinement Time`. If the pipeline is quiet, squads start refining upcoming tickets early rather than idling.
 
 #### Stage 3: DAF Review & Approval
-- **Council Slot Booking**: Once the Solution Doc and task breakdowns are finalized, the squad books a review slot on the regular DAF session.
-- **The Defense**: Squad developers present the Solution Doc, sequence flows, edge cases, and granular task estimates to the panel of cross-product leads and architects (Core Product Leads, Main Product Leads, POL, SOL, and Platform Architecture).
-- **Feedback & Re-alignment**: The DAF panel provides feedback on edge cases, security controls, and integration risks. If revisions are requested, the squad realigns the document and reschedules.
-- **Approval & Estimation Verification**: Upon formal approval, the DAF baselines:
-  - **The Task Solution** (approach, design, and task breakdown)
-  - **Dev Time (Hours)** — verified as realistic against the breakdown
-  - **QA Time (Hours)** — verified as realistic against the test scope
-- **SM Date Lock (after DAF approval)**: The Scrum Master — not the DAF — locks the delivery schedule based on business needs and the planned release version/month:
-  - **Dev Completion Target Date**
-  - **UAT Delivery Date**
-  - **Target Release Version Tagging** (release month taken from the release calendar)
+- The squad books a slot and defends the doc to the cross-product panel: sequence flows, edge cases, security, and the task estimates.
+- Feedback means rework and a reschedule. Approval means the DAF baselines three things: the **task solution**, **Dev hours**, and **QA hours**.
+- Then the **SM locks the dates**: dev completion, UAT handover, and the release version/month — from business needs and the release calendar, never from the review room.
 
-#### Stage 4: Sprint Execution, Subtasks & Time Logging
-- **Subtask Hygiene**: Engineers create daily subtasks under the main Jira ticket using predefined templates, explicitly selecting task type:
-  - `Refinement Time` (discovery, discussions, KT, documentation).
-  - `Dev Time` (active coding, unit testing, high-value velocity).
-- **The 4-Hour Rule**: Every subtask must be broken down to ≤ 4 hours. Developers are responsible for daily time logging and updating statuses as work progresses.
-- **Standup Transparency**: Morning standups update the Scrum Master on yesterday's completed hours and today's planned 4-hour subtask.
-- **Blocker Escalation**: If any task is blocked, raise it immediately to the SM and document the blocker reason in the ticket comments.
-- **Peer Code Review**: Requires at least 2 approvals from senior squad peers (Senior FE and Senior BE approvers).
-- **VPN Environment Access**: All Dev and Staging environments require connecting to the internal VPN using designated engineer credentials.
+#### Stage 4: Sprint Execution
+- Daily subtasks under the main ticket, each ≤ 4 hours, each typed as `Dev Time` or `Refinement Time` at creation.
+- Standup covers yesterday's completed hours and today's planned subtask; blockers go to the SM immediately, with the reason documented in the ticket.
+- Every PR needs 2 approvals (senior FE + senior BE). Dev and Staging environments sit behind the VPN.
 
 #### Stage 5: Squad QA & The 10% Bug Buffer Rule
-- Merged feature builds are deployed to the internal Dev Environment behind VPN.
-- Squad QA executes test plans; defects are logged as linked bug subtickets.
-- **The 10% Defect Threshold**: Total bug-fixing time is mathematically capped at **≤ 10% of the original locked dev estimate**:
-
-  ```
-  Max Allowed Bug-Fix Time  ≤  10% × Locked Dev Hours
-  ```
-
-  *(e.g., a 40-hour dev ticket allows max 4.0 hours of bug fixing.)*
+- Merged builds deploy to the Dev Environment; Squad QA runs the test plan and files bugs as linked subtickets (so fix hours are trackable).
+- Total bug-fixing time is capped at **≤ 10% of the locked dev estimate** (a 40-hour ticket gets 4.0 hours).
 
 > [!WARNING]
-> **Quality Alarm:** breaching the 10% buffer signals incomplete implementation or misunderstood requirements. Trigger an immediate quality retro between developer and Squad Lead, and don't quietly absorb the overrun.
+> **Quality alarm:** blowing the 10% buffer means the implementation or the requirements were wrong somewhere. Stop, run a retro with the Squad Lead, and don't quietly absorb the overrun.
 
-#### Stage 6: Staging Deployment, UAT Governance & Live Issue Pool
-- On or before the committed **UAT Delivery Date**, all feature artifacts are deployed to the Staging Environment via VPN.
-- **Squad Delivery KPI**: The squad's delivery KPI is evaluated on UAT delivery date alignment (on-time delivery to UAT backlog).
-- Business UAT team verifies commercial user journeys on the Staging Environment.
-- **Defect Bifurcation Protocol**:
-  - *Defect Type A (Recent Regression / Story Bug)*: Caused by current PR changes. Must be fixed by the squad developer before UAT sign-off. Directly impacts the **Squad QA KPI (UAT Bug Leakage Rate)**.
-  - *Defect Type B (Pre-Existing Live Defect)*: Reproduces on the current live production application. Solution Architect validates the defect, and it is detached from the feature ticket and transferred to the **Live Issue Pool**.
-  - *Monthly Live Issue Quota*: Each squad has a mandatory monthly quota to solve live issues from the pool (drawn from `Ready for Squad` backlog). Critical P0 issues are resolved immediately.
+#### Stage 6: Staging, UAT & the Live Issue Pool
+- By the committed UAT date, features deploy to Staging; the squad's on-time KPI is measured against that date.
+- UAT verifies the business journeys. Every defect gets sorted by one question — *does it also reproduce on live production?*
+  - **No (Type A, story regression):** caused by this sprint's changes. Fixed before sign-off. Counts against the QA leakage KPI.
+  - **Yes (Type B, pre-existing):** SA validates, the bug is detached from the feature and moved to the **Live Issue Pool**. Squads clear a monthly quota from the pool; P0s are fixed immediately.
 
 #### Stage 7: TCAB & Pre-Sanity Backend Freeze
-- **Fixed Monthly Cadence**: Every month operates on a fixed store release date preceded by a strict **Sanity Start Date**.
-- **TCAB Preparation**: Backend engineers submit a Technical Change Advisory Board (TCAB) RFC for database migrations, config changes, and microservice deployments.
+- Backend submits a TCAB RFC (migrations, config, deployments) and deploys to production ahead of the sanity start date.
 
 > [!IMPORTANT]
-> **The Cardinal Rule — BE Freeze First:** all backend microservices scheduled for release must be deployed to LIVE production under TCAB **before the mobile sanity start date begins**. Mobile sanity testing never runs against fluctuating backend APIs.
+> **The cardinal rule — BE freeze first:** every backend service in the release is live in production *before* mobile sanity starts. Sanity never runs against a moving API.
 
-#### Stage 8: Branch Consolidation, Dual-Gate Sanity & Release Team
-- **Squad-Wise Branching**: Each squad maintains a dedicated release branch (`squad/a-release-vX.Y.Z`). The Squad Lead merges all completed squad release items into this branch.
-- **Consolidated Sanity Branch**: A final sanity candidate branch (`release/candidate-vX.Y.Z`) is created by merging all squad main release branches together.
-- **Rotating Release Team**: Every month, senior engineers from each squad form a dedicated release team responsible for branch consolidation, sanity execution, and store deployment.
-- **Dual-Gate Sanity Cycle**:
-  - *Gate 1 (Squad QA Sanity Pool)*: QA executes automated smoke, integration, and core regression suites.
-  - *Gate 2 (UAT Sanity Pool)*: Business UAT pool verifies end-to-end commercial sanity and grants the official store submission "Go-Ahead".
-- **Release Team KPI**: The Release Team is evaluated on achieving store submission strictly on the fixed monthly release date.
+#### Stage 8: Branch Consolidation & Dual-Gate Sanity
+- Each squad merges completed work into its `squad/x-release-vX.Y.Z` branch; a rotating release team merges those into `release/candidate-vX.Y.Z`.
+- **Gate 1 — QA sanity:** automated smoke, integration, and core regression suites.
+- **Gate 2 — UAT sanity:** business verifies end-to-end and gives the store-submission go-ahead. The release team's KPI is submission on the fixed date.
 
-#### Stage 9: Staged Store Rollout & Production Telemetry
-- Phased rollout to Google Play and Apple App Store:
-  - Day 1: 5% (Canary)
-  - Day 2: 20% (Expansion)
-  - Day 3: 50% (Broad Adoption)
-  - Day 4: 100% (General Availability)
-- **Real-Time Observability**: Release-responsible developers actively monitor Firebase Crashlytics and performance telemetry.
-- **Stability SLA**: App must maintain **≥ 99.8% Crash-Free User Sessions**.
-- **Hotfix Protocol**: If a critical issue arises during rollout, developers patch the defect, re-verify via QA then UAT, and re-upload the hotfixed build to stores.
+#### Stage 9: Staged Store Rollout
+- Rollout to both stores: **5% (D1) → 20% (D2) → 50% (D3) → 100% (D4)**, monitored live on Crashlytics.
+- Stability floor: **≥ 99.8% crash-free sessions**. A critical issue means: patch → re-verify through QA and UAT → re-upload.
 
 ---
 
@@ -399,30 +296,15 @@ Squad-level Jira boards roll up into one engineering dashboard, checked weekly a
 
 ---
 
-## 8. Git Branching & Secure Environment Architecture
+## 8. Git Branching & Environments
+
+Three environments: **Dev** (internal VPN, mocked external gateways), **Staging** (VPN, a 1:1 live replica with sandbox POL/SOL), and **Production** (live traffic, multi-region, TCAB-governed).
 
 ```
-+---------------------------------------------------------------------------------------------------+
-| ENVIRONMENTS & NETWORKS                                                                           |
-+---------------------------------------------------------------------------------------------------+
-|  [Dev Environment]        -> Internal VPN -> Rapid feature testing, mocked external gateways      |
-|  [Staging Environment]    -> Secure VPN   -> 1:1 Live replica, live sandbox POL/SOL integrations  |
-|  [Production Environment] -> Core Datacenter -> Live traffic, multi-region, strict TCAB governance|
-+---------------------------------------------------------------------------------------------------+
-
-+---------------------------------------------------------------------------------------------------+
-| GIT BRANCHING HIERARCHY                                                                           |
-+---------------------------------------------------------------------------------------------------+
-|                                                                                                   |
-|  feature/APP-101 (Dev) ---------+                                                                 |
-|                                 |--> squad/a-release-v2.4.0 ------+                               |
-|  feature/APP-102 (Dev) ---------+                                 |                               |
-|                                                                   |--> release/candidate-v2.4.0   |
-|  feature/APP-201 (Dev) ---------+                                 |    (Sanity Build -> Stores)   |
-|                                 |--> squad/b-release-v2.4.0 ------+                               |
-|  feature/APP-202 (Dev) ---------+                                                                 |
-|                                                                                                   |
-+---------------------------------------------------------------------------------------------------+
+  feature/APP-101 ──┐                                        ┌─ release/candidate-v2.4.0
+  feature/APP-102 ──┴─ squad/a-release-v2.4.0 ──┐            │   (sanity build → stores)
+  feature/APP-201 ──┐                            ├──────────┘
+  feature/APP-202 ──┴─ squad/b-release-v2.4.0 ──┘
 ```
 
 ---
@@ -462,28 +344,15 @@ Every rule in this document exists because something went wrong without it. If y
 
 ---
 
-## 11. Role-by-Role Quick Reference Cheatsheets
+## 11. Role-by-Role Quick Reference
 
-### 💻 For Developers (Frontend & Backend)
-- **Chunk your work**: Never create a 3-day task. Break it into ≤ 4 h verifiable subtasks.
-- **Separate your hours**: Always log meetings as `Refinement Time` and coding as `Dev Time`.
-- **Shift testing left**: Write unit tests (≥ 80% coverage) before handing off to Squad QA.
-- **Respect the 10% buffer**: If bug fixes exceed 10% of your locked dev hours, stop and consult your Tech Lead.
+**Developers** — split work into ≤ 4h subtasks · log Dev vs. Refinement honestly · unit-test to 80% before QA handoff · stop at the 10% cap and talk to your lead.
 
-### 🧪 For Squad QA Engineers
-- **Test on Dev Environment**: Catch all regressions before Staging handoff.
-- **Guard the UAT Gate**: Your primary KPI is the **UAT Bug Leakage Rate** (< 2%).
-- **File linked bugs**: Always link bug subtickets to the main feature ticket so bug-fixing hours are tracked accurately.
+**Squad QA** — find regressions on the dev environment, before staging · your KPI is leakage under 2% · always link bug subtickets to the feature ticket.
 
-### 📋 For Product Owners (PO)
-- **Use standard templates**: Every PRD must define user journeys, business acceptance criteria, and telemetry.
-- **Respect the DAF approval & SM schedule**: Once the solution is approved and the SM has locked the sprint dates, avoid adding new requirements mid-sprint.
-- **Triage live defects**: Work with the Solution Architect to route legacy bugs into the Live Issue Pool.
+**Product Owners** — every PRD carries journeys, acceptance criteria, and telemetry · after DAF approval and SM scheduling, new scope waits for the next sprint · route legacy bugs to the Live Issue Pool with the SA.
 
-### ⏱️ For Scrum Masters (SM)
-- **Enforce task granularity**: Reject any Jira subtask created with an estimate > 4 hours.
-- **Own the blocker SLA**: Clear flagged `[BLOCKER]` items within < 4 hours.
-- **Maintain time hygiene**: Ensure all squad members log Dev and Refinement hours daily.
+**Scrum Masters** — reject subtasks estimated over 4h · clear `[BLOCKER]` items within 4h · after DAF approval, you lock the dates · keep everyone logging hours daily.
 
 ---
 
