@@ -11,7 +11,7 @@
 4. [Organizational Topology & the 7-SPOC RACI Model](#4-organizational-topology--the-7-spoc-raci-model)
 5. [The 9-Stage Super-App Delivery Lifecycle](#5-the-9-stage-super-app-delivery-lifecycle)
 6. [STRIDE Threat Modeling for Mobile Features](#6-stride-threat-modeling-for-mobile-features)
-7. [Precision Time Engineering & Defect Governance](#7-precision-time-engineering--defect-governance)
+7. [Time Rules & the Jira Dashboard](#7-time-rules--the-jira-dashboard)
 8. [Git Branching & Secure Environment Architecture](#8-git-branching--secure-environment-architecture)
 9. [The Monthly Release Calendar](#9-the-monthly-release-calendar)
 10. [Common Failure Modes and What Stops Them](#10-common-failure-modes-and-what-stops-them)
@@ -23,27 +23,12 @@
 
 ## 1. Executive Summary & the 30-Second Quickstart
 
-This document formalizes the end-to-end engineering, architecture, governance, sprint execution, release cadence, and quality frameworks for high-concurrency mobile super-applications. It provides a clear, high-velocity operating model while maintaining the **deep technical rigor** required for mission-critical telecom and fintech platforms.
+This is the operating model our mobile teams work by: how squads are organized, how solutions get designed and approved, and how a release ships on the same 28-day schedule every month. It is written for telecom and fintech super-apps, where payments, subscriptions and core services all have to change together without breaking each other.
 
 > **[!TIP]**
 > The short version: an architect sketches the solution, the squad writes it up, the **DAF** reviews and approves it, and the **SM** sets the dates against the release calendar. During the sprint, two limits do most of the work: tasks stay under 4 hours, and bug fixing stays under 10% of the dev estimate.
 
-### The pipeline at a glance
-
-```mermaid
-flowchart LR
-    subgraph PLAN["🏗️ PLAN · Phase 1"]
-        A[Box Solution] --> B[Solution Doc + STRIDE] --> C{{"✅ DAF<br/>Approves Solution<br/>& Verifies Estimates"}}
-    end
-    subgraph BUILD["⚡ BUILD · Phase 2"]
-        C --> D["SM Locks Dates to<br/>Release Version"] --> E["≤ 4 h Subtasks"] --> F["≤ 10% Bug Fixing"] --> G{{"🎯 UAT<br/>Sign-off"}}
-    end
-    subgraph SHIP["🚀 SHIP · Phase 3"]
-        G --> H{{"❄️ Backend<br/>Freeze"}} --> I[Dual-Gate Sanity] --> J["Staged Rollout<br/>5% → 100%"]
-    end
-```
-
-### ⚡ The Five Golden Rules of Our Engineering Culture
+### ⚡ The Five Golden Rules
 
 ```
   1. Box Before Build       ── Never start squad refinement without an architect's Box Solution blueprint.
@@ -153,14 +138,13 @@ To maintain velocity while ensuring architectural coherence across microservices
 ### Team Roles & Staffing Mechanics
 
 1. **Lead Team**:
-   - **Solution Architect (SA)**: Prepares system blueprints ("Box Solutions"), defines microservice boundaries, and ensures cross-system integrity.
-   - **Squad Main Lead**: Guides engineering delivery and resource allocation. A Squad Main Lead may oversee one or more squads.
-   - **Release Lead**: Coordinates monthly store release dates, manages release candidate branches, and oversees store deployment operations.
+   - **Solution Architect (SA)**: Draws the Box Solutions, defines microservice boundaries, and keeps cross-system integrity.
+   - **Squad Main Lead**: Guides delivery and staffing. One lead may oversee one or more squads.
+   - **Release Lead**: Owns the monthly release dates, the release candidate branches, and store deployment.
 
 2. **DAF (Design Authority Forum)**:
-   - A joint council of Team Leads, System Architects, Core Product Leads, and Main Product Leads across key domains (Core Products, Main Product Leads, Payment Orchestration - POL, Subscription Orchestration - SOL, and Platform Services).
-   - Reviews the Confluence solution doc, approves the task solution, and verifies Dev and QA time estimates against the task breakdown.
-   - **Not a scheduling body**: the DAF does not lock delivery dates. After approval, the Scrum Master locks the Dev Completion Target, UAT Delivery Date, and Release Version/Month based on business needs and the planned release calendar.
+   - Reviews the Confluence solution doc, approves the task solution, and verifies Dev and QA estimates against the task breakdown. (Its composition is in the chart above.)
+   - **Not a scheduling body**: it never locks dates. Scheduling belongs to the SM, below.
 
 3. **Dev Squad Pool & Staffing Dynamics**:
    - **Squad Composition**: Each squad contains dedicated Frontend (Android & iOS), Backend (BE), Squad QA, an Internal Dev Lead, and is supported by a Squad Main Lead.
@@ -169,8 +153,8 @@ To maintain velocity while ensuring architectural coherence across microservices
    - **Special Revamp Taskforces vs. Growth Squads**: For major app redesigns or core rewrites, senior engineers from multiple squads form a temporary taskforce. Meanwhile, Growth squads continue shipping daily business features.
 
 4. **Scrum Masters (SM)**:
-   - **Squad-Based SM**: Tracks daily subtasks, time logs, backlog health, standup updates, and blocker removal. One SM may serve multiple squads.
-   - **Release SM**: Manages the monthly release candidate scope, tracks squad readiness, and prepares the pipeline for the next upcoming release.
+   - **Squad-Based SM**: Locks the Dev Completion, UAT, and release dates after DAF approval (from business needs and the release calendar). Tracks daily subtasks, time logs, standups, and blocker removal. One SM may serve multiple squads.
+   - **Release SM**: Manages the monthly release candidate scope, tracks squad readiness, and prepares the pipeline for the next release.
 
 ---
 
@@ -187,33 +171,19 @@ Every main Jira ticket binds 7 designated owners to eliminate ambiguity:
 | 6 | **UAT SPOC** | Staging business acceptance |
 | 7 | **Code Reviewers (Senior FE + BE)** | Architecture & PR approvals |
 
-The full Jira template these owners are bound to:
+Ticket metadata and milestones (the seven owners above are bound by name to the ticket):
 
 ```
-+--------------------------------------------------------------------------------------+
-| MAIN JIRA TICKET TEMPLATE FIELDS                                                     |
-+--------------------------------------------------------------------------------------+
-|  [Core Metadata]                                                                     |
-|  - Epic / Feature Name:      [e.g., Unified Payment Gateway Integration]             |
-|  - Target Release Version:   [e.g., v2.4.0 - Monthly Release]                        |
-|  - Component / Subsystem:    [POL / SOL / Core Mobile / Platform Services]           |
-|                                                                                      |
-|  [Accountability Matrix (RACI)]                                                      |
-|  - 1. Product Owner (PO):    [Business Owner Name]       ➔ Owns PRD & Intent         |
-|  - 2. Integration SPOC (SA): [Assigned Architect]        ➔ Owns Box Solution & DAF   |
-|  - 3. Assignee (Dev Lead):   [Primary Feature Owner]     ➔ Owns Solution Doc & Code  |
-|  - 4. Squad QA SPOC:         [Primary QA Engineer]       ➔ Owns Dev Env Test Plan    |
-|  - 5. Scrum Master (SM):     [Assigned Squad SM]         ➔ Owns Blocker Resolution   |
-|  - 6. UAT SPOC:              [Business QA Tester]        ➔ Owns Staging Acceptance   |
-|  - 7. Code Reviewers:        [Senior FE, Senior BE]      ➔ Owns Architecture & PRs   |
-|                                                                                      |
-|  [Milestone Dates - Locked by SM]                                                    |
-|  - DAF Approval Date:        [YYYY-MM-DD]                                            |
-|  - Dev Completion Target:    [YYYY-MM-DD]                                            |
-|  - Staging / UAT Handover:   [YYYY-MM-DD]                                            |
-|  - TCAB Submission Date:     [YYYY-MM-DD] (Backend Only)                             |
-|  - Release Sanity Cutoff:    [YYYY-MM-DD]                                            |
-+--------------------------------------------------------------------------------------+
+Epic / Feature Name:       [e.g., Unified Payment Gateway Integration]
+Target Release Version:    [e.g., v2.4.0 - Monthly Release]
+Component / Subsystem:     [POL / SOL / Core Mobile / Platform Services]
+
+Milestone dates - locked by the SM after DAF approval:
+  DAF Approval Date        [YYYY-MM-DD]
+  Dev Completion Target    [YYYY-MM-DD]
+  Staging / UAT Handover   [YYYY-MM-DD]
+  TCAB Submission Date     [YYYY-MM-DD] (backend only)
+  Release Sanity Cutoff    [YYYY-MM-DD]
 ```
 
 > [!IMPORTANT]
@@ -406,34 +376,26 @@ Every feature handling financial transactions, subscriptions, or authentication 
 
 ---
 
-## 7. Precision Time Engineering & Defect Governance
+## 7. Time Rules & the Jira Dashboard
 
-### The 4-Hour Granularity Rule
-- No Jira subtask may exceed **4 estimated hours**.
-- If a task is estimated at 12 hours, it must be decomposed into 3 distinct deliverables (e.g., *DTO serialization [4h]*, *UI Layout & State Binding [4h]*, *Unit Tests & Fallbacks [4h]*).
-- **Why it matters**: Blockers are exposed within 24 hours at daily standups, rather than discovering a developer was stuck for 4 days at the end of the sprint.
+The three time rules in one place (stages 4 and 5 above show where each applies):
 
-### Time Classification Taxonomy
-- **Refinement Time**: Discovery, meeting alignment, Confluence authoring, and PO clarification. Monitored to prevent tickets stalling in squad backlogs.
-- **Dev Time**: Active coding, unit test implementation, CI integration, and PR generation. The core metric of engineering velocity.
+| Rule | The limit | Example |
+| :--- | :--- | :--- |
+| **4-hour rule** | No Jira subtask exceeds 4 estimated hours. | A 12-hour task becomes *DTO serialization [4h] + UI & state binding [4h] + unit tests & fallbacks [4h]*. |
+| **Honest time logs** | Every hour is logged as `Dev Time` (coding) or `Refinement Time` (meetings, KT, docs). | Refinement is capped at 20% of squad time so discovery can't quietly eat the sprint. |
+| **10% bug buffer** | Bug fixing ≤ 10% × locked dev hours. | A 40-hour ticket carries a 4.0-hour allowance; exceeding it triggers the Stage 5 quality retro. |
 
-### The 10% Bug Buffer Rule
+Why the 4-hour rule matters most: a blocked developer is visible at the next standup (within 24 hours) instead of at the end of the sprint.
 
-```
-Max Allowed Bug-Fix Time  ≤  10% × Original Locked Dev Estimate
-```
-
-- *Example*: A 40-hour dev ticket has a 4.0-hour bug-fixing allowance.
-- *Alarm Protocol*: If bug fixing exceeds 4.0 hours, it indicates an incomplete implementation or ambiguous API, triggering a constructive review with the Tech Lead.
-
-### Central Jira Dashboard & Velocity Monitoring
-To track delivery across distributed squads, squad-level Jira boards roll up into a centralized engineering dashboard:
-- **Monthly Dev Completion Tracking**: Measures planned vs. actual completed dev hours per engineer and per squad (evaluated weekly and monthly).
-- **Monthly UAT Delivery Goal**: Real-time tracking of whether features hit the committed UAT date on Staging without delay.
-- **Monthly Feature Release Goal**: Tracks the percentage of committed monthly features successfully delivered to store production.
-- **Refinement vs. Dev Ratio**: Monitors the balance between overhead (meetings, KT, Confluence docs) and actual coding velocity to ensure squads aren't stalled in endless refinement.
-- **Production Delivery Volume**: Quantifies feature value shipped to production per month and per quarter.
-- **Live Issue Quota Gauge**: Tracks squad progress toward resolving their mandatory monthly allocation of legacy bugs from the Live Issue Pool.
+### Central Jira Dashboard
+Squad-level Jira boards roll up into one engineering dashboard, checked weekly and monthly:
+- **Dev completion**: planned vs. actual dev hours, per engineer and per squad.
+- **UAT delivery**: whether features hit the committed staging date.
+- **Release goal**: share of committed features that actually ship to the stores.
+- **Refinement vs. dev ratio**: overhead vs. coding, so squads don't stall in endless refinement.
+- **Production delivery volume**: value shipped per month and quarter.
+- **Live issue quota**: progress on each squad's monthly share of the Live Issue Pool.
 
 ---
 

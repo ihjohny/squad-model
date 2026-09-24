@@ -48,8 +48,6 @@ Every feature goes through the same three steps:
 4. **Enforce 10% Buffer** *(dev + QA own it)* — bug fixing gets at most 10% of the dev estimate.
 5. **BE Freeze First** *(release team owns it)* — backend goes to production before mobile sanity testing starts.
 
-Approval and scheduling are separate jobs: the DAF verifies the plan, the SM sets the dates.
-
 > 💡 **Note:** five lines any engineer can recite. That's the point. If a rule needs a paragraph to explain, it doesn't get followed.
 
 ---
