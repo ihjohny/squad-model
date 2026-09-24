@@ -15,7 +15,7 @@ paginate: true
 
 ### Why normal agile breaks at this scale
 
-- **30% of the sprint** goes to bug fixing, because edge cases never got reviewed.
+- **30% of the month** goes to bug fixing, because edge cases never got reviewed.
 - **20 hours** of meetings logged as coding, so the metrics stop meaning anything.
 - **Tests run twice:** a backend deploys mid-run, the results are void, QA starts over.
 - **Silent breakage:** Squad A changes a checkout payload. Squad B's subscription flow crashes in staging, two days before submission.
@@ -32,7 +32,7 @@ Every feature goes through the same three steps:
 
 - **The DAF approves** (before code): reviews the solution doc, checks the approach and the edge cases, confirms the dev and QA estimates hold up.
 - **The SM schedules** (from the release plan): sets the dev completion date and the UAT handover date, fitted to the release version and month.
-- **The rules protect** (during the sprint): tasks stay under 4 hours, bug fixing stays under 10% of dev hours, the backend freezes before sanity testing.
+- **The rules protect** (while work flows): tasks stay under 4 hours, bug fixing stays under 10% of dev hours, the backend freezes before sanity testing.
 
 > 💡 **Note:** approval and scheduling are deliberately separate. The people reviewing the solution are not the people committing to dates.
 
@@ -72,7 +72,7 @@ Every feature goes through the same three steps:
 
 **Phase 1 · Plan** — 01 PO Grooming (PRD in, one-page sketch out) → 02 Squad Refinement (solution doc, security checklist, 4h tasks) → **03 DAF Review ✅** (forum approves, estimates confirmed)
 
-**Phase 2 · Build** — 04 SM Scheduling & Sprint (dates set from the release plan, daily 4h tasks, honest time logs) → 05 Squad QA (testing on dev, bug fixing within 10%) → **06 UAT Staging 🎯** (regressions fixed, old bugs to the pool)
+**Phase 2 · Build** — 04 Scheduling & Kanban Flow (dates set from the release plan, pull one 4h task at a time, honest time logs) → 05 Squad QA (testing on dev, bug fixing within 10%) → **06 UAT Staging 🎯** (regressions fixed, old bugs to the pool)
 
 **Phase 3 · Ship** — **07 TCAB & Freeze ❄️** (backend in production before sanity starts) → 08 Dual-Gate Sanity (QA sanity, then UAT) → 09 Staged Rollout (5, 20, 50, then 100%, watching Crashlytics)
 
@@ -112,7 +112,7 @@ The split that keeps it honest:
   - The STRIDE security checklist for anything touching money or identity
   - Blockers and the 4h task list
 
-**No box, no sprint. No doc, no DAF.**
+**No box, no build. No doc, no DAF.**
 
 > 💡 **Note:** an hour on these documents routinely saves a week of debugging. "I assumed the API worked differently" is what this is designed to prevent.
 
@@ -139,7 +139,7 @@ Max bug-fixing time  ≤  10% × locked dev hours
 ```
 
 - Example: a 40-hour estimate carries a 4.0-hour allowance. (Interactive calculator on this slide in `presentation.html`.)
-- **Within the buffer:** typos, styling, missed null checks. Fixed quietly, and the sprint never feels it.
+- **Within the buffer:** typos, styling, missed null checks. Fixed quietly, and the team never feels it.
 - **Buffer blown:** fixing stops. Dev and lead sit down — were the edge cases tested locally? Was the spec ambiguous? Is there design debt to file?
 - A bug caught on the dev environment costs roughly a tenth of the same bug found after UAT.
 
@@ -153,12 +153,12 @@ Max bug-fixing time  ≤  10% × locked dev hours
 
 One question decides who fixes it and what it counts against: does it also happen on the live app?
 
-- **No → a regression from this sprint:** introduced by this squad's recent PR, fixed before UAT sign-off, counts against the QA leakage KPI (under 2%).
+- **No → a regression from the new work:** introduced by this squad's recent PR, fixed before UAT sign-off, counts against the QA leakage KPI (under 2%).
 - **Yes → a pre-existing live bug:** the SA confirms it exists in production, it's detached from the feature and sent to the Live Issue Pool, and it's fixed through the squad's monthly quota.
 
 The split keeps the release date safe from old debt, measures QA only on what it could have caught, and still gets the old bugs fixed on a schedule.
 
-> 💡 **Note:** if it happens in production, it was never your sprint's regression. Hand it over and keep your date.
+> 💡 **Note:** if it happens in production, it was never your regression. Hand it over and keep your date.
 
 ---
 
@@ -168,7 +168,7 @@ The split keeps the release date safe from old debt, measures QA only on what it
 
 The same 28 days, every month:
 
-- **Days 1–18** sprint and squad QA (90% of dev hours done)
+- **Days 1–18** build flow and squad QA (90% of dev hours done)
 - **Day 19** staging handover · **Day 20** fixes and UAT sign-off
 - **Days 21–22** ❄️ TCAB, backend live in production, frozen
 - **Days 23–27** dual-gate sanity (QA, then UAT) · **Day 28** rollout starts
@@ -203,7 +203,7 @@ Rollout: **5, 20, 50, then 100%** of users over four days, crash-free sessions h
 ### Rolling it out? Do it in three passes.
 
 - **Pass 1 (weeks 1–2), time hygiene:** 4h tasks everywhere, dev and refinement hours logged separately, `[BLOCKER]` tag cleared within 4h.
-- **Pass 2 (sprints 1–2), quality discipline:** the 10% buffer and its alarm, sorting UAT bugs by type, the Live Issue Pool with monthly quotas.
+- **Pass 2 (cycles 1–2), quality discipline:** the 10% buffer and its alarm, sorting UAT bugs by type, the Live Issue Pool with monthly quotas.
 - **Pass 3 (the quarter), the full process:** box solutions and DAF reviews, the TCAB backend freeze, the 28-day release calendar.
 
 Recap: **Box Before Build · Approve at DAF · Chunk to ≤ 4h · Enforce 10% Buffer · BE Freeze First.**

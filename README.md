@@ -12,7 +12,7 @@ How our mobile teams work: how squads are set up, how solutions get approved, an
 
 👉 **[Launch the Interactive Presentation](https://ihjohny.github.io/squad-model/presentation.html)**
 
-**The short version:** an architect sketches the solution, the squad writes it up, the DAF reviews and approves it, and the SM sets the dates against a fixed monthly release calendar. During the sprint, two limits do most of the work: tasks stay under 4 hours, and bug fixing stays under 10% of the dev estimate.
+**The short version:** an architect sketches the solution, the squad writes it up, the DAF reviews and approves it, and the SM sets the dates against a fixed monthly release calendar. While work flows to the monthly release, two limits do most of the work: tasks stay under 4 hours, and bug fixing stays under 10% of the dev estimate.
 
 </div>
 
@@ -44,7 +44,7 @@ How our mobile teams work: how squads are set up, how solutions get approved, an
 
 ```
 PLAN   1 · PO Grooming & Box Solution  →  2 · Squad Refinement (4h tasks)  →  3 · DAF Review ✅  →  SM locks the dates
-BUILD  4 · Sprint Execution            →  5 · Squad QA (10% bug cap)       →  6 · UAT Sign-off 🎯
+BUILD  4 · Kanban Flow            →  5 · Squad QA (10% bug cap)       →  6 · UAT Sign-off 🎯
 SHIP   7 · TCAB & Backend Freeze ❄️    →  8 · Dual-Gate Sanity             →  9 · Staged Rollout (5 → 100%)
 ```
 
@@ -72,5 +72,5 @@ The [full playbook](ENTERPRISE_MOBILE_SUPERAPP_WORKFLOW.md#5-the-9-stage-super-a
 | Step | When | What to introduce |
 | :--- | :--- | :--- |
 | 1 | Weeks 1–2 | 4h subtasks, separate dev/refinement time logs, `[BLOCKER]` tag |
-| 2 | Sprints 1–2 | The 10% bug buffer, sorting UAT bugs by type, the Live Issue Pool |
+| 2 | Cycles 1–2 | The 10% bug buffer, sorting UAT bugs by type, the Live Issue Pool |
 | 3 | The quarter | Box solutions, DAF reviews, the TCAB backend freeze, the release calendar |

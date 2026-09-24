@@ -26,7 +26,7 @@
 This is the operating model our mobile teams work by: how squads are organized, how solutions get designed and approved, and how a release ships on the same 28-day schedule every month. It is written for telecom and fintech super-apps, where payments, subscriptions and core services all have to change together without breaking each other.
 
 > **[!TIP]**
-> The short version: an architect sketches the solution, the squad writes it up, the **DAF** reviews and approves it, and the **SM** sets the dates against the release calendar. During the sprint, two limits do most of the work: tasks stay under 4 hours, and bug fixing stays under 10% of the dev estimate.
+> The short version: an architect sketches the solution, the squad writes it up, the **DAF** reviews and approves it, and the **SM** sets the dates against the release calendar. While work flows to the monthly release, two limits do most of the work: tasks stay under 4 hours, and bug fixing stays under 10% of the dev estimate.
 
 ### ⚡ The Five Golden Rules
 
@@ -34,7 +34,7 @@ This is the operating model our mobile teams work by: how squads are organized, 
   1. Box Before Build       ── Never start squad refinement without an architect's Box Solution blueprint.
   2. Approve at DAF         ── The Design Authority Forum approves the task solution & verifies estimates; the SM locks dates from business needs.
   3. Chunk to ≤ 4 Hours     ── Granular subtasks surface blockers within 24 hours at morning standups.
-  4. Enforce 10% Bug Buffer ── Mathematically cap QA bug-fixing time to maintain sprint commitments.
+  4. Enforce 10% Bug Buffer ── Mathematically cap QA bug-fixing time to keep delivery commitments.
   5. BE Freeze First        ── All backend microservices deploy to production BEFORE mobile sanity begins.
 ```
 
@@ -55,7 +55,7 @@ Standard terms keep squads aligned across engineering, product, and leadership:
 | **SOL** | Subscription Orchestration Layer | The central engine managing recurring packs, auto-renewals, billing cycles, and balance deduction fallbacks. | A recurring subscription service (like Netflix billing). |
 | **STRIDE** | Threat Modeling Framework | A 6-part security checklist (Spoofing, Tampering, Repudiation, Info Disclosure, DoS, Elevation of Privilege) required for sensitive features. | A rigorous building security audit checking doors, locks, cameras, and alarms. |
 | **TCAB** | Technical Change Advisory Board | The infrastructure governance council that reviews database migrations, configurations, and backend deployments. | Air traffic control approving takeoff slots and flight paths. |
-| **Live Issue Pool** | Pre-Existing Defect Backlog | A shared backlog of legacy production bugs kept separate from new feature tickets so sprint deliveries stay on schedule. | A municipal road maintenance backlog for old potholes, kept separate from new highway projects. |
+| **Live Issue Pool** | Pre-Existing Defect Backlog | A shared backlog of legacy production bugs kept separate from new feature tickets so feature deliveries stay on schedule. | A municipal road maintenance backlog for old potholes, kept separate from new highway projects. |
 | **UAT Bug Leakage** | QA Quality Metric | The percentage of defects missed by Squad QA and caught later by business UAT testers. Target: **< 2%**. | A water filter test: fewer impurities leaking through means higher quality. |
 
 ---
@@ -154,7 +154,7 @@ flowchart TD
         L --> L2[SM Locks Delivery Dates & Release Version]
     end
 
-    subgraph S4["Stage 4: Sprint Execution"]
+    subgraph S4["Stage 4: Kanban Flow"]
         L2 --> M[Dev Creates 4h Subtasks under Main Ticket]
         M --> N[Active Coding & Daily Time Logging]
         N --> O[Peer Code Review FE & BE]
@@ -223,9 +223,10 @@ flowchart TD
 - Feedback means rework and a reschedule. Approval means the DAF baselines three things: the **task solution**, **Dev hours**, and **QA hours**.
 - Then the **SM locks the dates**: dev completion, UAT handover, and the release version/month — from business needs and the release calendar, never from the review room.
 
-#### Stage 4: Sprint Execution
-- Daily subtasks under the main ticket, each ≤ 4 hours, each typed as `Dev Time` or `Refinement Time` at creation.
-- Standup covers yesterday's completed hours and today's planned subtask; blockers go to the SM immediately, with the reason documented in the ticket.
+#### Stage 4: Kanban Flow & Time Logging
+- Squads work kanban-style against the monthly release: each engineer pulls **one subtask at a time** from the squad board (work in progress stays at one) and flows it to done before pulling the next.
+- Subtasks sit under the main ticket, each ≤ 4 hours, each typed as `Dev Time` or `Refinement Time` at creation.
+- Standup covers yesterday's completed hours and today's pulled subtask; blockers go to the SM immediately, with the reason documented in the ticket.
 - Every PR needs 2 approvals (senior FE + senior BE). Dev and Staging environments sit behind the VPN.
 
 #### Stage 5: Squad QA & The 10% Bug Buffer Rule
@@ -238,7 +239,7 @@ flowchart TD
 #### Stage 6: Staging, UAT & the Live Issue Pool
 - By the committed UAT date, features deploy to Staging; the squad's on-time KPI is measured against that date.
 - UAT verifies the business journeys. Every defect gets sorted by one question — *does it also reproduce on live production?*
-  - **No (Type A, story regression):** caused by this sprint's changes. Fixed before sign-off. Counts against the QA leakage KPI.
+  - **No (Type A, story regression):** caused by the new changes. Fixed before sign-off. Counts against the QA leakage KPI.
   - **Yes (Type B, pre-existing):** SA validates, the bug is detached from the feature and moved to the **Live Issue Pool**. Squads clear a monthly quota from the pool; P0s are fixed immediately.
 
 #### Stage 7: TCAB & Pre-Sanity Backend Freeze
@@ -280,10 +281,10 @@ The three time rules in one place (stages 4 and 5 above show where each applies)
 | Rule | The limit | Example |
 | :--- | :--- | :--- |
 | **4-hour rule** | No Jira subtask exceeds 4 estimated hours. | A 12-hour task becomes *DTO serialization [4h] + UI & state binding [4h] + unit tests & fallbacks [4h]*. |
-| **Honest time logs** | Every hour is logged as `Dev Time` (coding) or `Refinement Time` (meetings, KT, docs). | Refinement is capped at 20% of squad time so discovery can't quietly eat the sprint. |
+| **Honest time logs** | Every hour is logged as `Dev Time` (coding) or `Refinement Time` (meetings, KT, docs). | Refinement is capped at 20% of squad time so discovery can't quietly eat the month. |
 | **10% bug buffer** | Bug fixing ≤ 10% × locked dev hours. | A 40-hour ticket carries a 4.0-hour allowance; exceeding it triggers the Stage 5 quality retro. |
 
-Why the 4-hour rule matters most: a blocked developer is visible at the next standup (within 24 hours) instead of at the end of the sprint.
+Why the 4-hour rule matters most: a blocked developer is visible at the next standup (within 24 hours) instead of days later.
 
 ### Central Jira Dashboard
 Squad-level Jira boards roll up into one engineering dashboard, checked weekly and monthly:
@@ -315,7 +316,7 @@ The same 28 days, every month. The Release Lead owns this calendar; squads plan 
 
 | Window | Milestone | Primary Owner | Done When |
 | :--- | :--- | :--- | :--- |
-| **Days 1–18** | Sprint execution: coding, PR reviews, Squad QA on Dev Environment | Squad Developers & QA | Dev hours ≥ 90% complete; bug fixing within the 10% buffer |
+| **Days 1–18** | Build flow: coding, PR reviews, Squad QA on Dev Environment | Squad Developers & QA | Dev hours ≥ 90% complete; bug fixing within the 10% buffer |
 | **Day 19** | UAT staging cutoff — all feature artifacts deployed to Staging | Squad Leads | Tickets in `UAT Backlog` before the deadline timestamp; zero open P0/P1 |
 | **Day 20** | UAT verification & Type-A regression fixes | UAT Team & Developers | UAT sign-off on commercial journeys |
 | **Days 21–22** | TCAB review, backend production deployment & **BE Freeze** | Backend Eng & TCAB | All release microservices live in production *before* sanity starts |
@@ -334,9 +335,9 @@ Every rule in this document exists because something went wrong without it. If y
 
 | Failure Mode | What It Looks Like | What Stops It |
 | :--- | :--- | :--- |
-| **The black-box task** | A "3-day task" where the developer is quietly stuck, and nobody finds out until the sprint ends. | 4-Hour Rule + daily standup declarations. |
-| **Scope sneak-in** | Product adds "one small ask" after the solution is approved and the sprint is scheduled. | DAF-approved scope + SM-locked schedule. New scope means new estimates and a new schedule. |
-| **Bug whack-a-mole** | Bug fixing quietly consumes 30–40% of the sprint. | The 10% cap, and the retro it triggers with the Squad Lead. |
+| **The black-box task** | A "3-day task" where the developer is quietly stuck, and nobody finds out for days. | 4-Hour Rule + daily standup declarations. |
+| **Scope sneak-in** | Product adds "one small ask" after the solution is approved and the dates are locked. | DAF-approved scope + SM-locked schedule. New scope means new estimates and a new schedule. |
+| **Bug whack-a-mole** | Bug fixing quietly consumes 30–40% of the team's capacity. | The 10% cap, and the retro it triggers with the Squad Lead. |
 | **Blaming QA for old bugs** | UAT finds a legacy bug and the squad's QA takes the hit for it. | Defect bifurcation: pre-existing bugs go to the Live Issue Pool. |
 | **Testing against a moving backend** | APIs change while mobile sanity is running; everything fails for no clear reason. | The pre-sanity backend freeze, enforced through TCAB. |
 | **Invisible work** | 20 hours of clarification meetings logged as "coding time". | Strict Refinement vs. Dev Time logging in Jira. |
@@ -350,7 +351,7 @@ Every rule in this document exists because something went wrong without it. If y
 
 **Squad QA** — find regressions on the dev environment, before staging · your KPI is leakage under 2% · always link bug subtickets to the feature ticket.
 
-**Product Owners** — every PRD carries journeys, acceptance criteria, and telemetry · after DAF approval and SM scheduling, new scope waits for the next sprint · route legacy bugs to the Live Issue Pool with the SA.
+**Product Owners** — every PRD carries journeys, acceptance criteria, and telemetry · after DAF approval and SM scheduling, new scope waits for the next cycle · route legacy bugs to the Live Issue Pool with the SA.
 
 **Scrum Masters** — reject subtasks estimated over 4h · clear `[BLOCKER]` items within 4h · after DAF approval, you lock the dates · keep everyone logging hours daily.
 
